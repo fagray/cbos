@@ -12,7 +12,6 @@
                     <!-- block -->
                         <div class="panel panel-default">
                             <div class="blue-bg panel-heading">
-
                                My Accounts 
                             </div>
                             <div class="panel-body">
@@ -340,13 +339,18 @@
              
 
             $('#myTab a').click(function (e) {
-  e.preventDefault();
-  $(this).tab('show');
-})
+                e.preventDefault();
+                $(this).tab('show');
+              })
               $(document).ready(function(){
                  $('input[name="trans_amount"]').number(true,2);
                  $('input[name="other_trans_amount"]').number(true,2);
                $current_account = $('#tdAcctNo').attr('data-account-no');
+
+               if( $('input[name="trans_amount"]').val() < 0 ) {
+
+                   $('#btn_confirm').attr("disabled","disabled");
+              }
 
                 $('.btn-clear').click(function(){
                   clearAllInputs();
