@@ -104,12 +104,12 @@
                                               </tr>
                                                <tr>
                                                 <td>Transfer Amount </td>
-                                                <td> <input type="text" name="trans_amount" id="input" class="form-control" value="" required="required" pattern="" title=""></td>
+                                                <td> <input required="required" type="text" name="trans_amount" id="input" class="form-control" value="" required="required" pattern="" title=""></td>
                                               </tr>
                                                <tr>
                                                 <td>Transfer Description </td>
                                                 <td> 
-                                                  <textarea name="trans_desc" id="inputTrans_desc" class="form-control" style="width:230px;" rows="3" required="required"></textarea>
+                                                  <textarea required="required" name="trans_desc" id="inputTrans_desc" class="form-control" style="width:230px;" rows="3" required="required"></textarea>
                                                 </td>
                                               </tr>
 
@@ -343,6 +343,11 @@
                 $(this).tab('show');
               })
               $(document).ready(function(){
+                validateInput('cbos');
+                // validateInput('others');
+                
+                $('#cbos_send').attr("disabled","disabled");
+
                  $('input[name="trans_amount"]').number(true,2);
                  $('input[name="other_trans_amount"]').number(true,2);
                $current_account = $('#tdAcctNo').attr('data-account-no');
@@ -351,6 +356,31 @@
 
                    $('#btn_confirm').attr("disabled","disabled");
               }
+
+              $('input[name="trans_amount"]').keyup(function(){
+
+                  validateInput('cbos');
+              });
+
+              $('textarea[name="trans_desc"]').keyup(function(){
+                 validateInput('cbos');
+              });
+
+              $('input[name="trans_amount"]').keyup(function(){
+                 validateInput('cbos');
+              });
+
+               $('input[name="others_trans_amount"]').keyup(function(){
+                 validateInput('others');
+              });
+              
+              $('input[name="others_trans_desc"]').keyup(function(){
+                 validateInput('others');
+              });
+              $('input[name="others_trans_amount"]').keyup(function(){
+                 validateInput('others');
+              });
+
 
                 $('.btn-clear').click(function(){
                   clearAllInputs();
@@ -425,14 +455,68 @@
 
                 });
 
+
+
+              function validateInput(open_tab){
+
+                switch(open_tab){
+
+                  case 'cbos' :
+
+                    if(
+                          $('select[name="cbos_acct_no"]').val() == ''
+
+                           ||  $('input[name="trans_amount"]').val() == ''
+
+                           || $('textarea[name="trans_desc"]').val() == ''
+                        ) {
+
+                        $('button#cbos_send').attr("disabled","disabled");
+
+                      }else{
+
+                         $('#cbos_send').removeAttr("disabled");
+
+                        }
+                  break;
+
+                  case 'others' : 
+
+                    if ( $('select[name="other_acct_no"]').val() == ''
+
+                        || $('input[name="other_trans_amount"]').val() == ''
+
+                        || $('select[name="other_trans_desc"]').val() == '' )
+
+                     {
+
+                      $('#others_send').attr("disabled","disabled");
+                    
+                    }else{
+
+                       $('#others_send').removeAttr("disabled");
+                    }
+                 
+
+                  break;
+                }
+                 
+            }
+
                 $('a#cbos_send').click(function(){
 
+                  if ( $('input[name="trans_amount"]').val() == 0){
+
+                    alert("Transfer amount cannot be zero!");
+                    $('#modalConfirmCbos').hide();
+                    return false;
+                  }
                   $('td#confirm_acct_no').html($('select[name="cbos_acct_no"]').val());
                   $('td#confirm_trans_amount').html($('input[name="trans_amount"]').val());
                   $('td#confirm_trans_desc').html($('textarea[name="trans_desc"]').val());
                   $('input[ name="tran_amount"]').val($('input[name="trans_amount"]').val());
                   $('input[ name="trans_desc"]').val($('textarea[name="trans_desc"]').val());
-
+                   $('#modalConfirmCbos').show();
                 });
 
                   
@@ -444,13 +528,14 @@
                       if ($acct_no == $current_account){
 
                         alert("Cannot transfer to the same account!");
-
+                        validateInput('cbos');
                         clearAllInputs();
                         return false;
 
                       }else if ( $acct_no == ''){
 
                         clearAllInputs();
+                        validateInput('cbos');
                         return false;
                       }
 
@@ -466,11 +551,19 @@
 
         $('a#others_send').click(function(){
 
+                 if ( $('input[name="others_trans_amount"]').val() == 0){
+
+                    alert("Transfer amount cannot be zero!");
+                    $('#modalConfirmOthers').hide();
+                    return false;
+                  }
+
                   $('td#other_acct_no').html($('select[name="other_acct_no"]').val());
                   $('td#other_trans_amount').html($('input[name="other_trans_amount"]').val());
                   $('td#other_trans_desc').html($('textarea[name="other_trans_desc').val());
                   $('input[name="other_trans_amount"]').val($('input[name="other_trans_amount"]').val());
                   $('input[name="other_trans_desc"]').val($('textarea[name="other_trans_desc"]').val());
+                 $('#modalConfirmOthers').show();
                   showOthersConfirmation();
 
                 });
@@ -485,11 +578,13 @@
                         alert("Cannot transfer to the same account!");
 
                         clearAllInputs();
+                        validateInput('others');
                         return false;
 
                       }else if ( $acct_no == ''){
 
                         clearAllInputs();
+                        validateInput('others');
                         return false;
                       }
 
@@ -597,8 +692,8 @@
                             
                             $('td#acct_name').html(val.ACCT_DESC);
                             $('td#branch_ccy').html(val.BRANCH+' / '+ val.CCY);
-                            $('td#beginning_bal').html(val.LEDGER_BAL);
-                            $('td#avail_bal').html(val.ACTUAL_BAL);
+                            $('td#beginning_bal').html(val.LEDGER_BAL * -1);
+                            $('td#avail_bal').html(val.ACTUAL_BAL * -1);
                             $('td#trans_ccy').html(val.CCY);
 
                             $('input[name="acct_name"]').val(val.ACCT_DESC);
