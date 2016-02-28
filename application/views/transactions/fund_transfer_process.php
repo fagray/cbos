@@ -345,7 +345,7 @@
               $(document).ready(function(){
                 validateInput('cbos');
                 // validateInput('others');
-                
+
                 $('#cbos_send').attr("disabled","disabled");
 
                  $('input[name="trans_amount"]').number(true,2);
@@ -425,8 +425,8 @@
 
                         $('.modal-body').append("<a href='<?php print current_url(); ?>' class='btn-reload btn btn-default'>Click here to reload</a>");
                          $('.modal-footer').remove();
-                         $('.modal-title').html("<h4>Transfer Completed.</h4>").css("color","#006633");
-                        $('#response').html("<h4>Transfer successfully completed for Fund Transfer for CBOS Account.</h4>").css("color","#006633");
+                         $('.modal-title').html("<h4>Transfer request has been received.</h4>").css("color","#006633");
+                        $('#response').html("<h4>Transfer request has been received for Fund Transfer for CBOS Account.</h4>").css("color","#006633");
                          clearAllInputs();
                          clearPage();
 

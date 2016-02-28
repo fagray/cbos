@@ -142,11 +142,11 @@ class Account extends CI_Controller {
 						'CLIENT_TERMINAL'	=> $this->input->ip_address()
 			);
 
-		if ( $this->initiate_transfer($data)){
+		$this->initiate_transfer($data);
 
-			$params = array('response' => 200,'msg' => 'Transfer has been completed.');
+			$params = array('response' => 200,'msg' => 'Transfer has been received.');
 			return $this->toJson($params);
-		}
+		
 
 	}
 
@@ -245,7 +245,7 @@ class Account extends CI_Controller {
 			$params = array(
 
 					'INTERNAL_KEY'				=> $account[0]->INTERNAL_KEY,
-					'TRAN_DATE'					=> date('Y-m-d'),
+					'TRAN_DATE'					=> date('Y-m-d g:i:s'),
 					'ACTUAL_BAL'				=> $new_balance,
 					'LEDGER_BAL'				=> $new_balance,
 					'CALC_BAL'					=> $new_balance,
