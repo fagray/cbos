@@ -58,7 +58,7 @@ $route['sample'] = 'auth/sample';
 $route['auth/session/logout'] = 'auth/destroy';
 $route['accounts/transactions/transfer'] = 'account/get_transfer';
 $route['accounts/(:num)/transfers/new'] = 'account/new_transfer/$1';
-$route['accounts/account-statement'] = 'account/get_account_statement';
+$route['accounts/e-statements'] = 'account/get_account_statement';
 $route['accounts/transactions/history'] = 'transaction/index';
 $route['accounts/settings/change-password'] = 'auth/get_change_password';
 $route['accounts/post_change_password'] = 'auth/post_change_new_account_password';
@@ -72,7 +72,8 @@ $route['accounts/async_other_process_transfer'] = 'account/async_others_post_tra
 $route['accounts/transactions/aysnc_get_transactions'] = 'transaction/aysnc_get_transactions';
 
 $route['accounts/transactions/estatement/(:num)'] = 'transaction/view_estatement/$1';
-$route['accounts/transactions/estatement/(:num)/download'] = 'transaction/download_in_pdf/$1';
+$route['accounts/transactions/estatement/(:num)/download/pdf'] = 'transaction/download_in_pdf/$1';
+$route['accounts/transactions/estatement/(:num)/download/csv'] = 'transaction/download_in_csv/$1';
 $route['accounts/transactions/test'] = 'transaction/test_estatement';
 
 
