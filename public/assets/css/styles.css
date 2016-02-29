@@ -218,3 +218,10 @@ body {
   font-size: 12px;
   padding-left: 2px;
 }
+
+span#banking-tips ul li{
+
+  list-style: none;
+  padding: 10px;
+  font-size: 13px;
+}

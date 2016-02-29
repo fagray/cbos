@@ -134,7 +134,7 @@ class Account extends CI_Controller {
 		$data = array(
 						'TRAN_TYPE'			=> $this->input->get('tran_type'),
 						'ACCT_NO'			=> $this->input->get('source_acct_no'),
-						'BENEF_ACCT_NO'		=> $this->input->get('benef_acct_no'),
+							'BENEF_ACCT_NO'		=> $this->input->get('benef_acct_no'),
 						'TRAN_CCY'			=> $transfer_ccy,
 						'TRAN_AMT'			=> $this->input->get('tran_amount'),
 						'TRAN_DESC'			=> $this->input->get('trans_desc'),
@@ -201,10 +201,14 @@ class Account extends CI_Controller {
 			return $this->toJson($params);
 		}
 
+		// deduct the source balance from the transfer amount
+		 $this->update_balance($source_balance,$prev_original_bal,
+		 			$transfer_amount,$source_acct_no,$rate,$account);
+
 		//$update_balance_params = $this->prepare_updated_params($account);
 
 		// deduct the source balance from the transfer amount
-		 $this->update_balance($source_balance,$prev_original_bal,$transfer_amount,$source_acct_no,$rate);
+		  // $this->update_balance($source_balance,$prev_original_bal,$transfer_amount,$source_acct_no,$rate);
 
 			$data = array(
 

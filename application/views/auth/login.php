@@ -7,6 +7,7 @@
         <link href="<?php print base_url('public/assets/bootstrap/css/bootstrap.css') ?>" rel="stylesheet" media="screen">
         <link href="<?php print base_url('public/assets/bootstrap/css/bootstrap-responsive.min.css') ?>" rel="stylesheet" media="screen">
         <link href="<?php print base_url('public/assets/css/styles.css') ?>" rel="stylesheet" media="screen">
+        <link href="<?php print base_url('public/assets/css/font-awesome.css') ?>" rel="stylesheet">
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -18,7 +19,7 @@
      <div class="navbar navbar-default navbar-fixed-top">
           <div class="container">
             <div class="navbar-header">
-              <a href="<?php print base_url('acesmain/home') ?>" class="navbar-brand">aceseb online banking</a>
+              <a href="<?php print base_url('acesmain/home') ?>" class="navbar-brand">CBOS Online Banking</a>
               <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -41,7 +42,34 @@
         <!-- /content -->
         <div class="container">
             <div class=" row">
-                <div class="col-md-offset-3 col-md-6">
+                <div class="col-md-offset-1 col-md-4">
+                    <span id="banking-tips">
+                        <p style="font-size:12px;padding:20px;margin-top:0px;">
+                        <img class="img-responsive" src="<?php print base_url('public/assets/img/lock.png') ?>">
+                        <h4>Online Banking Security Tips</h4>
+                            <ul>
+                                <li> 1. Securely manage your password.</li>
+                                <li> 2. Protect your computer against viruses, 
+                                        malicious programs, and hacking attacks</li>
+                                <li> 3. Do not become a victim of Phishing 
+                                        attacks.
+                                </li>
+                                <li>
+                                     4. Logoff and close the browser after 
+                                    completing your transactions.
+                                </li>
+                            </ul>
+                          
+                            </p>
+                    </span>
+                  
+                   
+                </div><!-- /col-md-4 -->
+
+                <div class="col-md-offset-1 col-md-6">
+                    <p align="center">
+                        <i class="fa fa-lock "></i> Access your CBOS Account Online
+                    </p><hr/>
                      <div class="panel panel-default">
                                 <div class="blue-bg panel-heading">
                                   Account Login
@@ -73,7 +101,8 @@
                                 </div>
                             </div>
                             <!-- /block -->
-                </div><!-- /span6 -->
+                </div><!-- /col-md-6 -->
+                
             </div>
              <hr>
             <footer>

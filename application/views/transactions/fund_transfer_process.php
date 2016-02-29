@@ -344,7 +344,7 @@
               })
               $(document).ready(function(){
                 validateInput('cbos');
-                // validateInput('others');
+                validateInput('others');
 
                 $('#cbos_send').attr("disabled","disabled");
 
@@ -374,10 +374,10 @@
                  validateInput('others');
               });
               
-              $('input[name="others_trans_desc"]').keyup(function(){
+              $('textarea[name="other_trans_desc"]').keyup(function(){
                  validateInput('others');
               });
-              $('input[name="others_trans_amount"]').keyup(function(){
+              $('input[name="other_acct_no"]').keyup(function(){
                  validateInput('others');
               });
 
@@ -486,7 +486,7 @@
 
                         || $('input[name="other_trans_amount"]').val() == ''
 
-                        || $('select[name="other_trans_desc"]').val() == '' )
+                        || $('textarea[name="other_trans_desc"]').val() == '' )
 
                      {
 
@@ -551,7 +551,7 @@
 
         $('a#others_send').click(function(){
 
-                 if ( $('input[name="others_trans_amount"]').val() == 0){
+                 if ( $('input[name="other_trans_amount"]').val() == 0){
 
                     alert("Transfer amount cannot be zero!");
                     $('#modalConfirmOthers').hide();
