@@ -346,7 +346,10 @@ class Account extends CI_Controller {
 	 */
 	public function get_account_statement()
 	{
-		return print "Not yet available";
+		$this->load->model('statement_header_model');
+		$data['estatements'] = $this->statement_header_model->get_all();
+		// return print_r($data['statements']);
+		return $this->render('accounts/estatements',$data);
 	}
 
 	/**

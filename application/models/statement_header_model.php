@@ -6,6 +6,12 @@ class Statement_header_model extends CI_Model {
 	// private $db;
 	protected $table = 'rb_stmt_header';
 
+
+	public function get_all()
+	{
+		return $this->db->get($this->table)->result_object();
+	}
+
 	/**
 	 * Store the statement header
 	 * @param  array $data 

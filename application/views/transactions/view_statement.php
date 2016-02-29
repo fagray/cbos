@@ -81,7 +81,11 @@
 
 <div class="container">
   <a href="
-  <?php print base_url('accounts/transactions/estatement/'.$statement->SEQ_NO.'/download') ?>"
+  <?php print base_url('accounts/transactions/estatement/'.$statement->SEQ_NO.'/download/pdf') ?>"
    class="btn ">Download in PDF
-</a>
+  </a>
+  <a href="
+  <?php print base_url('accounts/transactions/estatement/'.$statement->SEQ_NO.'/download/csv') ?>"
+   class="btn ">Download in CSV
+  </a>
 </div>

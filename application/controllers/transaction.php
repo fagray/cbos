@@ -220,6 +220,52 @@ class Transaction extends CI_Controller {
      	 return pdf_create($html, 'eStatement as of  '.$start_date. ' to' .$end_date);
 	}
 
+	/**
+	 * Convert the estatement to csv format
+	 * @param  int $seq_no 
+	 * @return Response
+	 */
+	public function download_in_csv($seq_no)
+	{
+		$this->load->model('statement_header_model');
+		// $this->load->library('m_pdf');
+		$this->load->model('transactions_model');
+		$statement 				= $this->statement_header_model->get_statement($seq_no);
+		$start_date 			= $statement[0]->START_DATE;
+		$end_date 				= $statement[0]->END_DATE;
+		$internal_key 			= $statement[0]->INTERNAL_KEY;
+		$data['statement'] 		= $statement[0];
+
+		// return print_r($statement);
+		$data['transactions'] = $this->transactions_model
+				->get_trans_history($start_date,$end_date,$internal_key);
+
+		$data['start_date'] = $this->formatDate($start_date);
+		$data['end_date'] = $this->formatDate($end_date);
+
+		// prepare the csv file
+		 $this->load->helper('csv');
+		
+
+		$array = array(
+			array('Last Name', 'First Name', 'Gender'),
+			array('Furtado', 'Nelly', 'female'),
+			array('Twain', 'Shania', 'female'),
+			array('Farmer', 'Mylene', 'female')
+		);
+		 
+		 // $csv_array_header = array(
+		 // 							'Transaction Date',
+		 // 							'Transaction Desc',
+		 // 							'Cheque/ Seq.No',
+		 // 							'Withdrawal',
+		 // 							'Deposit',
+		 // 							'Balance',
+		 // 						);
+		return array_to_csv($array, TRUE, 'toto.csv');
+		
+	}
+
 	public function toJson($value)
 	{
 		return $this->output
