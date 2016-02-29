@@ -12,7 +12,7 @@
                         <a class="list-group-item"  href ="<?php print base_url('accounts/transactions/history'); ?>">
                             <i class="icon-chevron-right"></i> Transaction History
                         </a>
-                        <a class="list-group-item" href ="<?php print base_url('accounts/account-statement'); ?>">
+                        <a class="list-group-item" href ="<?php print base_url('accounts/e-statements   '); ?>">
                             <i class="icon-chevron-right"></i> Download eStatement
                         </a> 
                         <a class="list-group-item" href ="<?php print base_url('accounts/transactions/transfer'); ?>">
