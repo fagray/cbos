@@ -97,7 +97,7 @@ class Transactions_model extends CI_Model {
 		$this->db->from($this->table);
 		$this->db->where('INTERNAL_KEY',$internal_key);
 		$this->db->where('TRAN_DATE < ', $start_date);
-		$this->db->where('TRAN_DATE >=', $end_date);
+		$this->db->where('TRAN_DATE <=', $end_date);
 		$this->db->order_by('TRAN_DATE ', 'ASC');
 		return $this->db->get()->result_object();
 	}

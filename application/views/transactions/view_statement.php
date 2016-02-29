@@ -42,7 +42,6 @@
         </tr>
       </thead>
       <tbody>
-
         <?php foreach($transactions as $transaction){ 
 
             $d = new DateTime($transaction->TRAN_DATE);
@@ -62,7 +61,7 @@
           <td>
             <?php
               if($transaction->CR_DR_MAINT_IND == 'C'){
-                 print number_format($transaction->TRAN_AMT,2);
+                 print number_format($transaction->TRAN_AMT *-1,2);
                 }
               ?>
           </td>
