@@ -16,7 +16,7 @@ body {
   margin: 0;
 }
 .blue-bg {
-  background:#0C6A99 !important;color:#fff !important;
+  background:#0099ff !important;color:#fff !important;
 }
 article,
 aside,
@@ -1193,6 +1193,7 @@ h6,
   font-weight: 300;
   line-height: 1.1;
   color: inherit;
+  color: #0099ff;
 }
 h1 small,
 h2 small,
@@ -1293,6 +1294,7 @@ h6,
   font-size: 13px;
 }
 p {
+  color: #0099ff;
   margin: 0 0 10.5px;
 }
 .lead {
@@ -4397,7 +4399,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-default {
-  background-color: #0C6A99;    
+  background-color: #0099ff;    
 
   border-color: #222222;
 }
@@ -5139,6 +5141,8 @@ a.thumbnail.active {
 .list-group {
   margin-bottom: 20px;
   padding-left: 0;
+  color: #fff;
+  /*background: #0099ff;*/
 }
 .list-group-item {
   position: relative;
@@ -5147,6 +5151,8 @@ a.thumbnail.active {
   margin-bottom: -1px;
   background-color: #ffffff;
   border: 1px solid #dddddd;
+  background: #0099ff;
+  color: #fff;
 }
 .list-group-item:first-child {
   border-top-right-radius: 0;
@@ -5158,7 +5164,7 @@ a.thumbnail.active {
   border-bottom-left-radius: 0;
 }
 a.list-group-item {
-  color: #555555;
+  color: #fff;
 }
 a.list-group-item .list-group-item-heading {
   color: #333333;

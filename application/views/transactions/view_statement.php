@@ -28,8 +28,9 @@
   </div><!-- /row -->
 
   <div class="row">
-  <?php print 'OPENING BALANCE AS OF '. $d_start->format('d-M-y'). ' is '.$statement->START_BALANCE ?>
+ 
    <Br/><br/><strong><?php print $statement->ACCT_NO ?></strong>
+    
     <table class="table table-hover">
       <thead>
         <tr>
@@ -42,6 +43,14 @@
         </tr>
       </thead>
       <tbody>
+      <tr>
+          <td colspan="2">Opening Balance as of</td>
+          <td><?php print $statement->START_DATE; ?></td>
+          <td></td>
+          <td></td>
+          <td> <?php print number_format($statement->START_BALANCE,2) ?></td>
+          
+      </tr>
         <?php foreach($transactions as $transaction){ 
 
             $d = new DateTime($transaction->TRAN_DATE);
@@ -61,7 +70,7 @@
           <td>
             <?php
               if($transaction->CR_DR_MAINT_IND == 'C'){
-                 print number_format($transaction->TRAN_AMT *-1,2);
+                 print number_format($transaction->TRAN_AMT,2);
                 }
               ?>
           </td>
@@ -74,17 +83,13 @@
     </table>
     </div><!-- /col-md-12 -->
 
-<p>Closing Balance as of <?php print $end_date.' is '. $statement->END_BALANCE; ?></p>
+<p>Closing Balance as of <?php print $end_date.' is '.number_format($statement->END_BALANCE,2); ?></p>
 </div>
 
 
 <div class="container">
   <a href="
-  <?php print base_url('accounts/transactions/estatement/'.$statement->SEQ_NO.'/download/pdf') ?>"
+  <?php print base_url('accounts/transactions/estatement/'.$statement->SEQ_NO.'/download') ?>"
    class="btn ">Download in PDF
-  </a>
-  <a href="
-  <?php print base_url('accounts/transactions/estatement/'.$statement->SEQ_NO.'/download/csv') ?>"
-   class="btn ">Download in CSV
-  </a>
+</a>
 </div>

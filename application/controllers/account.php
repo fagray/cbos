@@ -54,12 +54,16 @@ class Account extends CI_Controller {
 		if ( ! $this->account_exist($acct_no)){
 			return show_error('Account does not exist.',500,'An error occured.');
 		}
+
 		$client_no = $this->session->userdata('client_no');
 		$this->load->model('accounts_model');
 		$this->load->model('currency_model');
 		$data['currencies'] = $this->currency_model->get_all();
 		$data['account'] = $this->accounts_model->get_acocunt_details($acct_no);
-		$data['user_accounts'] = $this->accounts_model->get_client_accounts($client_no); // client accounts
+		$data['user_accounts'] = $this->accounts_model
+						->get_client_remaining_accounts($client_no,$acct_no); // client accounts
+		
+
 		return $this->render('transactions/fund_transfer_process',$data);
 	}
 
@@ -134,7 +138,7 @@ class Account extends CI_Controller {
 		$data = array(
 						'TRAN_TYPE'			=> $this->input->get('tran_type'),
 						'ACCT_NO'			=> $this->input->get('source_acct_no'),
-							'BENEF_ACCT_NO'		=> $this->input->get('benef_acct_no'),
+						'BENEF_ACCT_NO'		=> $this->input->get('benef_acct_no'),
 						'TRAN_CCY'			=> $transfer_ccy,
 						'TRAN_AMT'			=> $this->input->get('tran_amount'),
 						'TRAN_DESC'			=> $this->input->get('trans_desc'),
@@ -212,14 +216,15 @@ class Account extends CI_Controller {
 
 			$data = array(
 
-						'TRAN_TYPE'			=> $this->input->get('other_tran_type'),
-						'ACCT_NO'			=> $this->input->get('other_source_acct_no'),
-						'BENEF_ACCT_NO'		=> $this->input->get('other_benef_acct_no'),
-						'TRAN_CCY'			=> $this->input->get('other_ccy'),
-						'TRAN_AMT'			=> $transfer_amount,
-						'TRAN_DESC'			=> $this->input->get('other_trans_desc'),
-						'CLIENT_NO'			=> $this->session->userdata('client_no'),
-						'CLIENT_TERMINAL'	=> $this->input->ip_address()
+						'TRAN_TYPE'					=> $this->input->get('other_tran_type'),
+						'ACCT_NO'					=> $this->input->get('other_source_acct_no'),
+						'BENEF_ACCT_NO'				=> $this->input->get('other_benef_acct_no'),
+						'TRAN_CCY'					=> $this->input->get('other_ccy'),
+						'TRAN_AMT'					=> $transfer_amount,
+						'TRAN_DESC'					=> $this->input->get('other_trans_desc'),
+						'REQUEST_TIMESTAMP'			=> date('Y-m-d H:i:s'),
+						'CLIENT_NO'					=> $this->session->userdata('client_no'),
+						'CLIENT_TERMINAL'			=> $this->input->ip_address()
 			);
 
 			
@@ -227,9 +232,12 @@ class Account extends CI_Controller {
 		if ( $this->initiate_transfer($data)){
 
 			//$this->update_balance($updated_balance_params);
-			$params = array('response' => 200,'msg' => 'Transfer has been completed.');
+			$params = array('response' => 200,'msg' => 'Transfer has been received.');
 			return $this->toJson($params);
 		}
+
+			$params = array('response' => 500,'msg' => 'Transfer has been aborted. Transfer error.');
+			return $this->toJson($params);
 
 
 	}
@@ -299,7 +307,7 @@ class Account extends CI_Controller {
 	{
 		$this->load->model('user_transactions_model');
 		
-		$this->user_transactions_model->transfer_funds($data);
+		return $this->user_transactions_model->transfer_funds($data);
 		
 		
 	}

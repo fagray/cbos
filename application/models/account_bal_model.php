@@ -29,6 +29,7 @@ class Account_bal_model extends CI_Model {
 		$this->db->from($this->table);
 		$this->db->where('INTERNAL_KEY',$internal_key);
 		$this->db->where('TRAN_DATE <=',$start_date);
+		$this->db->order_by('TRAN_DATE','DESC');
 		$result =  $this->db->get()->result_object();
 
 		if ( count($result) < 1){
@@ -53,6 +54,26 @@ class Account_bal_model extends CI_Model {
 		// return print_r($result);
 	
 	}
+
+	public function get_end_balance($internal_key,$end_date)
+	{
+		
+		$this->db->select("LEDGER_BAL");
+		$this->db->from($this->table);
+		$this->db->where('INTERNAL_KEY',$internal_key);
+		$this->db->where('TRAN_DATE <=',$end_date);
+		$this->db->order_by('TRAN_DATE','DESC');
+		$result =  $this->db->get()->result_object();
+		
+		if ( count($result) < 1){
+
+			// return print 'not found';
+			return '0.00';
+		}
+
+		return  $result[0]->LEDGER_BAL * -1;
+	}
+
 
 	/**
 	 * Update the balance after fund transfer request.

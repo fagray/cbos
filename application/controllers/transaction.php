@@ -76,9 +76,10 @@ class Transaction extends CI_Controller {
 
 		 $start_balance =  $this->account_bal_model->get_start_balance($internal_key,$start_date);
 		// return print $this->transactions_model->get_back_date_amt($internal_key,$start_date);
-		$end_balance = $this->transactions_model
-							->get_end_balance($internal_key,$start_date,															$end_date,$start_balance);
+		// $end_balance = $this->transactions_model
+		// 					->get_end_balance($internal_key,$start_date,															$end_date,$start_balance);
 		
+		$end_balance = $this->account_bal_model->get_end_balance($internal_key,$end_date);
 		if ( count( $account) < 1){
 
 			return new Exception('Account not found');

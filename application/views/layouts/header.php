@@ -26,11 +26,12 @@
 		        </div><!-- /navbar-header -->
 		        <div class="navbar-collapse collapse" id="navbar-main">
 		          <ul class="nav navbar-nav">
-		    
+		    			
 		          </ul>
 
 		          <ul class="nav navbar-nav navbar-right">
-		          
+		         
+		          		 <img  src="<?php print base_url('public/assets/img/logo-blue.jpg') ?>">
 		          </ul>
 
 		        </div><!-- /navbar-main -->

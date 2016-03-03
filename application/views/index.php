@@ -45,7 +45,7 @@
                                             <a href="<?php print base_url('accounts/'.$account->ACCT_NO.
                                               '/transfers/new')  ?>">
                                                 Make Transfer
-                                            </a>
+                                            </a> | 
                                             <a href="#">View Transaction</a>
                                           </td>
                                         </tr>

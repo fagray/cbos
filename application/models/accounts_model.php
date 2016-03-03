@@ -6,61 +6,30 @@ class Accounts_model extends CI_Model {
 	protected $table = 'rb_acct';
 	// private $db; use for oracle
 	
-
-	public function authenticate_user($user_id,$password)
-	{
-		//move to client_model
-
-		// $this->db = $this->database_model->getInstance();
-		// $this->db->where('USER_ID',$user_id);
-		// $this->db->where('CLIENT_PASSWORD',$password);
-		// $result = $this->db->get($this->table)->result_object();
-		// return print_r($result);
-		// return $result;
-		// // $encrypted_password = sha1($password);
-
-		// // $stmt = oci_parse($this->db,"SELECT * FROM {$this->table} WHERE USER_ID = '$user_id' AND CLIENT_PASSWORD = '$password'") 
-		// // 	or die(oci_error());
-		// // oci_execute($stmt);
-		// // $result_count = oci_num_rows($stmt);
-		
-		// // if ( $result_count > 0){
-		// 	return  oci_fetch_object($stmt);
-		// // }
-		// // return false;
-
-	}
 	/**
 	 * Get the client user info.
 	 * @return Response 
+	 */
+	public function get_client_remaining_accounts($client_no,$source_acct)
+	{
+		$this->db->where('CLIENT_NO',$client_no);
+		$this->db->where('ACCT_NO !=',$source_acct);
+		$result = $this->db->get($this->table)->result_object();
+		return $result;
+		
+	}
+
+	/**
+	 * Getting all the client accounts
+	 * @param  int $client_no 
+	 * @return Response            
 	 */
 	public function get_client_accounts($client_no)
 	{
 		$this->db->where('CLIENT_NO',$client_no);
 		$result = $this->db->get($this->table)->result_object();
 		return $result;
-		// $this->db = $this->database_model->getInstance();
-		// ;$result = array();
-		// $this->db = $this->database_model->getInstance();
-		// $sql = "SELECT BRANCH_NAME,ACCT_NO,ACCT_DESC,CCY,LEDGER_BAL,ACTUAL_BAL FROM RB_ACCT  a,	FM_BRANCH_TBL  b 
-		// WHERE a.branch = b.branch";
-		// $stmt = oci_parse($this->db,$sql) or die(oci_error());
-		// oci_execute($stmt);
-		// while (($row = oci_fetch_object($stmt)) != false) {
-		   
-		//     $result[] = array(
-		//     					'branch' 			=> $row->branch,
-		//     					'acct_no'			=> $row->acct_no,
-		//     					'ccy'				=> $row->ccy,
-		//     					'ledger_bal'		=> $row->ledger_bal,
-		//     					'actual_bal'		=> $row->actual_bal
-		//     				); 
-		   
-		// }
-		
-		// return $result;
 	}
-
 	/**
 	 * Count number of current accounts on the storage.
 	 * @return Response 

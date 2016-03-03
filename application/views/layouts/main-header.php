@@ -9,9 +9,7 @@
 			                   <p>Last Logged in : <?php print $this->session->userdata('last_login'); ?></p>
 			                </div><!-- /span3 -->
 
-			              <div class="col-md-offset-4 col-md-1">
-			                  <img  style="position: relative;bottom: 50px;" src="<?php print base_url('public/assets/img/cbos.jpg') ?>">
-			              </div><!-- /span9 -->
+			           
 
 		                </div><!-- /row -->
 		       

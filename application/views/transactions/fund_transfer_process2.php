@@ -41,7 +41,7 @@
                                           <td><?php print $account[0]->ACCT_DESC ?></td>
                                           <td><?php print $account[0]->CCY ?></td>
                                           <td><?php print number_format($account[0]->LEDGER_BAL,2) ?></td>
-                                          <td data-bal="<?php print $account[0]->ACTUAL_BAL ?>" id="source_beginning_bal"><?php print number_format($account[0]->ACTUAL_BAL,2) ?></td>
+                                          <td data-bal="<?php print number_format($account[0]->ACTUAL_BAL,2) ?>" id="source_beginning_bal"><?php print number_format($account[0]->ACTUAL_BAL,2) ?></td>
                                         </tr>
                                       </tbody>
                                     </table>
@@ -76,7 +76,7 @@
                                                     <option value=""></option>
                                                     <?php foreach($user_accounts as $acct){ ?>
                                                       <option value="<?php print $acct->ACCT_NO; ?>">
-                                                        <?php print $acct->ACCT_NO .'/ '.$acct->BRANCH .' / ' . $acct->ACCT_DESC; ?>
+                                                        <?php print $acct->ACCT_NO; ?>
                                                       </option>
                                                     <?php  } ?>
                                                   </select>
@@ -104,9 +104,7 @@
                                               </tr>
                                                <tr>
                                                 <td>Transfer Amount </td>
-                                                <td> <input required="required" type="text" name="trans_amount" id="input" class="form-control" value="" required="required" pattern="" title="">
-                                                <span id="feedback_trans_amount"></span>
-                                                </td>
+                                                <td> <input required="required" type="text" name="trans_amount" id="input" class="form-control" value="" required="required" pattern="" title=""></td>
                                               </tr>
                                                <tr>
                                                 <td>Transfer Description </td>
@@ -138,10 +136,10 @@
                                                 <td>Account Number </td>
                                                 <td> 
                                                   <select name="other_acct_no"  class="form-control" >
-                                                    <option value=""></option>
-                                                     <?php foreach($user_accounts as $acct){ ?>
-                                                      <option value="<?php print $acct->ACCT_NO; ?>">
-                                                        <?php print $acct->ACCT_NO .'/ '.$acct->BRANCH .' / ' . $acct->ACCT_DESC; ?>
+                                                  
+                                                    <?php foreach($user_accounts as $account){ ?>
+                                                      <option value="<?php print $account->ACCT_NO; ?>">
+                                                        <?php print $account->ACCT_NO; ?>
                                                       </option>
                                                     <?php  } ?>
                                                   </select>
@@ -162,14 +160,12 @@
                                               
                                                <tr>
                                                 <td>Transfer Amount </td>
-                                                <td> <input type="text" name="other_trans_amount" id="input" class="form-control" value="" required="required" pattern="" title="">
-                                                <span id="feedback_other_trans_amount"></span>
-                                                </td>
+                                                <td> <input type="text" name="other_trans_amount" id="input" class="form-control" value="" required="required" pattern="" title=""></td>
                                               </tr>
                                                <tr>
                                                 <td>Transfer Description </td>
                                                 <td> 
-                                                  <input name="other_trans_desc" id="inputTrans_desc" class="form-control"  required="required">
+                                                  <textarea name="other_trans_desc" id="inputTrans_desc" class="form-control" style="width:230px;" rows="3" required="required"></textarea>
                                                 </td>
                                               </tr>
 
@@ -262,7 +258,7 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="other-modal-title modal-title">Transaction Confirmation for Fund Transfer for Others Bank Account</h4>
+                    <h4 class="modal-title">Transaction Confirmation for Fund Transfer for Others Bank Account</h4>
                   </div>
                 <?php print form_open('',array('id' => 'frmConfirmOthers')) ?>
 
@@ -343,19 +339,18 @@
               // alert($.number(899,2));
               $('input[name="trans_desc"]').attr("disabled","disabled");
               $('input[name="trans_amount"]').attr("disabled","disabled");
-              
-              $('input[name="other_trans_desc"]').attr("disabled","disabled");
-              $('input[name="other_trans_amount"]').attr("disabled","disabled");
 
             $('#myTab a').click(function (e) {
 
 
                 e.preventDefault();
                 $(this).tab('show');
-              })
+                 
+              });
+
               $(document).ready(function(){
 
-                $current_url = window.location.href;
+
                 $source_balance = $('td#source_beginning_bal').attr("data-bal");
                                
 
@@ -372,58 +367,26 @@
 
               $('input[name="trans_amount"]').keyup(function(){
 
-                  $value = parseInt($(this).val());
-                  $source_balance = parseInt($source_balance);
+                  $value = $(this).val();
+
                   if ( $value == 0){
 
                     disableElement($('#cbos_send'));
                     $('input[name="trans_desc"]').attr("disabled","disabled").val('');
 
-                  }else if( $value > $source_balance) { 
-
-                    $('span#feedback_trans_amount').html('Transfer amount cannot be more than the source amount.!').css("color","red");
-
-
+                  }else if( $value > $source_balance) {  
+                    alert($source_balance);
+                    
                     disableElement($('#cbos_send'));
                     $('input[name="trans_desc"]').attr("disabled","disabled").val('');
                   
                   }else{
 
-                    $('span#feedback_trans_amount').html('');
                     $('input[name="trans_desc"]').removeAttr("disabled");
 
                   }
 
               });
-
-               $('input[name="other_trans_amount"]').keyup(function(){
-
-                  $value = parseInt($(this).val());
-                  $source_balance = parseInt($source_balance);
-
-                  if ( $value == 0 || $value == ''){
-
-                    disableElement($('a#others_send'));
-                    $('input[name="other_trans_desc"]').attr("disabled","disabled");
-
-                  }else if( $value > $source_balance) { 
-
-                    $('span#feedback_other_trans_amount').html('Transfer amount cannot be more than the source amount.!').css("color","red");
-
-
-                    disableElement($('a#others_send'));
-                    $('input[name="other_trans_desc"]').attr("disabled","disabled").val('');
-                  
-                  }else{
-
-                    $('span#feedback_other_trans_amount').html('');
-                    $('input[name="other_trans_desc"]').removeAttr("disabled");
-
-                  }
-
-              });
-
-
 
                $('input[name="trans_desc"]').keyup(function(){
 
@@ -434,18 +397,6 @@
                   }else{
 
                     activateElement($('#cbos_send'));
-                  }
-               });
-
-               $('input[name="other_trans_desc"]').keyup(function(){
-
-                  if($(this).val() == ''){
-
-                    disableElement($('a#others_send'));
-
-                  }else{
-
-                    activateElement($('a#others_send'));
                   }
                });
 
@@ -493,7 +444,6 @@
 
                       console.log(data);
                       if ( data.response == 200){
-                        $('#content').html('Transaction has been processed.Please reload the page for further transactions.');
 
                         $('.modal-body').append("<a href='<?php print current_url(); ?>' class='btn-reload btn btn-default'>Click here to reload</a>");
                          $('.modal-footer').remove();
@@ -503,7 +453,7 @@
                          clearPage();
 
                       }else if(data.response == 500){
-                         $('#content').html('Transaction has been processed.Please reload the page for further transactions.<a href="'+$current_url+'" class="btn btn-primary">Click here to reload</a>');
+                       
                         $('.modal-footer').remove();
                         $('.modal-title').html("<h4>Transfer Error</h4>").css("color","#ff0000");
                         $('#response').html("<h4>"+ data.msg +"</h4>");
@@ -541,9 +491,9 @@
                   }
                   $('td#confirm_acct_no').html( $('select[name="cbos_acct_no"]').val());
                   $('td#confirm_trans_amount').html(format($('input[name="trans_amount"]').val()));
-                  $('td#confirm_trans_desc').html($('input[name="trans_desc"]').val());
+                  $('td#confirm_trans_desc').html($('textarea[name="trans_desc"]').val());
                   $('input[ name="tran_amount"]').val($('input[name="trans_amount"]').val());
-                  $('input[ name="trans_desc"]').val($('input[name="trans_desc"]').val());
+                  $('input[ name="trans_desc"]').val($('textarea[name="trans_desc"]').val());
                    $('#modalConfirmCbos').show();
                 });
 
@@ -562,8 +512,8 @@
                       }else if ( $acct_no == ''){
 
                         clearAllInputs();
-                        $('input[name="trans_amount"]').attr("disabled","disabled");
-                        return false;
+                        $('input[name="trans_amount"]').removeAttr("disabled");
+                                               return false;
                       }
                       $('input[name="trans_amount"]').removeAttr("disabled");
                       getAccountDetails($acct_no,'cbos');
@@ -587,9 +537,9 @@
 
                   $('td#other_acct_no').html($('select[name="other_acct_no"]').val());
                   $('td#other_trans_amount').html(format($('input[name="other_trans_amount"]').val()));
-                  $('td#other_trans_desc').html($('input[name="other_trans_desc').val());
+                  $('td#other_trans_desc').html($('textarea[name="other_trans_desc').val());
                   $('input[name="other_trans_amount"]').val($('input[name="other_trans_amount"]').val());
-                  $('input[name="other_trans_desc"]').val($('input[name="other_trans_desc"]').val());
+                  $('input[name="other_trans_desc"]').val($('textarea[name="other_trans_desc"]').val());
                  $('#modalConfirmOthers').show();
                   showOthersConfirmation();
 
@@ -611,10 +561,10 @@
                       }else if ( $acct_no == ''){
 
                         clearAllInputs();
-                      $('input[name="other_trans_amount"]').attr("disabled","disabled");
+                        
                         return false;
                       }
-                      $('input[name="other_trans_amount"]').removeAttr("disabled");
+
                       getAccountDetails($acct_no,'others');
                      return false;
                       
@@ -644,7 +594,7 @@
 
                     beforeSend : function(){
 
-                      $('#response-error').html("<h3>Transferring Funds...</h3>");
+                      $('#response').html("<h3>Transferring Funds...</h3>");
                       clearAllInputs();
                     },
 
@@ -653,18 +603,15 @@
                       console.log(data);
                       if ( data.response == 200){
 
-                         $('#content').html('Transaction has been processed.Please reload the page for further transactions.');
-
                         $('#modalConfirmOthers.modal-body').append("<a href='<?php print current_url(); ?>' class='btn-reload btn btn-default'>Click here to reload</a>");
                          $('#modalConfirmOthers .modal-footer').remove();
                          $('#modalConfirmOthers .modal-title').html("<h4>Transfer Completed.</h4>").css("color","#006633");
-                        $('#modalConfirmOthers #response-error').html("<h4>Transfer successfully completed for Fund Transfer for CBOS Account.</h4>").css("color","#006633");
+                        $('#modalConfirmOthers #response').html("<h4>Transfer successfully completed for Fund Transfer for CBOS Account.</h4>").css("color","#006633");
                          clearAllInputs();
                          clearPage();
 
                       }else if(data.response == 500){
                        
-                        $('#content').html('Transaction has been processed.Please reload the page for further transactions.');               
                         $('#modalConfirmOthers.modal-footer').remove();
                         $('#modalConfirmOthers.modal-title').html("<h4>Transfer Error</h4>").css("color","#ff0000");
                         $('#modalConfirmOthers#response-error').html("<h4>"+ data.msg +"</h4>.");

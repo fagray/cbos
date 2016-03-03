@@ -96,61 +96,61 @@ class Transactions_model extends CI_Model {
 		$this->db->select('*');
 		$this->db->from($this->table);
 		$this->db->where('INTERNAL_KEY',$internal_key);
-		$this->db->where('TRAN_DATE < ', $start_date);
+		$this->db->where('TRAN_DATE >= ', $start_date);
 		$this->db->where('TRAN_DATE <=', $end_date);
 		$this->db->order_by('TRAN_DATE ', 'ASC');
 		return $this->db->get()->result_object();
 	}
 
-	public function get_end_balance($internal_key,$start_date,$end_date,$start_balance)
-	{
-		$debited_amount = $this->get_debit_amounts($internal_key,$start_date,$end_date);
-		$credited_amount= $this->get_credited_amounts($internal_key,$start_date,$end_date);
-		$end_balance  = ($start_balance - $debited_amount) + $credited_amount;
+	// public function get_end_balance($internal_key,$start_date,$end_date,$start_balance)
+	// {
+	// 	$debited_amount = $this->get_debit_amounts($internal_key,$start_date,$end_date);
+	// 	$credited_amount= $this->get_credited_amounts($internal_key,$start_date,$end_date);
+	// 	$end_balance  = ($start_balance - $debited_amount) + $credited_amount;
 
-	//	return print 'DEBIT : ' . $debited_amount .' CREDIT : ' . $credited_amount;
-		return $end_balance;
-	}
+	// //	return print 'DEBIT : ' . $debited_amount .' CREDIT : ' . $credited_amount;
+	// 	return $end_balance;
+	// }
 
-	public function get_debit_amounts($internal_key,$start_date,$end_date)
-	{
-		$this->db->select_sum('TRAN_AMT');
-		$this->db->from($this->table);
-		$this->db->where('INTERNAL_KEY',$internal_key);
-		$this->db->where('TRAN_DATE   >=', $start_date);
-		$this->db->where('TRAN_DATE <=', $end_date);
-		$this->db->where('CR_DR_MAINT_IND', 'D');
-		$result=  $this->db->get()->result_object();
+	// public function get_debit_amounts($internal_key,$start_date,$end_date)
+	// {
+	// 	$this->db->select_sum('TRAN_AMT');
+	// 	$this->db->from($this->table);
+	// 	$this->db->where('INTERNAL_KEY',$internal_key);
+	// 	$this->db->where('TRAN_DATE   >=', $start_date);
+	// 	$this->db->where('TRAN_DATE <=', $end_date);
+	// 	$this->db->where('CR_DR_MAINT_IND', 'D');
+	// 	$result=  $this->db->get()->result_object();
 
-		if ( count($result) < 1){
+	// 	if ( count($result) < 1){
 
-			// return print 'not found';
-			return '0.00';
-		}
+	// 		// return print 'not found';
+	// 		return '0.00';
+	// 	}
 
-		return  $result[0]->TRAN_AMT;
-	}
+	// 	return  $result[0]->TRAN_AMT;
+	// }
 
-	public function get_credited_amounts($internal_key,$start_date,$end_date)
-	{
+	// public function get_credited_amounts($internal_key,$start_date,$end_date)
+	// {
 		
-		$this->db->select_sum('TRAN_AMT');
-		$this->db->from($this->table);
-		$this->db->where('INTERNAL_KEY',$internal_key);
-		$this->db->where('TRAN_DATE   >=', $start_date);
-		$this->db->where('TRAN_DATE <=', $end_date);
-		$this->db->where('CR_DR_MAINT_IND', 'C');
-		$result=  $this->db->get()->result_object();
+	// 	$this->db->select_sum('TRAN_AMT');
+	// 	$this->db->from($this->table);
+	// 	$this->db->where('INTERNAL_KEY',$internal_key);
+	// 	$this->db->where('TRAN_DATE   >=', $start_date);
+	// 	$this->db->where('TRAN_DATE <=', $end_date);
+	// 	$this->db->where('CR_DR_MAINT_IND', 'C');
+	// 	$result=  $this->db->get()->result_object();
 
-		if ( count($result) < 1){
+	// 	if ( count($result) < 1){
 
-			// return print 'not found';
-			return '0.00';
-		}
+	// 		// return print 'not found';
+	// 		return '0.00';
+	// 	}
 
-		return  $result[0]->TRAN_AMT;
+	// 	return  $result[0]->TRAN_AMT;
 	
 
-	}
+	// }
 
 }
