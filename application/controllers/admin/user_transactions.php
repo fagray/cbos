@@ -47,14 +47,55 @@ class User_Transactions extends CI_Controller {
 	{	
 		$tran_id  = $this->input->get('tran_id');
 		$tran_status  = $this->input->get('tran_status');
+		$benef_acct_no  = $this->input->get('benef_acct_no');
+		$trans_amt  = $this->input->get('_trans_amt');
 		// return print $tran_id.' '. $tran_status;exit();
 		$this->load->model('user_transactions_model');
 		$data = array(
 						'TRAN_STAT'	=> $tran_status,
 					);
+
 		$this->user_transactions_model->verify_request($data,$tran_id);
+		$this->update_beneficiary_balance($benef_acct_no,$trans_amt);
 		$params = array('response'	=> 200,'msg' => 'Request has been successfully completed.');
 		return $this->toJson($params);
+	}
+
+	/**
+	 * Credit beneficiary balances
+	 * @param  string $acct_no 
+	 * @return Response          
+	 */
+	public function update_beneficiary_balance($benef_acct_no,$trans_amt)
+	{
+		$this->load->model('accounts_model');
+		$this->load->model('account_bal_model');
+		$exist = $this->accounts_model->check_account_number($benef_acct_no);	
+		if ( $exist){
+
+			$account = $this->accounts_model->get_acocunt_details($benef_acct_no);
+			$internal_key = $account[0]->INTERNAL_KEY;
+			$old_balance = $account[0]->ACTUAL_BAL;
+			$new_balance = $old_balance + $trans_amt;
+			// return print $new_balance;
+			$data = array(
+							'LEDGER_BAL'			=> $new_balance,
+							'ACTUAL_BAL'			=> $new_balance,
+							'CALC_BAL'				=> $new_balance,
+							'PREV_DAY_LEDGER_BAL'	=> $old_balance,
+							'PREV_DAY_ACTUAL_BAL'	=> $old_balance,
+							'PREV_DAY_CALC_BAL'		=> $old_balance,
+							'LAST_CHANGE_OFFICER'	=> $this->session->userdata('usrname'),
+							'LAST_BAL_UPDATE'		=> date('Y-m-d')
+						);
+
+			$this->accounts_model->update_beneficiary_balance($data,$benef_acct_no);
+			$this->account_bal_model
+					->update_beneficiary_balance($data,$internal_key);
+
+		}	
+
+		return $this->toJson(array('response'	=> 500,'msg' => 'Beneficiary account number doest not exist.'));
 	}
 
 	/**

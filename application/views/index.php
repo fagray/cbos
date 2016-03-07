@@ -39,14 +39,38 @@
                                           <td><?php print $account->ACCT_NO ?></td>
                                           <td><?php print $account->ACCT_DESC ?></td>
                                           <td><?php print $account->CCY ?></td>
-                                          <td><?php print number_format($account->LEDGER_BAL,2) ?></td>
-                                          <td><?php print number_format($account->ACTUAL_BAL,2) ?></td>
+                                          <td>
+                                            <?php 
+                                              if($account->LEDGER_BAL < 0){
+                                               print number_format(-1 * $account->LEDGER_BAL,2); 
+                                               }else {
+
+                                                 print number_format( $account->LEDGER_BAL,2);
+                                               } 
+                                            ?>
+                                          </td>
+                                          <td>
+                                          <?php 
+                                           if($account->ACTUAL_BAL < 0){
+                                               print number_format(-1 * $account->ACTUAL_BAL,2);
+                                                
+                                               }else{
+
+                                                 print number_format($account->ACTUAL_BAL,2);
+                                               } 
+
+                                           ?>
+                                          </td>
                                            <td>
                                             <a href="<?php print base_url('accounts/'.$account->ACCT_NO.
                                               '/transfers/new')  ?>">
                                                 Make Transfer
-                                            </a> | 
-                                            <a href="#">View Transaction</a>
+                                            </a>  <br/>
+                                            <a href="
+                                            <?php print base_url('accounts/'.
+                                            $account->ACCT_NO.'/transactions') ?>">
+
+                                            View Transaction</a>
                                           </td>
                                         </tr>
                                       <?php } ?>

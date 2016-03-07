@@ -43,7 +43,7 @@ class Cpdf {
    * @var string The default font metrics file to use if no other font has been loaded.
    * The path to the directory containing the font metrics should be included
    */
-  public  $defaultFont = './fonts/Helvetica.afm';
+  public  $defaultFont = './fonts/F25_Bank_Printer.ttf';
   
   /**
    * @string A record of the current font
@@ -318,7 +318,7 @@ class Cpdf {
     'courier', 'courier-bold', 'courier-oblique', 'courier-boldoblique',
     'helvetica', 'helvetica-bold', 'helvetica-oblique', 'helvetica-boldoblique',
     'times-roman', 'times-bold', 'times-italic', 'times-bolditalic',
-    'symbol', 'zapfdingbats'
+    'symbol', 'zapfdingbats','F25_Bank_Printer'
   );
   
   /**

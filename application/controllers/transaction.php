@@ -14,6 +14,7 @@ class Transaction extends CI_Controller {
 			return redirect(base_url('auth/login'));
 		}
 
+		$data['page']  = 'TH';
 		$client_no = $this->session->userdata('client_no');
 		$this->load->model('currency_model');
 		$this->load->model('accounts_model');
@@ -189,7 +190,7 @@ class Transaction extends CI_Controller {
 
 
 		// return print_r($data['transactions']);
-		return $this->render('transactions/view_statement',$data);
+		return $this->render('transactions/view_statement3',$data);
 	}
 
 	/**
@@ -217,7 +218,7 @@ class Transaction extends CI_Controller {
 
 
 		 $this->load->helper('dompdf');
-		 $html = $this->load->view('transactions/view_statement', $data, true);
+		 $html = $this->load->view('transactions/view_statement2', $data, true);
      	 return pdf_create($html, 'eStatement as of  '.$start_date. ' to' .$end_date);
 	}
 

@@ -48,6 +48,18 @@ class User_transactions_model extends CI_Model {
 
 	}
 
+	public function get_all_transactions_by_account($acct_no)
+	{
+		$this->db->select('*');
+		$this->db->from('aces_user_transactions t');
+		$this->db->where('t.ACCT_NO',$acct_no);
+		$this->db->join('rb_acct a','a.ACCT_NO = t.ACCT_NO');
+		$this->db->join('fm_client c','c.CLIENT_NO = t.CLIENT_NO');
+		$this->db->join('aces_tran_types ty','ty.TYPE_ID = t.TRAN_TYPE');
+		$this->db->order_by('t.TRAN_DATE','desc');
+		return $this->db->get()->result_object();
+	}
+
 	/**
 	 * Grab the client transactions.
 	 * @param  int $client_no 
@@ -64,6 +76,11 @@ class User_transactions_model extends CI_Model {
 		return $this->db->get()->result_object();
 	}
 
+	/**
+	 * Grab the transaction details
+	 * @param  int $trans_id 
+	 * @return Response           
+	 */
 	public function get_transaction_details($trans_id)
 	{
 		$this->db->select('*');

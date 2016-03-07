@@ -28,6 +28,18 @@ class User_accounts_model extends CI_Model {
 	}
 
 	/**
+	 * Change the authentication state of the user.
+	 * @param  string  $user_id 
+	 * @param  int $state   
+	 * @return Response           
+	 */
+	public function change_auth_state($user_id,$state = 0)
+	{
+		$data = array('is_active' => $state);
+		return $this->db->update($this->table, $data,array('usr_name' => $user_id));
+	}
+
+	/**
 	 * Store the new resource.
 	 * @param  array $params 
 	 * @return Response         

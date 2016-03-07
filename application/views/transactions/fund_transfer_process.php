@@ -14,7 +14,7 @@
                             <div class="blue-bg panel-heading">
                                My Accounts 
                             </div>
-                            <div class="panel-body">
+                            <div  class="transfer-content panel-body">
 
                                 <div class="col-md-12">
                                  
@@ -119,7 +119,7 @@
 
                                           </table>  
                                           <span class="pull-right">
-                                             <a id="cbos_send" href="#" class="btn btn-primary">Send</a>
+                                             <a id="cbos_send" href="#" class="blue-bg btn btn-primary">Send</a>
                                              <button type="button" class="btn-clear btn btn-default">Clear</button>
                                           </span>
                                          
@@ -138,12 +138,10 @@
                                                 <td>Account Number </td>
                                                 <td> 
                                                   <select name="other_acct_no"  class="form-control" >
-                                                    <option value=""></option>
-                                                     <?php foreach($user_accounts as $acct){ ?>
-                                                      <option value="<?php print $acct->ACCT_NO; ?>">
-                                                        <?php print $acct->ACCT_NO .'/ '.$acct->BRANCH .' / ' . $acct->ACCT_DESC; ?>
-                                                      </option>
-                                                    <?php  } ?>
+                                                    <option 
+                                                    value="<?php print $account[0]->ACCT_NO ?>">
+                                                    <?php print $account[0]->ACCT_NO ?>
+                                                    </option>
                                                   </select>
                                                 </td>
                                               </tr>
@@ -177,8 +175,8 @@
 
                                           </table>  
                                           <span class="pull-right">
-                                             <a id="others_send" href="#" class="btn btn-primary">Send</a>
-                                             <button type="button" class="btn btn-default">Clear</button>
+                                             <a id="others_send" href="#" class="blue-bg btn btn-primary">Send</a>
+                                             <button type="button" class="blue-bg btn btn-default">Clear</button>
                                           </span>
                                           
                                         </div><!-- /others tab -->
@@ -337,7 +335,9 @@
           <hr>
 
           <?php $this->load->view('layouts/footer') ?>
-          <script src="<?php print base_url('public/assets/vendors/num-seperator/jquery.number.min.js') ?>"></script>
+
+            <script src="<?php print base_url('public/assets/js/autonumeric.min.js') ?>"></script>
+
           <script type="text/javascript">
 
               // alert($.number(899,2));
@@ -357,12 +357,13 @@
 
                 $current_url = window.location.href;
                 $source_balance = $('td#source_beginning_bal').attr("data-bal");
-                               
+                
+                processOtherTransfer();
 
                 $('#cbos_send').attr("disabled","disabled");
 
-                 $('input[name="trans_amount"]').number(true,2);
-                 $('input[name="other_trans_amount"]').number(true,2);
+                 format($('input[name="trans_amount"]'));
+                 format($('input[name="other_trans_amount"]'));
                $current_account = $('#tdAcctNo').attr('data-account-no');
 
                if( $('input[name="trans_amount"]').val() < 0 ) {
@@ -374,6 +375,7 @@
 
                   $value = parseInt($(this).val());
                   $source_balance = parseInt($source_balance);
+
                   if ( $value == 0){
 
                     disableElement($('#cbos_send'));
@@ -412,7 +414,7 @@
 
 
                     disableElement($('a#others_send'));
-                    $('input[name="other_trans_desc"]').attr("disabled","disabled").val('');
+                    $('input[name="other_trans_desc"]').attr("disabled","disabled");
                   
                   }else{
 
@@ -429,6 +431,7 @@
 
                   if($(this).val() == ''){
 
+                    alert("Field is mandatory, please enter Transfer Description");
                     disableElement($('#cbos_send'));
 
                   }else{
@@ -441,6 +444,7 @@
 
                   if($(this).val() == ''){
 
+                    alert("Field is mandatory, please enter Transfer Description");
                     disableElement($('a#others_send'));
 
                   }else{
@@ -495,7 +499,9 @@
                       if ( data.response == 200){
                         $('#content').html('Transaction has been processed.Please reload the page for further transactions.');
 
-                        $('.modal-body').append("<a href='<?php print current_url(); ?>' class='btn-reload btn btn-default'>Click here to reload</a>");
+                        $('.modal-body').append("<a href='<?php print current_url(); ?>' class='blue-bg btn-reload btn btn-default'>Make Another Transfer</a>");
+                        $('.modal-body').append("&nbsp;&nbsp;<a href='<?php print base_url('accounts/transactions/history') ?>' class='btn-reload btn btn-default'>View Transaction History</a>");
+
                          $('.modal-footer').remove();
                          $('.modal-title').html("<h4>Transfer request has been received.</h4>").css("color","#006633");
                         $('#response').html("<h4>Transfer request has been received for Fund Transfer for CBOS Account.</h4>").css("color","#006633");
@@ -527,10 +533,6 @@
 
                 });
 
-
-
-              
-
                 $('a#cbos_send').click(function(){
 
                   if ( $('input[name="trans_amount"]').val() == 0){
@@ -540,14 +542,13 @@
                     return false;
                   }
                   $('td#confirm_acct_no').html( $('select[name="cbos_acct_no"]').val());
-                  $('td#confirm_trans_amount').html(format($('input[name="trans_amount"]').val()));
+                   format($('td#confirm_trans_amount').html($('input[name="trans_amount"]').val()));
                   $('td#confirm_trans_desc').html($('input[name="trans_desc"]').val());
                   $('input[ name="tran_amount"]').val($('input[name="trans_amount"]').val());
                   $('input[ name="trans_desc"]').val($('input[name="trans_desc"]').val());
                    $('#modalConfirmCbos').show();
                 });
 
-                  
 
                   $('select[name="cbos_acct_no"]').change(function(){
 
@@ -586,7 +587,10 @@
                   }
 
                   $('td#other_acct_no').html($('select[name="other_acct_no"]').val());
-                  $('td#other_trans_amount').html(format($('input[name="other_trans_amount"]').val()));
+
+                  format($('td#other_trans_amount')
+                      .html($('input[name="other_trans_amount"]').val()));
+
                   $('td#other_trans_desc').html($('input[name="other_trans_desc').val());
                   $('input[name="other_trans_amount"]').val($('input[name="other_trans_amount"]').val());
                   $('input[name="other_trans_desc"]').val($('input[name="other_trans_desc"]').val());
@@ -596,29 +600,31 @@
                 });
 
 
-         $('select[name="other_acct_no"]').change(function(){
 
-                      $acct_no = $(this).val();
+       
 
-                      if ($acct_no == $current_account){
+         // $('select[name="other_acct_no"]').change(function(){
 
-                        alert("Cannot transfer to the same account!");
+         //              $acct_no = $(this).val();
 
-                        clearAllInputs();
+         //              if ($acct_no == $current_account){
+
                         
-                        return false;
+         //                clearAllInputs();
+                        
+         //                return false;
 
-                      }else if ( $acct_no == ''){
+         //              }else if ( $acct_no == ''){
 
-                        clearAllInputs();
-                      $('input[name="other_trans_amount"]').attr("disabled","disabled");
-                        return false;
-                      }
-                      $('input[name="other_trans_amount"]').removeAttr("disabled");
-                      getAccountDetails($acct_no,'others');
-                     return false;
+         //                clearAllInputs();
+         //              $('input[name="other_trans_amount"]').attr("disabled","disabled");
+         //                return false;
+         //              }
+         //              $('input[name="other_trans_amount"]').removeAttr("disabled");
+         //              getAccountDetails($acct_no,'others');
+         //             return false;
                       
-                  });
+         //          });
                  // handle other  transfer
                 $('form[id="frmConfirmOthers"]').submit(function(e){
 
@@ -632,6 +638,15 @@
                   handleOtherTransfer($formData);
 
                 });
+                
+        function processOtherTransfer(){
+
+          $acct_no = $('select[name="other_acct_no"]').val();
+          $('select[name="other_acct_no"]').attr("disabled","disabled");
+          getAccountDetails($acct_no,'others');
+          $('input[name="other_trans_amount"]').removeAttr("disabled");
+
+        }
 
         function handleOtherTransfer(formData){
 
@@ -655,7 +670,10 @@
 
                          $('#content').html('Transaction has been processed.Please reload the page for further transactions.');
 
-                        $('#modalConfirmOthers.modal-body').append("<a href='<?php print current_url(); ?>' class='btn-reload btn btn-default'>Click here to reload</a>");
+                        $('#modalConfirmOthers .modal-body').append("<a href='<?php print current_url(); ?>' class='blue-bg btn-reload btn btn-default'>Make Another Transfer</a>");
+                        $('#modalConfirmOthers .modal-body').append("&nbsp;&nbsp;<a href='<?php print base_url('accounts/transactions/history') ?>' class=' btn-reload btn btn-default'>View Transaction History</a>");
+
+                     
                          $('#modalConfirmOthers .modal-footer').remove();
                          $('#modalConfirmOthers .modal-title').html("<h4>Transfer Completed.</h4>").css("color","#006633");
                         $('#modalConfirmOthers #response-error').html("<h4>Transfer successfully completed for Fund Transfer for CBOS Account.</h4>").css("color","#006633");
@@ -722,8 +740,8 @@
                             
                             $('td#acct_name').html(val.ACCT_DESC);
                             $('td#branch_ccy').html(val.BRANCH+' / '+ val.CCY);
-                            $('td#beginning_bal').html(format(val.LEDGER_BAL,2));
-                            $('td#avail_bal').html(format(val.ACTUAL_BAL ));
+                            format($('td#beginning_bal').html(val.LEDGER_BAL,2));
+                            format($('td#avail_bal').html(val.ACTUAL_BAL ));
                             $('td#trans_ccy').html(val.CCY);
 
                             $('input[name="acct_name"]').val(val.ACCT_DESC);
@@ -790,9 +808,10 @@
         }
 
 
-       function format(value){
+       function format(selector){
 
-        return $.number(value,2);
+        $(selector).autoNumeric('init');
+        // return $.number(value,2);
 
        }
 

@@ -225,3 +225,45 @@ span#banking-tips ul li{
   padding: 10px;
   font-size: 13px;
 }
+
+
+.transfer-content table {
+
+  font-size: 13px;
+
+}
+
+.transfer-content input,select {
+
+  font-size: 13px !important;
+}
+
+/* / Custom */
+
+div.stmt-transactions {
+
+  margin-top: 50px;
+
+}
+
+div.stmt-transactions table{
+
+  padding: 20px;
+  border-spacing: 40px !important;
+  border-collapse: inherit !important;
+}
+
+div.stmt-transactions thead {
+  margin-left: 420px;
+}
+
+
+
+
+
+
+
+
+
+
+

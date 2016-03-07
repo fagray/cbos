@@ -30,7 +30,7 @@
 
 <div style="font-family: 'BankPrinter';font-size: 12px;" class="container">
   <div class="row" style=" font-family: 'BankPrinter';font-size: 12px;" >
-  
+ 
 
     <div class="col-md-4">
       <p><?php print $statement->CLIENT_NAME ?></p>
@@ -59,9 +59,9 @@
 
   <div class="row">
  
-   <Br/><br/><strong><?php print $statement->ACCT_NO ?></strong>
+   <strong><?php print $statement->ACCT_NO ?></strong>
     
-    <table class="table table-hover">
+    <table  class="table table-hover">
       <thead>
         <tr>
           <th>Tran Date</th>
@@ -88,35 +88,61 @@
 
         <tr>
           <td><?php print $d->format('M d, Y') ?></td>
-          <td><?php print $transaction->TRAN_DESC ?></td>
-          <td><?php print $transaction->SEQ_NO ?></td>
           <td>
-            <?php
-              if($transaction->CR_DR_MAINT_IND == 'D'){
-                 print $transaction->TRAN_AMT;
+            <?php 
 
-                }else{ 
+              if(isset($transaction->TRAN_ID)){
 
-                   print number_format($transaction->TRAN_AMT,2);
-                }
-              ?>
-          </td>
-          <td>
-            <?php
-              if($transaction->CR_DR_MAINT_IND == 'C'){
-                 print number_format($transaction->TRAN_AMT,2);
-                }
-              ?>
+                  print $transaction->trans_desc;
+              }else{
+
+                print $transaction->TRAN_DESC;
+              }
+
+            ?>
           </td>
 
           <td>
             <?php 
-              if(isset($transaction->TRAN_TYPE)){
-                print number_format($transaction->ACTUAL_BAL,2);
-              } else{
 
-                print number_format($transaction->ACTUAL_BAL_AMT,2);
+              if(isset($transaction->TRAN_ID)){
+
+                print "----";
+              }else{
+
+                print $transaction->SEQ_NO;
               }
+            ?>
+          </td>
+          <td>
+          
+          </td>
+
+          <td>
+            <?php
+                if(isset($transaction->TRAN_ID)){
+
+                    print number_format($transaction->trans_amt,2);
+                }else{
+
+                  print number_format($transaction->TRAN_AMT,2);
+                }
+                
+              ?>
+          </td>
+         
+
+          <td>
+            <?php 
+
+              if(isset($transaction->TRAN_ID)){
+
+                  print number_format(-1* $transaction->trans_bal,2);
+              }else{
+
+                 print number_format(-1* $transaction->ACTUAL_BAL_AMT,2);
+              }
+              
               
              ?>
           </td>
@@ -136,5 +162,6 @@
         print number_format( $statement->END_BALANCE,2);
      } ?>
   </p>
+  <p>Total number of transactions : <?php print count($transactions); ?></p>
 </div>
 

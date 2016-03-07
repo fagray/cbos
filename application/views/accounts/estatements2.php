@@ -5,48 +5,13 @@
             
               <?php $this->load->view('layouts/sidebar') ?>
 
-                <div class="col-md-9" id="content">
+            <div class="col-md-9" id="content">
                  
-                <h3>Transaction History</h3>
+                <h3>eStatements</h3>
                           
                                 
-                    <!-- panel -->
-                        <!-- <div class="panel panel-default">
-                            <div class="panel-heading blue-bg">
-                               TRANSACTION HISTORY
-
-                            </div>
-                            <div class="panel-body">
-                                <div class="col-md-12">
-                                    <table class="table table-hover">
-                                      <thead>
-                                        <tr>
-                                          <th>Date</th>
-                                          <th>Description</th>
-                                          <th>Reference</th>
-                                          <th>Debit Bal</th>
-                                          <th>Credit Bal</th>
-                                      
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <?php foreach($transactions as $transaction){ ?>
-                                          <tr>
-                                            <td><?php print $transaction->EFFECT_DATE ?></td>
-                                            <td><?php print $transaction->TRAN_DATE ?></td>
-                                            <td><?php print $transaction->REFERENCE ?></td>
-                                            <td></td>
-                                            <td></td>
-                                          </tr>
-                                        <?php } ?>
-                                      </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- /panel -->
-                </div><!-- /content -->
-            </div>    <!-- /row -->
+                
+            </div><!-- /col-md-9 -->
             <div class="modal fade" id="modalFilter">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -56,7 +21,7 @@
                   </div>
                   <div  class="panel panel-default">
                         <div class="heading-status panel-heading blue-bg">
-                          Prepare eStatement and Transaction History
+                          Prepare an eStatement
                            
                         </div>
                         <div class="panel-body">
@@ -135,6 +100,7 @@
                 </div><!-- /modal-content -->
               </div><!-- /modal-dialog -->
             </div><!-- /modal-filter -->
+            </div>
             <hr>
 
       <?php $this->load->view('layouts/footer') ?>

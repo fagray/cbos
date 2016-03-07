@@ -1,14 +1,14 @@
         <!-- /content -->
         <div class="container">
-            <?php $this->load->view('layouts/main-header') ?>
+           
             <div class="row">
              
             <div class="col-md-offset-2 col-md-9" id="content">
               
                     <!-- panel -->
                         <div class="col-md-offset-3 panel panel-default">
-                            <div class="panel-heading">
-                                Change Password for this new account access>
+                            <div class="blue-bg panel-heading">
+                                CHANGE PASSWORD FOR THIS NEW ACCOUNT ACCESS
                             </div>
                             <div class="panel-body">
                              <?php if($this->session->flashdata('msg')){ ?>

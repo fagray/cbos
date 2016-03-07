@@ -1,5 +1,6 @@
     <footer>
-                <p>Aces eGlobal Online Banking System &copy;  <?php print date('Y'); ?></p>
+               <span style="color:#09F;">aces EGlobal, Inc.</span>  
+                <img style="" src="<?php print base_url('public/assets/img/aces.png') ?>">
             </footer>
         </div><!-- /container -->
           
@@ -11,6 +12,8 @@
         <script src="<?php print base_url('public/assets/vendors/pace/pace.min.js') ?>"></script>
 
         <script type="text/javascript">
+        
+           
     //     	$(document).idle({
 				//   onIdle: function(){
 				//   	window.location.href="<?php print base_url('auth/session/logout') ?>";
@@ -19,3 +22,4 @@
 				//   idle: 30000 // 30 seconds of inactivity
 				// })
         </script>
+

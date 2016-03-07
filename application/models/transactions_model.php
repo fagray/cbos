@@ -93,13 +93,49 @@ class Transactions_model extends CI_Model {
 		// return print $start_date.' '. $end_date;
 		// $start_date = date('Y-m-d',strtotime(str_replace('-', '/', $start_date)));
 		// $end_date = date('Y-m-d',strtotime(str_replace('-', '/', $end_date)));
+		// $this->db->select('*');
+		// $this->db->from($this->table);
+		// $this->db->where('INTERNAL_KEY',$internal_key);
+		// $this->db->where('TRAN_DATE >= ', $start_date);
+		// $this->db->where('TRAN_DATE <=', $end_date);
+		// $this->db->order_by('TRAN_DATE ', 'ASC');
+		// return $this->db->get()->result_object();
+		
+		// $this->db->select('h.INTERNAL_KEY,h.SEQ_NO,h.TRAN_DATE,t.ACTUAL_BAL ,
+		// 	t.TRAN_AMT,t.TRAN_DESC as tran_desc');
+		// $this->db->select('*');
+		// $this->db->from('rb_tran_hist h');
+		// $this->db->where('h.TRAN_DATE >= ', $start_date);
+		// $this->db->where('h.TRAN_DATE <=', $end_date);
+		// $this->db->where('h.INTERNAL_KEY',$internal_key);
+		// $this->db->order_by('h.TRAN_DATE ', 'ASC');
+		// $this->db->order_by('t.ACTUAL_BAL ','ASC');
+		// $this->db->group_by('t.TRAN_ID ');
+		// // $this->db->join('rb_acct a ', 'a.INTERNAL_KEY = h.INTERNAL_KEY','left');
+		// // $this->db->join('rb_acct a ', 'a.INTERNAL_KEY =  h.INTERNAL_KEY');
+		// $this->db->join('aces_user_transactions t ', 't.INTERNAL_KEY = h.INTERNAL_KEY','left');
+		// return $this->db->get()->result_object();
+
+
 		$this->db->select('*');
-		$this->db->from($this->table);
-		$this->db->where('INTERNAL_KEY',$internal_key);
+		$this->db->from('rb_tran_hist h');
+		$this->db->where('h.TRAN_DATE >= ', $start_date);
+		$this->db->where('h.TRAN_DATE <=', $end_date);
+		$this->db->where('h.INTERNAL_KEY',$internal_key);
+		$res1 = $this->db->get()->result_object();
+
+		$this->db->select('TRAN_DESC as trans_desc,TRAN_AMT as trans_amt,TRAN_DATE,ACTUAL_BAL as trans_bal ,
+			TRAN_AMT as trans_amt,TRAN_DESC  as trans_desc,TRAN_ID');
+		$this->db->from('aces_user_transactions');
 		$this->db->where('TRAN_DATE >= ', $start_date);
 		$this->db->where('TRAN_DATE <=', $end_date);
-		$this->db->order_by('TRAN_DATE ', 'ASC');
-		return $this->db->get()->result_object();
+		$this->db->where('INTERNAL_KEY',$internal_key);
+		$res2 = $this->db->get()->result_object();
+
+		return array_merge($res1,$res2);
+
+
+
 	}
 
 	// public function get_end_balance($internal_key,$start_date,$end_date,$start_balance)

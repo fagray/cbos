@@ -14,29 +14,36 @@
  		</head>
      <body>
      	<span id="base" data-value="<?php print base_url(); ?>"></span>
-	        <div class="navbar navbar-default navbar-fixed-top">
-		      <div class="container">
-		        <div class="navbar-header">
-		          <a href="<?php print base_url('acesmain/home') ?>" class="navbar-brand">CBOS Online Banking Application</a>
-		          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-		            <span class="icon-bar"></span>
-		            <span class="icon-bar"></span>
-		            <span class="icon-bar"></span>
-		          </button>
-		        </div><!-- /navbar-header -->
-		        <div class="navbar-collapse collapse" id="navbar-main">
-		          <ul class="nav navbar-nav">
-		    			
-		          </ul>
+	     
+	     <div style="padding:10px;margin-right:0px;background: #0099FF;position:relative;bottom:60px !important;" class="row">
+	     	<div class="container">
+	     		<div class="col-md-12">
 
-		          <ul class="nav navbar-nav navbar-right">
-		         
-		          		 <img  src="<?php print base_url('public/assets/img/logo-blue.jpg') ?>">
-		          </ul>
+		     	<div style="margin-top:60px;" class="col-md-4">
+		     		<?php if($this->session->has_userdata('access_token')){ ?>
+						<h3 style="color:#fff !important;" >Welcome : <?php print $this->session->userdata('client_name'); ?> 
+			          	</h3><br/><br/>
+			           <p style="color:#fff !important" class="text-left">Last Logged in : <?php print $this->session->userdata('last_login'); ?></p>
+			           <p style="color:#fff !important;">Current Time : <?php print date('D, M d, Y G:i:s'); ?></p>
+		     		<?php } ?>
 
-		        </div><!-- /navbar-main -->
-		      </div>
-		    </div><!-- /navbar -->
+		     		<?php if( ! $this->session->has_userdata('access_token')){ ?>
+		     			<h4 style="color:#fff !important;" >Welcome to CBOS Online Banking
+			          	</h4><br/><br/>
+			           <p style="color:#fff !important" class="text-left">We are glad to serve you :)</p>
 
-		    
-	      
+
+		     		<?php } ?>
+		     	</div><!-- /col-md-6 -->	
+
+
+		     	<div style="margin-top:60px;" class="col-md-offset-5 col-md-3  ">
+		     		<img class="img-responsive"  src="<?php print base_url('public/assets/img/cbos.png') ?>">
+				    <h4 style="color:#fff !important" class="text-left">Online Banking Application</h4>
+		     	</div><!-- /col-md-6 -->
+
+	     	</div><!-- /col-md-12 -->
+	     	</div>
+	     	
+	     </div><!-- /row -->
+	   

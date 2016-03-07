@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Account extends CI_Controller {
-
+	
 	public function __construct()
 	{
 		parent::__construct();
@@ -11,6 +11,9 @@ class Account extends CI_Controller {
 				&& ! $this->session->userdata('client_no')) {
 			return redirect('auth/login');
 		}
+
+		
+
 	}
 
 	/**
@@ -28,6 +31,7 @@ class Account extends CI_Controller {
 		$client_no = $this->session->userdata('client_no');
 		$this->load->model('accounts_model');
 		$data['accounts'] = $this->accounts_model->get_client_accounts($client_no);
+		$data['page'] = 'AS';
 		$this->render('index',$data);
 
 	}
@@ -38,6 +42,7 @@ class Account extends CI_Controller {
 	 */
 	public function get_transfer()
 	{
+		$data['page'] = 'FT';
 		$client_no = $this->session->userdata('client_no');
 		$this->load->model('user_transactions_model');
 		$data['title'] = 'Account Transfer | acesglobal';
@@ -51,6 +56,7 @@ class Account extends CI_Controller {
 	 */
 	public function new_transfer($acct_no)
 	{	
+		$data['page'] = 'FT';
 		if ( ! $this->account_exist($acct_no)){
 			return show_error('Account does not exist.',500,'An error occured.');
 		}
@@ -65,6 +71,16 @@ class Account extends CI_Controller {
 		
 
 		return $this->render('transactions/fund_transfer_process',$data);
+	}
+
+	public function view_transaction_details($trans_id)
+	{
+		$data['page'] = 'FT';
+		$this->load->model('user_transactions_model');
+		$data['account'] = $this->user_transactions_model->get_transaction_details($trans_id);
+		
+		return $this->render('transactions/view',$data);
+
 	}
 
 	/**
@@ -111,6 +127,7 @@ class Account extends CI_Controller {
 		$transfer_ccy  = $this->input->get('ccy');
 
 		if (  $source_ccy != $transfer_ccy){
+
 			// get the rate for the currency
 			$rate = $this->get_conversion_rate($source_ccy,$transfer_ccy); // e.g 1 PHP = 0.021 USD
 			$source_balance = $this->convert($source_balance,$rate);
@@ -132,16 +149,21 @@ class Account extends CI_Controller {
 
 
 		// deduct the source balance from the transfer amount
-		 $this->update_balance($source_balance,$prev_original_bal,
-		 			$transfer_amount,$source_acct_no,$rate,$account);
+		$new_balance = $this->get_new_balance($source_balance,$transfer_amount,$rate);
+		$this->update_balance($new_balance,$prev_original_bal,$source_acct_no,$account);
 
 		$data = array(
+
+						'INTERNAL_KEY'		=> $account[0]->INTERNAL_KEY,
+						'TRAN_DATE'			=> date('Y-m-d'),
 						'TRAN_TYPE'			=> $this->input->get('tran_type'),
 						'ACCT_NO'			=> $this->input->get('source_acct_no'),
 						'BENEF_ACCT_NO'		=> $this->input->get('benef_acct_no'),
 						'TRAN_CCY'			=> $transfer_ccy,
 						'TRAN_AMT'			=> $this->input->get('tran_amount'),
 						'TRAN_DESC'			=> $this->input->get('trans_desc'),
+						'ACTUAL_BAL'		=> $new_balance,
+						'PREV_BAL'			=> $prev_original_bal,
 						'CLIENT_NO'			=> $this->session->userdata('client_no'),
 						'CLIENT_TERMINAL'	=> $this->input->ip_address()
 			);
@@ -205,9 +227,11 @@ class Account extends CI_Controller {
 			return $this->toJson($params);
 		}
 
+
+
 		// deduct the source balance from the transfer amount
-		 $this->update_balance($source_balance,$prev_original_bal,
-		 			$transfer_amount,$source_acct_no,$rate,$account);
+		$new_balance = $this->get_new_balance($source_balance,$transfer_amount,$rate);
+		$this->update_balance($new_balance,$prev_original_bal,$source_acct_no,$account);
 
 		//$update_balance_params = $this->prepare_updated_params($account);
 
@@ -216,12 +240,16 @@ class Account extends CI_Controller {
 
 			$data = array(
 
+						'INTERNAL_KEY'				=> $account[0]->INTERNAL_KEY,
+						'TRAN_DATE'					=> date('Y-m-d'),
 						'TRAN_TYPE'					=> $this->input->get('other_tran_type'),
 						'ACCT_NO'					=> $this->input->get('other_source_acct_no'),
 						'BENEF_ACCT_NO'				=> $this->input->get('other_benef_acct_no'),
 						'TRAN_CCY'					=> $this->input->get('other_ccy'),
 						'TRAN_AMT'					=> $transfer_amount,
 						'TRAN_DESC'					=> $this->input->get('other_trans_desc'),
+						'ACTUAL_BAL'				=> $new_balance,
+						'PREV_BAL'					=> $prev_original_bal,
 						'REQUEST_TIMESTAMP'			=> date('Y-m-d H:i:s'),
 						'CLIENT_NO'					=> $this->session->userdata('client_no'),
 						'CLIENT_TERMINAL'			=> $this->input->ip_address()
@@ -257,7 +285,7 @@ class Account extends CI_Controller {
 			$params = array(
 
 					'INTERNAL_KEY'				=> $account[0]->INTERNAL_KEY,
-					'TRAN_DATE'					=> date('Y-m-d g:i:s'),
+					'TRAN_DATE'					=> date('Y-m-d'),
 					'ACTUAL_BAL'				=> $new_balance,
 					'LEDGER_BAL'				=> $new_balance,
 					'CALC_BAL'					=> $new_balance,
@@ -282,20 +310,27 @@ class Account extends CI_Controller {
 	 * @param  array $account_row // client db row details  
 	 * @return Response                  
 	 */
-	public function update_balance($source_balance,$prev_bal,
-									$transfer_amount,$source_acct_no,$rate,
-										$account_row)
+	public function update_balance($new_balance,$prev_bal,$source_acct_no,$account_row)
 	{
 		// return print ' source_balance : '.$source_balance . ' source rate : '.$rate;
 		$this->load->model('accounts_model');
 		$this->load->model('account_bal_model');
-		$new_balance = $source_balance - $transfer_amount;
-		$new_balance = $new_balance / $rate;
-		// update account on rb_acct table
-		$this->accounts_model->update_account($source_acct_no,$new_balance,$prev_bal);
+		
+
 		// prepare to update rb_acct_bal table
 		$params = $this->update_balance_params($account_row,$new_balance,$prev_bal);
 		$this->account_bal_model->update_ledger_balance($params);
+
+		// update account on rb_acct table
+		$this->accounts_model->update_account($source_acct_no,$new_balance,$prev_bal);
+
+		
+	}
+
+	public function get_new_balance($source_balance,$transfer_amount,$rate)
+	{
+		$new_balance = $source_balance - $transfer_amount;
+		return  $new_balance / $rate;
 	}
 
 	/**
@@ -312,6 +347,19 @@ class Account extends CI_Controller {
 		
 	}
 
+
+	/**
+	 * Get all the transactions based on a certain account.
+	 * @param  int $acct_no 
+	 * @return  Response
+	 */
+	public function get_transactions_by_account($acct_no)
+	{
+		$data['page'] = '';
+		$this->load->model('user_transactions_model');
+		$data['transactions'] = $this->user_transactions_model->get_all_transactions_by_account($acct_no);
+		return $this->render('accounts/account_transactions',$data);
+	}
 	/**
 	 * Get the conversion rates of the two currencies.
 	 * @param  string $ccy_from 
@@ -349,15 +397,19 @@ class Account extends CI_Controller {
 	}
 
 	/**
-	 * Grab the account  statement of the client.
+	 * Grab the account statement of the client.
 	 * @return Response 
 	 */
 	public function get_account_statement()
 	{
+		$data['page'] = 'ES';
+		$client_no = $this->session->userdata('client_no');
+		$this->load->model('accounts_model');
+		$data['accounts'] = $this->accounts_model->get_client_accounts($client_no);
 		$this->load->model('statement_header_model');
-		$data['estatements'] = $this->statement_header_model->get_all();
+		$data['estatements'] = $this->statement_header_model->get_all_by_client();
 		// return print_r($data['statements']);
-		return $this->render('accounts/estatements',$data);
+		return $this->render('accounts/estatements2',$data);
 	}
 
 	/**

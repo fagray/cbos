@@ -6,6 +6,8 @@ class Accounts_model extends CI_Model {
 	protected $table = 'rb_acct';
 	// private $db; use for oracle
 	
+
+	
 	/**
 	 * Get the client user info.
 	 * @return Response 
@@ -111,9 +113,21 @@ class Accounts_model extends CI_Model {
 						'PREV_DAY_ACTUAL_BAL'		=> $previous_bal,
 						'PREV_DAY_CALC_BAL'			=> $previous_bal,
 						'LAST_CHANGE_OFFICER'		=> $change_by ,
-						'LAST_CHANGE_DATE'			=> now(),
-						'LAST_BAL_UPDATE'			=> now()
+						'LAST_CHANGE_DATE'			=> date('Y-m-d'),
+						'LAST_BAL_UPDATE'			=> date('Y-m-d')
 					);
+		return $this->db->update($this->table, $data,array( 'ACCT_NO' => $acct_no));
+	}
+
+
+	/**
+	 * Credit the transfer.
+	 * @param  array $data    
+	 * @param  string $acct_no 
+	 * @return Response          
+	 */
+	public function update_beneficiary_balance($data,$acct_no)
+	{
 		return $this->db->update($this->table, $data,array( 'ACCT_NO' => $acct_no));
 	}
 

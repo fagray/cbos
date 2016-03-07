@@ -1,13 +1,15 @@
         <!-- /content -->
-
+        <?php $this->load->view('layouts/main-header') ?>
+        
             <div class="row">
-              <?php $this->load->view('admin/layouts/sidebar') ?>
+
+              <?php $this->load->view('layouts/sidebar') ?>
             
               <div class="col-md-9" id="content">
                       
                         <div class="">
                             <div class="panel panel-default">
-                               <div class="blue-bg panel-heading"> TRANSACTION DETAILS</div>
+                               <div class="blue-bg panel-heading"> TRANSACTION DETAILS </div>
                           
                             <div class="panel-body">
                             <p> Transfer Type : <strong>
@@ -42,7 +44,7 @@
                                             <th>Benefactor Account No.</th>
                                             <th>Transfer Amount</th>
                                             <th>Currency</th>
-                                            <th></th>
+                                            <th>Status</th>
                                           </tr>
                                         </thead>
                                         <tbody>
@@ -50,22 +52,10 @@
                                             <td><?php print $account[0]->ACCT_NO ?></td>
                                             <td><?php print $account[0]->ACCT_DESC ?></td>
                                             <td><?php print $account[0]->BENEF_ACCT_NO ?></td>
-                                            <td id="tdAmt" data-amt="<?php print $account[0]->TRAN_AMT ?>">
-
-                                              <?php print number_format($account[0]->TRAN_AMT,2) ?>
-
-                                              </td>
+                                            <td><?php print number_format($account[0]->TRAN_AMT,2) ?></td>
                                             <td><?php print $account[0]->TRAN_CCY ?></td>
-                                            <?php if($account[0]->TRAN_STAT == 'In progress'){ ?>
-                                            <td>
-                                              <button data-choice="Rejected"  type="button" class="btn-choice btn-danger">Reject</button>
-                                              <button data-choice="Approved"  type="button" class="btn-choice btn-success">Approve</button>
-                                            </td>
-                                            <?php }else if( $account[0]->TRAN_STAT == 'Approved'){ ?>
-                                              <td><span class="label label-success"><?php print $account[0]->TRAN_STAT ?></span></td>
-                                            <?php }else{ ?>
-                                              <td><span class="label label-warning"><?php print $account[0]->TRAN_STAT ?></span></td>
-                                            <?php } ?>
+                                            <td><?php print $account[0]->TRAN_STAT  ?></td>
+                                           
                                           </tr>
                                         </tbody>
                                       </table>
@@ -89,7 +79,7 @@
                 <div class="modal-content">
                   <div  class="blue-bg modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 style="color:#fff !important;" class="modal-title">Confirmation Required </h4>
+                    <h4 class="modal-title">Confirmation Required </h4>
                   </div>
                  
                   <div class="modal-body">
@@ -99,8 +89,6 @@
                   <div class="modal-footer">
                     <?php print form_hidden('tran_id', $account[0]->TRAN_ID ); ?>
                       <?php print form_hidden('tran_status', ''); ?>
-                      <?php print form_hidden('benef_acct_no',$account[0]->BENEF_ACCT_NO) ?>
-                      <?php print form_hidden('_trans_amt') ?>
                    <?php print form_submit('confirm', 'Confirm',array('class' => 'btn_confirm btn btn-primary')); ?>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <!-- <button type="submit" class="btn_confirm btn btn-primary">Confirm</button> -->
@@ -141,9 +129,7 @@
           $('form[name="frmSubmit"]').submit(function(e){
 
               e.preventDefault();
-              $trans_amt = $('#tdAmt').attr("data-amt");
                $('.btn-choice').attr("disabled","disabled");
-              $('input[name="_trans_amt"]').val($trans_amt);
               $formData = $(this).serialize();
 
               process_request($formData);
@@ -182,8 +168,8 @@
 
                   complete : function(){
 
-                    // location = window.location.href;
-                   setTimeout("function(){'"+ window.location.href +"'}",5000);
+                    location = window.location.href;
+                   // setTimeout("function(){'"+ window.location.href +"'}",5000);
                    
                   },
 
