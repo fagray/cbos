@@ -14,29 +14,11 @@
     </head>
     
     <body>
-         <div class="navbar navbar-default navbar-fixed-top">
-          <div class="container">
-            <div class="navbar-header">
-              <a href="<?php print base_url('acesmain/home') ?>" class="navbar-brand">aceseb online banking</a>
-              <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-            </div>
-            <div class="navbar-collapse collapse" id="navbar-main">
-              <ul class="nav navbar-nav">
-        
-              </ul>
-
-              <ul class="nav navbar-nav navbar-right">
-            
-            </div>
-          </div>
-        </div>
+         <?php $this->load->view('admin/layouts/header') ?>
 
         <!-- /content -->
         <div class="container">
+
             <div class=" row">
                 <div class="col-md-offset-3 col-md-6">
                      <div class="panel panel-default">
@@ -67,10 +49,7 @@
                 </div><!-- /span6 -->
             </div>
              <hr>
-            <footer>
-                <p>&copy; Aces Global Online Banking System</p>
-            </footer>
-        </div>    <!-- /container -->
+           <?php $this->load->view('admin/layouts/footer') ?>
         
      
         <!--/.fluid-container-->

@@ -3,12 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Clients_model extends CI_Model {
 
-	protected $table = 'fm_client';
+	protected $table = 'FM_CLIENT';
 	// private $db; // use for oracle
 	
 	// public function __construct()
 	// {
-	// 	$this->db = $database_oci_model->getInstance();
+	// 	parent::__construct();
+	// 	// $this->db = $database_oci_model->getInstance();
 	// }
 	
 
@@ -19,8 +20,8 @@ class Clients_model extends CI_Model {
 	public function get_all()
 	{
 			$this->db->select('*');
-			$this->db->from('fm_client  c');
-			$this->db->join('aces_user_accounts  a','a.CLIENT_NO = c.CLIENT_NO','left');
+			$this->db->from('OBA_CLIENT_ACCOUNTS  a');
+			$this->db->join('FM_CLIENT  c','c.CLIENT_NO = a.CLIENT_NO','right');
 			$clients = $this->db->get()->result_object();
 			return $clients;
 	}
@@ -28,7 +29,18 @@ class Clients_model extends CI_Model {
 	public function count_number_of_accounts($client_no)
 	{
 		 $this->db->where('CLIENT_NO',$client_no);
-		 return $this->db->count_all_results('rb_acct');
+		 return $this->db->count_all_results('RB_ACCT');
+	}
+
+	/**
+	 * Grab the client details.
+	 * @param  int $client_no 
+	 * @return Response            
+	 */
+	public function get_client_details($client_no)
+	{
+		$this->db->where('CLIENT_NO',$client_no);
+		return $this->db->get($this->table)->result_object();
 	}
 
 	/**
@@ -39,12 +51,13 @@ class Clients_model extends CI_Model {
 	public function get_details($client_no)
 	{
 		$this->db->select('*');
-		$this->db->from('fm_client  c');
+		$this->db->from('FM_CLIENT  c');
 		$this->db->where('a.CLIENT_NO',$client_no);
-		$this->db->join('rb_acct a',"a.CLIENT_NO = c.CLIENT_NO",'left');
+		$this->db->join('RB_ACCT a',"a.CLIENT_NO = c.CLIENT_NO",'right');
 		$client = $this->db->get()->result_object();
 		return $client;
 	}
+
 	/**
 	 * Get the client user info.
 	 * @return Response 

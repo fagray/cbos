@@ -81,12 +81,12 @@
                                       <tbody>
                                       <?php foreach ($accounts as $account) { ?>
                                         <tr>
-                                          <td><?php print $account->branch; ?></td>
-                                          <td><?php print $account->acct_no ?></td>
-                                          <td><?php print $account->acct_desc ?></td>
-                                          <td><?php print $account->ccy ?></td>
-                                          <td><?php print number_format($account->ledger_bal,2) ?></td>
-                                          <td><?php print number_format($account->actual_bal,2) ?></td>
+                                          <td><?php print $account->BRANCH; ?></td>
+                                          <td><?php print $account->ACCT_NO ?></td>
+                                          <td><?php print $account->ACCT_DESC ?></td>
+                                          <td><?php print $account->CCY ?></td>
+                                          <td><?php print number_format($account->LEDGER_BAL,2) ?></td>
+                                          <td><?php print number_format($account->ACTUAL_BAL,2) ?></td>
                                         </tr>
                                       <?php } ?>
                                        

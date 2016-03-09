@@ -40,7 +40,7 @@
                                             </span>
                                         </div>
                                         <br/><br/>
-                                        <?php echo form_submit('btn_access', 'Grant Access',array('class' =>  'btn btn-primary')); ?>
+                                        <?php echo form_submit('btn_access blue-bg', 'Grant Access',array('class' =>  'btn btn-primary')); ?>
                                     <?php echo form_close(); ?>
                                 </div>
                             </div>

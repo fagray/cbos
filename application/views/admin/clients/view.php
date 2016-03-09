@@ -7,11 +7,12 @@
                                             <?php print $this->session->flashdata('msg'); ?>
                                         </div>
                                     <?php } ?>
+
                 <h3> Client Details : #<?php print $client[0]->CLIENT_NO; ?> </h3>
                 <button data-client="<?php print $client[0]->CLIENT_NAME; ?>" 
                   data-client-no="<?php print $client[0]->CLIENT_NO; ?>"
                   id="btn-changepassword" type="button" class="btn btn-default"><i class="fa fa-lock"></i> Change Password</button> 
-                 <button type="button" class="btn btn-danger">Deactivate access</button> 
+                 <!-- <button type="button" class="btn btn-danger">Deactivate access</button>  -->
                    <hr/>
                         <div class="panel panel-default">
                             <div class="blue-bg  panel-heading">
@@ -26,8 +27,14 @@
                                   <p>Client Name : <?php print $client[0]->CLIENT_NAME; ?></p><br/>
 
                                    <p><strong>Accounts</strong> </p><hr/>
+
+                                    <?php if(count($accounts) < 1 ){ ?>
+                                      <h4>This client has no available accounts.</h4>
+                                    <?php } ?>
+
+
                                       <!-- /accounts block -->
-                                    <?php foreach($client as $account){ ?>
+                                    <?php foreach($accounts as $account){ ?>
                                       <div class="panel panel-default">
                                           <div class="blue-bg  panel-heading">
                                               ACCT NO.  <?php print $account->ACCT_NO ?> 
@@ -61,10 +68,11 @@
                 <div class="modal-content">
                   <div class="blue-bg modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Change Client Password</h4>
+                    Change Client Password
                   </div>
                   <div class="modal-body">
                       <div id="response"></div>
+                      <div id="client-info"></div>
                       <?php echo form_open('',array('id' => 'frmChangePass')) ?>
 
                          <div class="form-group">
@@ -126,7 +134,7 @@
             $('button#btn-changepassword').click(function(){
                 $client_no = $(this).attr('data-client-no');
                 $client_name = $(this).attr('data-client');
-                $("#modal-changepass .modal-body").prepend('<p>Client Name : '+$client_name+'</p>'+
+                $("#modal-changepass .modal-body #client-info").html('<p>Client Name : '+$client_name+'</p>'+
                   '<p>Client No : '+$client_no+'</p>'
                   );
                 $('#modal-changepass').modal({

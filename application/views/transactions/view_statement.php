@@ -1,5 +1,35 @@
+<style type="text/css">
+  
+@font-face{
+
+  src:url('<?php print base_url("public/assets/font/F25_Bank_Printer.ttf")  ?>');
+  font-family: 'BankPrinter';
+}
+
+
+</style>
+
+<div style="font-size: 12px;position: relative;bottom:50px;" class="container">
+  <div class="pull-right">
+  <a href="<?php print base_url('accounts/transactions/history') ?>">
+    Back to previous page
+  </a> | 
+  <a href="<?php print base_url() ?>">
+    Back to Main
+  </a> | 
+  <a href="
+  <?php print base_url('accounts/transactions/estatement/'.$statement->SEQ_NO.'/download/pdf') ?>"
+  >Download in PDF
+  </a> | 
+  <a href="
+  <?php print base_url('accounts/transactions/estatement/'.$statement->SEQ_NO.'/download/csv') ?>"
+   >Download in CSV
+  </a>
+</div>
+</div><!-- /container -->
+
 <div style="font-family: 'BankPrinter';font-size: 12px;" class="container">
-  <div class="row" >
+  <div class="row" style=" font-family: 'BankPrinter';font-size: 12px;" >
   
 
     <div class="col-md-4">
@@ -28,8 +58,9 @@
   </div><!-- /row -->
 
   <div class="row">
-  <?php print 'OPENING BALANCE AS OF '. $d_start->format('d-M-y'). ' is '.$statement->START_BALANCE ?>
+ 
    <Br/><br/><strong><?php print $statement->ACCT_NO ?></strong>
+    
     <table class="table table-hover">
       <thead>
         <tr>
@@ -42,7 +73,14 @@
         </tr>
       </thead>
       <tbody>
-
+      <tr>
+          <td colspan="2">Opening Balance as of</td>
+          <td><?php print $statement->START_DATE; ?></td>
+          <td></td>
+          <td></td>
+          <td> <?php print number_format($statement->START_BALANCE,2) ?></td>
+          
+      </tr>
         <?php foreach($transactions as $transaction){ 
 
             $d = new DateTime($transaction->TRAN_DATE);
@@ -56,6 +94,10 @@
             <?php
               if($transaction->CR_DR_MAINT_IND == 'D'){
                  print $transaction->TRAN_AMT;
+
+                }else{ 
+
+                   print number_format($transaction->TRAN_AMT,2);
                 }
               ?>
           </td>
@@ -66,7 +108,18 @@
                 }
               ?>
           </td>
-          <td><?php print number_format($transaction->ACTUAL_BAL_AMT * -1,2) ?></td>
+
+          <td>
+            <?php 
+              if(isset($transaction->TRAN_TYPE)){
+                print number_format($transaction->ACTUAL_BAL,2);
+              } else{
+
+                print number_format($transaction->ACTUAL_BAL_AMT,2);
+              }
+              
+             ?>
+          </td>
         </tr>
 
         <?php } ?>
@@ -75,13 +128,13 @@
     </table>
     </div><!-- /col-md-12 -->
 
-<p>Closing Balance as of <?php print $end_date.' is '. $statement->END_BALANCE; ?></p>
+<p>Closing Balance as of <?php print $end_date.' is '; ?>
+<?php 
+
+  if($statement->END_BALANCE < 0 ) { print number_format(-1 * $statement->END_BALANCE,2); } 
+    else {
+        print number_format( $statement->END_BALANCE,2);
+     } ?>
+  </p>
 </div>
 
-
-<div class="container">
-  <a href="
-  <?php print base_url('accounts/transactions/estatement/'.$statement->SEQ_NO.'/download') ?>"
-   class="btn ">Download in PDF
-</a>
-</div>

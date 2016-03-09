@@ -36,7 +36,7 @@
                                         </div>
                                         <?php echo form_hidden('_exst_token',random_string('md5',12)); ?>
                                         <?php echo form_hidden('_origin',uri_string()); ?>
-                                        <?php echo form_submit('', 'Change Password',array('class' =>  'btn btn-default')); ?>
+                                        <?php echo form_submit('', 'Change Password',array('class' =>  'btn btn-default blue-bg')); ?>
                                     <?php echo form_close(); ?>
                                 </div>
                             </div>

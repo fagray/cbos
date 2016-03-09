@@ -4,15 +4,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class User_transactions_model extends CI_Model {
 
 	// private $db;
-	protected $table = 'aces_user_transactions';
+	protected $table = 'OBA_USER_TRANSACTIONS';
 
 	
 	public function get_all()
 	{
 			$this->db->select('*');
-			$this->db->from('aces_user_transactions t');
-			$this->db->join('fm_client c', 'c.CLIENT_NO = t.CLIENT_NO','left');
-			$this->db->join('aces_tran_types ty', 'ty.TYPE_ID = t.TRAN_TYPE','left');
+			$this->db->from('OBA_USER_TRANSACTIONS t');
+			$this->db->join('FM_CLIENT c', 'c.CLIENT_NO = t.CLIENT_NO','left');
+			$this->db->join('OBA_TRAN_TYPES ty', 'ty.TYPE_ID = t.TRAN_TYPE','left');
 			$transactions = $this->db->get()->result_object();	
 			return $transactions;
 		// $this->db = $this->database_model->getInstance();
@@ -48,6 +48,19 @@ class User_transactions_model extends CI_Model {
 
 	}
 
+	public function get_all_transactions_by_account($acct_no)
+	{
+		$this->db->select('*');
+		$this->db->from('OBA_USER_TRANSACTIONS t');
+		$this->db->where('t.ACCT_NO',$acct_no);
+		$this->db->join('RB_ACCT a','a.ACCT_NO = t.ACCT_NO');
+		$this->db->join('FM_CLIENT c','c.CLIENT_NO = t.CLIENT_NO');
+		$this->db->join('OBA_TRAN_TYPES ty','ty.TYPE_ID = t.TRAN_TYPE');
+		$this->db->order_by('t.TRAN_DATE','desc');
+		return $this->db->get()->result_object();
+	}
+	
+
 	/**
 	 * Grab the client transactions.
 	 * @param  int $client_no 
@@ -56,22 +69,22 @@ class User_transactions_model extends CI_Model {
 	public function get_client_transfers($client_no)
 	{
 		$this->db->select('*');
-		$this->db->from('aces_user_transactions t');
+		$this->db->from('OBA_USER_TRANSACTIONS t');
 		$this->db->where('t.CLIENT_NO',$client_no);
-		$this->db->join('rb_acct a','a.ACCT_NO = t.ACCT_NO');
-		$this->db->join('fm_client c','c.CLIENT_NO = a.CLIENT_NO');
-		$this->db->join('aces_tran_types ty','ty.TYPE_ID = t.TRAN_TYPE');
+		$this->db->join('RB_ACCT a','a.ACCT_NO = t.ACCT_NO');
+		$this->db->join('FM_CLIENT c','c.CLIENT_NO = a.CLIENT_NO');
+		$this->db->join('OBA_TRAN_TYPES ty','ty.TYPE_ID = t.TRAN_TYPE');
 		return $this->db->get()->result_object();
 	}
 
 	public function get_transaction_details($trans_id)
 	{
 		$this->db->select('*');
-		$this->db->from('aces_user_transactions t');
+		$this->db->from('OBA_USER_TRANSACTIONS t');
 		$this->db->where('t.TRAN_ID',$trans_id);
-		$this->db->join('rb_acct a','a.CLIENT_NO = t.CLIENT_NO');
-		$this->db->join('aces_tran_types ty','ty.TYPE_ID = t.TRAN_TYPE');
-		$this->db->join('fm_client c','c.CLIENT_NO = a.CLIENT_NO');
+		$this->db->join('RB_ACCT a','a.CLIENT_NO = t.CLIENT_NO','left');
+		$this->db->join('OBA_TRAN_TYPES ty','ty.TYPE_ID = t.TRAN_TYPE','left');
+		$this->db->join('FM_CLIENT c','c.CLIENT_NO = a.CLIENT_NO','left');
 		return $this->db->get()->result_object();
 	}
 
@@ -82,7 +95,7 @@ class User_transactions_model extends CI_Model {
 	public function count_all_successful_transfers()
 	{
 			$this->db->select('*');
-			$this->db->from('aces_user_transactions t');
+			$this->db->from('OBA_USER_TRANSACTIONS t');
 			$this->db->where('TRAN_STAT','Approved');
 			return $this->db->count_all_results();
 	}

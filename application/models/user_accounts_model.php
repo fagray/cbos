@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User_accounts_model extends CI_Model {
 
-	private $table = 'aces_user_accounts';
+	private $table = 'OBA_CLIENT_ACCOUNTS';
 
 	/**
 	 * Authenticating the client.
@@ -15,16 +15,28 @@ class User_accounts_model extends CI_Model {
 	{
 		$encrpted_pass = hash('sha1',$password);
 		$this->db->select('*');
-		$this->db->from('aces_user_accounts a');
-		$this->db->where('a.usr_name',"$user_id");
-		$this->db->where('a.usr_password',"$encrpted_pass");
-		$this->db->where('a.status','Granted');
-		$this->db->join('fm_client c','c.CLIENT_NO = a.client_no');
+		$this->db->from('OBA_CLIENT_ACCOUNTS a');
+		$this->db->where('a.USR_NAME',"$user_id");
+		$this->db->where('a.USR_PASSWORD',"$encrpted_pass");
+		$this->db->where('a.STATUS','Granted');
+		$this->db->join('FM_CLIENT c','c.CLIENT_NO = a.CLIENT_NO');
 		// return print $this->db->count_all_results();
 		// $this->db->join('fm_client c','c.CLIENT_NO = a.client_no ','left');
 		$result = $this->db->get()->result_object();
 		return  $result;
 
+	}
+
+	/**
+	 * Change the authentication state of the user.
+	 * @param  string  $user_id 
+	 * @param  int $state   
+	 * @return Response           
+	 */
+	public function change_auth_state($user_id,$state = 0)
+	{
+		$data = array('IS_ACTIVE' => $state);
+		return $this->db->update($this->table, $data,array('USR_NAME' => $user_id));
 	}
 
 	/**
@@ -37,6 +49,8 @@ class User_accounts_model extends CI_Model {
 		return $this->db->insert($this->table,$params);	
 		
 	}
+
+	
 
 	/**
 	 * Watching out for multiple access.
@@ -56,7 +70,7 @@ class User_accounts_model extends CI_Model {
 	 */
 	public function check_for_old_password($old_password)
 	{
-		$this->db->where('usr_password',hash('sha1',$old_password));
+		$this->db->where('USR_PASSWORD',hash('sha1',$old_password));
 		return $this->db->count_all_results($this->table);
 	}
 
@@ -72,15 +86,15 @@ class User_accounts_model extends CI_Model {
 
 		$data = array(
 			
-					'usr_password' 					=> hash('sha1',$new_password),
-					'password_changed_timestamp'	=> now(),
-					'access_type'					=> 1		
+					'USR_PASSWORD' 					=> hash('sha1',$new_password),
+					'PASSWORD_CHANGED_TIMESTAMP'	=> date('Y-m-d g:i:s'),
+					'ACCESS_TYPE'					=> 1		
 				);	
 
 		return $this->db->update($this->table, $data,
 					array(
-							'client_no' 		=> $client_no,
-							'usr_password' 		=> hash('sha1',$old_password),
+							'CLIENT_NO' 		=> $client_no,
+							'USR_PASSWORD' 		=> hash('sha1',$old_password),
 					));
 	}
 
@@ -94,16 +108,28 @@ class User_accounts_model extends CI_Model {
 	{
 		$data = array(
 			
-					'usr_password' 					=> hash_input($new_password),
-					'password_changed_timestamp'	=> add_stamp()
+					'USR_PASSWORD' 					=> hash_input($new_password),
+					'PASSWORD_CHANGED_TIMESTAMP'	=>  date('Y-m-d g:i:s')
 					
 				);	
 
 		return $this->db->update($this->table, $data,
 					array(
-							'client_no' 		=> $client_no
+							'CLIENT_NO' 		=> $client_no
 							
 					));
 	}
+
+
+	/**
+	 * Grab all the current logged in users.
+	 * @return Response 
+	 */
+	public function get_logged_in_users()
+	{
+		$this->db->where('IS_ACTIVE',1);
+		return $this->db->get($this->table)->result_object();
+	}
+
 
 }

@@ -33,7 +33,9 @@ class Clients extends CI_Controller{
 	public function view($client_no)
 	{
 		$this->load->model('clients_model');
-		$data['client'] = $this->clients_model->get_details($client_no);
+		$this->load->model('accounts_model');
+		$data['client'] = $this->clients_model->get_client_details($client_no);
+		$data['accounts'] = $this->accounts_model->get_client_accounts($client_no);
 		return $this->render('clients/view',$data);
 	}
 

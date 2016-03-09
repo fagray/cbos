@@ -33,9 +33,17 @@ class Auth extends CI_Controller {
 	 */
 	public function post_login()
 	{
+
+		$this->load->library('passwordhash');
+		
+		
 		$this->load->model('system_users_model');
 		$username = $this->input->post('usr_id');
 		$password = hash('sha1',$this->input->post('usr_password'));
+		// return print $password;
+		// $encrypted_pass = $this->passwordhash->HashPassword($this->input->post('usr_password'));
+		// return print $encrypted_pass . ' - '. $this->passwordhash->HashPassword('raymund');exit();
+
 		$account = $this->system_users_model->authenticate_user($username,$password);
 		
 		if( count ($account) < 1 ){
@@ -47,7 +55,7 @@ class Auth extends CI_Controller {
 		$data = array(
 						'panel_access_token'	=> 	random_string('alnum',32), 
 						'usrname' 				=> 	$username,
-						'last_login' 			=> 	$account->usr_acs_last_login,
+						'last_login' 			=> 	$account[0]->USR_ACS_LAST_LOGIN,
 						
 					);
 

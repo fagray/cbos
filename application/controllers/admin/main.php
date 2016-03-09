@@ -15,10 +15,13 @@ class Main extends CI_Controller {
 	{
 		$this->load->model('clients_model');
 		$this->load->model('accounts_model');
+		$this->load->model('user_accounts_model');
 		$this->load->model('user_transactions_model');
 		$data['client_count'] = $this->clients_model->count_number_of_clients();
 		$data['accounts_count'] = $this->accounts_model->count_number_of_accounts();
 		$data['transfers_count'] = $this->user_transactions_model->count_all_successful_transfers();
+		$logged_in_users = $this->user_accounts_model->get_logged_in_users();
+		$data['users'] = $logged_in_users;
 		$this->load->view('admin/layouts/header');
 		return $this->load->view('admin/index',$data);
 	}

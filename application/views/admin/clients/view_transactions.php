@@ -11,7 +11,7 @@
                   Client Name : <?php print $transactions[0]->CLIENT_NAME; ?>
                  </h3>
                  Search Transactions <input placeholder="Enter transaction number" class="form-control" name="keyword">    
-                    <button id="btn_clear" class="btn btn-default">Clear search</button>
+                    <button id="btn_clear" class="btn btn-default blue-bg">Clear search</button>
                    <hr/>
                         
                                 <div class="col-md-12">

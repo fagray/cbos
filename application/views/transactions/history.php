@@ -54,7 +54,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Filter Transactions</h4>
                   </div>
-                  <div class="panel panel-default">
+                  <div  class="panel panel-default">
                         <div class="heading-status panel-heading blue-bg">
                           Prepare eStatement and Transaction History
                            
@@ -86,7 +86,7 @@
                                   <div class="col-md-8">
                                     <div class="form-group">
                                       <label for="">Account Number</label>
-                                      <select name="acct_no" id="inputAcct_no" class="form-control" required="required">
+                                      <select style="font-size: 15px !important;" name="acct_no" id="inputAcct_no" class="form-control" required="required">
                                         <option value=""></option>
                                         <?php foreach($accounts as $account){ ?>
                                           <option value="<?php print $account->ACCT_NO ?>">
@@ -125,7 +125,7 @@
                                 </div><!-- /row -->
 
                                   <?php print form_submit('btn_filter', 'Prepare/ Display eStatement',
-                                    array('class' => 'btn btn-primary')); ?>
+                                    array('class' => ' blue-bg btn btn-primary')); ?>
                                   
                               <?php print form_close(); ?>                             
                             </div><!-- /span12 -->

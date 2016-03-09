@@ -4,21 +4,62 @@
                     <div class="list-group">
                       
                         
-                        <a class="list-group-item" href = "<?php print base_url(); ?>">
-                            <i class="icon-chevron-right"></i> Account Summary
+                        <a class="list-group-item 
+                            <?php 
+                                 if($page == 'AS')
+
+                                    { print 'active'; } ?>"
+
+                                    href = "<?php print base_url(); ?>">
+                                    <i class="icon-chevron-right"></i> Account Summary
                         </a>
 
                     
-                        <a class="list-group-item"  href ="<?php print base_url('accounts/transactions/history'); ?>">
+                        <a class="list-group-item 
+
+                            <?php 
+                                 if($page == 'TH')
+
+                                    { print 'active'; } ?>"
+
+                                    href ="<?php print base_url('accounts/transactions/history'); ?>">
+
+
                             <i class="icon-chevron-right"></i> Transaction History
+
+
+
                         </a>
-                        <a class="list-group-item" href ="<?php print base_url('accounts/account-statement'); ?>">
+                        <a class="list-group-item
+
+                        <?php 
+                                 if($page == 'ES')
+
+                                    { print 'active'; } ?>" 
+
+                        href ="<?php print base_url('accounts/e-statements   '); ?>">
                             <i class="icon-chevron-right"></i> Download eStatement
                         </a> 
-                        <a class="list-group-item" href ="<?php print base_url('accounts/transactions/transfer'); ?>">
+                        <a class="list-group-item
+
+                         <?php 
+                                 if($page == 'FT')
+
+                                    { print 'active'; } ?>"
+
+
+                        href ="<?php print base_url('accounts/transactions/transfer'); ?>">
                             <i class="icon-chevron-right"></i> Fund Transfer
                         </a> 
-                        <a class="list-group-item" href ="<?php print base_url('accounts/settings/change-password'); ?>">
+
+                        <a class="list-group-item
+
+                        <?php 
+                                 if($page == 'CP')
+
+                                    { print 'active'; } ?>" 
+
+                        href ="<?php print base_url('accounts/settings/change-password'); ?>">
                             <i class="icon-chevron-right"></i> Change Password
                         </a> 
                         <a class="list-group-item" href ="<?php print base_url('auth/session/logout'); ?>">

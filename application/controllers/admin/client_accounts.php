@@ -45,13 +45,13 @@ class Client_accounts extends CI_Controller {
 		
 			
 			$params = array(
-								'usr_id' 		=> random_string('alnum',12),
-								'usr_name'		=> $username,
-								'usr_password'	=> hash('sha1',$password),
-								'client_no'		=> $client_no,
-								'date_added'	=> now(),
-								'status'		=> 'Granted',
-								'access_type'	=> '0'
+								'USR_ID' 		=> random_string('alnum',12),
+								'USR_NAME'		=> $username,
+								'USR_PASSWORD'	=> hash('sha1',$password),
+								'CLIENT_NO'		=> $client_no,
+								'DATE_ADDED'	=> now(),
+								'STATUS'		=> 'Granted',
+								'ACCESS_TYPE'	=> '0'
 						);
 			$this->user_accounts_model->create_new_client_acccount($params);
 			
@@ -184,6 +184,18 @@ class Client_accounts extends CI_Controller {
 	{
 		return $this->load->view('admin/auth/login');
 
+	}
+
+	/**
+	 * Destroy client session.
+	 * @return Response 
+	 */
+	public function logout_user()
+	{
+		$username = $this->input->get('__usrname');
+		$this->load->model('user_accounts_model');
+		$this->user_accounts_model->change_auth_state($username,0);
+		return $this->toJson(array('response'	 => 200,'msg'	=> 'User has been logged out.'));
 	}
 
 	/**

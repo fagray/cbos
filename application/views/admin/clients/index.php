@@ -37,9 +37,9 @@
                                                 <?php print $this->clients_model->count_number_of_accounts($client->CLIENT_NO); ?>
                                             </td>
                                             <td>
-                                              <?php  if ( $client->status == 'Granted' ){
+                                              <?php  if ( $client->STATUS == 'Granted' ){
                                                       print "<label class='label label-success'>Granted</label>";
-                                                }else if( $client->status == ''){
+                                                }else if( $client->STATUS == ''){
                                                      print "<label class='label label-danger'>No access</label>";
                                                   } ?>
                                             </td>

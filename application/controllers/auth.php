@@ -22,7 +22,7 @@ class Auth extends CI_Controller {
 	public function post_login()
 	{
 
-		$this->output->enable_profiler(TRUE);
+		// $this->output->enable_profiler(TRUE);
 		$this->load->model('user_accounts_model');
 		$this->load->model('accounts_model');
 		$username = $this->input->post('usr_id');
@@ -35,18 +35,27 @@ class Auth extends CI_Controller {
 			return redirect('auth/login');
 		}
 
+		if ( $account[0]->IS_ACTIVE == '1' ){
+
+			$this->session->set_flashdata('msg','Cannot login to more than 1 terminal!');
+			return redirect('auth/login');
+		}
+
+		//set the auth state of the user to 1
+		$this->user_accounts_model->change_auth_state($username,1);
+
 		$data = array(
 						'access_token'	=> 	random_string('alnum',32), 
 						'usrname' 		=> 	$username,
 						'client_no' 	=> 	$account[0]->CLIENT_NO,
-						'last_login' 	=> 	$account[0]->last_login,
+						'last_login' 	=> 	$account[0]->LAST_LOGIN,
 						'client_name' 	=> 	$account[0]->CLIENT_NAME
 					);
-
+		session_set_cookie_params(0);
 		$this->session->set_userdata($data);
 
 		// determine if the account is new
-		if ( $account[0]->access_type == 0){
+		if ( $account[0]->ACCESS_TYPE == 0){
 			return redirect(base_url('accounts/new/settings/change-password/'.random_string('alnum',12)));
 
 		}
@@ -138,6 +147,7 @@ class Auth extends CI_Controller {
 	 */
 	public function force_logout()
 	{
+		$this->change_authentication_state();
 		$this->session->unset_userdata('access_token');
 		$this->session->unset_userdata('msg');
 		$this->session->set_flashdata('msg-success','Password has been changed.Please login again.');
@@ -152,9 +162,19 @@ class Auth extends CI_Controller {
 	 */
 	public function destroy()
 	{
+		$this->change_authentication_state();
+
 		$this->session->unset_userdata('access_token');
 		$this->session->sess_destroy();
 		return redirect(base_url('auth/login'));
+	}
+
+	public function change_authentication_state()
+	{
+		// change the authentication state of the user to inactive.
+		$username = $this->session->userdata('usrname');
+		$this->load->model('user_accounts_model');
+		$this->user_accounts_model->change_auth_state($username,0);
 	}
 
 	/**
@@ -163,6 +183,7 @@ class Auth extends CI_Controller {
 	 */
 	public function get_change_password()
 	{
+		$data['page'] = 'CP';
 		$this->is_not_logged_in();
 		$data['title'] = 'Change Password';
 		$this->load->view('layouts/header');

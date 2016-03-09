@@ -4,17 +4,44 @@
               <?php $this->load->view('admin/layouts/sidebar') ?>
             
               <div class="col-md-9" id="content">
-                      
-                        <div class="">
+                        
+                        <span class="pull-right">
+                           <?php if($account[0]->TRAN_STAT == 'In progress'){ ?>
+                            <button data-choice="Rejected"  
+                                type="button" class="btn-choice btn btn-danger blue-bg">Reject
+                            </button>
+                            <button data-choice="Approved"  
+                              type="button" class="btn-choice btn btn-success blue-bg ">Approve
+                            </button>
+                          <?php } ?>
+                          </span><!-- /pull-right -->
+                          <?php  if( $account[0]->TRAN_STAT == 'Approved'){ ?>
+
+                            <div class="alert alert-success">This transaction has been approved on
+                            <?php print $account[0]->CONFIRM_TIMESTAMP . ' by '.$account[0]->CONFIRM_REF; ?>
+                            </div>
+
+                           <?php }else if( $account[0]->TRAN_STAT == 'Rejected') { ?>
+
+                            <div class="alert alert-danger">
+                              This transaction has been denied on  
+                                <?php print $account[0]->CONFIRM_TIMESTAMP . ' by '.$account[0]->CONFIRM_REF; ?>
+
+                            </div>
+
+                            <?php } ?>
+                        
+
+                        <div style="margin-top:50px;" class="">
                             <div class="panel panel-default">
-                               <div class="blue-bg panel-heading"> <h5>TRANSACTION DETAILS</h5></div>
+                               <div class="blue-bg panel-heading"> TRANSACTION DETAILS</div>
                           
                             <div class="panel-body">
                             <p> Transfer Type : <strong>
                               <?php print $account[0]->TYPE_DESC ?>
                             </strong></p>
                              <p> Request Timestamp : <strong>
-                              <?php print $account[0]->TRAN_DATE ?>
+                              <?php print $account[0]->REQUEST_TIMESTAMP ?>
                             </strong></p>
                             <p> Transfer Status : <strong>
                               <?php print $account[0]->TRAN_STAT ?>
@@ -26,6 +53,7 @@
                               <hr/>
                               <div class="row">
                                 <div class="col-md-12">
+                                  
                                    <div class="panel panel-default">
                                
                                     <div class="blue-bg  panel-heading">
@@ -37,7 +65,7 @@
                                       <table class="table table-hover">
                                         <thead>
                                           <tr>
-                                            <th>Source Account No.</th>
+                                            <th> Source Account No.</th>
                                             <th>Source Account Name</th>
                                             <th>Benefactor Account No.</th>
                                             <th>Transfer Amount</th>
@@ -50,27 +78,109 @@
                                             <td><?php print $account[0]->ACCT_NO ?></td>
                                             <td><?php print $account[0]->ACCT_DESC ?></td>
                                             <td><?php print $account[0]->BENEF_ACCT_NO ?></td>
-                                            <td><?php print number_format($account[0]->TRAN_AMT,2) ?></td>
+                                            <td id="tdAmt" data-amt="<?php print $account[0]->TRAN_AMT ?>">
+
+                                              <?php print number_format($account[0]->TRAN_AMT,2) ?>
+
+                                              </td>
                                             <td><?php print $account[0]->TRAN_CCY ?></td>
+
                                             <?php if($account[0]->TRAN_STAT == 'In progress'){ ?>
-                                            <td>
-                                              <button data-choice="Rejected"  type="button" class="btn-choice btn-danger">Reject</button>
-                                              <button data-choice="Approved"  type="button" class="btn-choice btn-success">Approve</button>
-                                            </td>
-                                            <?php }else if( $account[0]->TRAN_STAT == 'Approved'){ ?>
-                                              <td><span class="label label-success"><?php print $account[0]->TRAN_STAT ?></span></td>
+                                            
+                                              <td>
+                                                <button data-choice="Rejected"  type="button" class="btn-choice btn-danger blue-bg">Reject</button>
+                                                <button data-choice="Approved"  type="button" class="btn-choice btn-success blue-bg">Approve</button>
+                                              </td>
+
+                                              <?php } else if( $account[0]->TRAN_STAT == 'Approved'){ ?>
+
+                                              <td>
+                                                <span class="label label-success">
+                                                  <?php print $account[0]->TRAN_STAT ?>
+                                                </span>
+                                              </td>
+
                                             <?php }else{ ?>
-                                              <td><span class="label label-warning"><?php print $account[0]->TRAN_STAT ?></span></td>
+
+                                              <td>
+                                                <span class="label label-warning">
+                                                  <?php print $account[0]->TRAN_STAT ?>
+                                                </span>
+                                              </td>
+
                                             <?php } ?>
                                           </tr>
                                         </tbody>
                                       </table>
-                                   <?php } ?>
-                                    </div><!-- /block-content -->
-                                  </div><!-- /block -->
+                                    <?php } ?><!-- /end of CBOS DETAILS -->
 
-                                  </div><!-- /span6 -->
-                              </div><!-- /row-fluid -->
+                                    <!-- START OF OTHER BANKS TRANSFER DETAILS -->
+
+                                      <p> Account Name : <?php print $account[0]->ACCT_NAME ?>  </p>
+                                      <p> Bank Name : <?php print $account[0]->BANK_NAME ?>  </p>
+                                      
+                                      <p> Swift Code : 
+
+                                           <?php if($account[0]->SWIFT_CODE == ''){ print "N/A"; }
+                                                else {
+
+                                                  print $account[0]->SWIFT_CODE;
+                                                }
+
+
+                                           ?>
+                                      
+                                      <p> TIBAN # : 
+
+                                          <?php if($account[0]->TIBAN_NUM == ''){ print "N/A"; }
+                                                else {
+
+                                                  print $account[0]->TIBAN_NUM;
+                                                }
+
+
+                                           ?>
+                                      </p>
+                                     <table class="table table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th> Source Account No.</th>
+                                            <th>Source Account Name</th>
+                                            <th>Benefactor Account No.</th>
+                                            <th>Transfer Amount</th>
+                                            <th>Currency</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td><?php print $account[0]->ACCT_NO ?></td>
+                                            <td><?php print $account[0]->ACCT_DESC ?></td>
+                                            <td><?php print $account[0]->BENEF_ACCT_NO ?></td>
+                                            <td id="tdAmt" data-amt="<?php print $account[0]->TRAN_AMT ?>">
+
+                                              <?php print number_format($account[0]->TRAN_AMT,2) ?>
+
+                                              </td>
+                                            <td><?php print $account[0]->TRAN_CCY ?></td>
+
+                                           
+
+                                              <td>
+                                                <span class="label label-warning">
+                                                  <?php print $account[0]->TRAN_STAT ?>
+                                                </span>
+                                              </td>
+
+                                           
+                                          </tr>
+                                        </tbody>
+                                      </table>
+
+                                    </div><!-- /panel-body -->
+                                  </div><!-- /panel-default -->
+
+                                  </div><!-- /col -->
+                              </div><!-- /row -->
                                 
                             </div>
                         </div>
@@ -85,7 +195,7 @@
                 <div class="modal-content">
                   <div  class="blue-bg modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Confirmation Required </h4>
+                    <h4 style="color:#fff !important;" class="modal-title">Confirmation Required </h4>
                   </div>
                  
                   <div class="modal-body">
@@ -95,8 +205,10 @@
                   <div class="modal-footer">
                     <?php print form_hidden('tran_id', $account[0]->TRAN_ID ); ?>
                       <?php print form_hidden('tran_status', ''); ?>
-                   <?php print form_submit('confirm', 'Confirm',array('class' => 'btn_confirm btn btn-primary')); ?>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <?php print form_hidden('benef_acct_no',$account[0]->BENEF_ACCT_NO) ?>
+                      <?php print form_hidden('_trans_amt') ?>
+                   <?php print form_submit('confirm', 'Confirm',array('class' => 'btn_confirm btn btn-primary blue-bg')); ?>
+                    <button type="button" class="btn btn-default blue-bg" data-dismiss="modal">Cancel</button>
                     <!-- <button type="submit" class="btn_confirm btn btn-primary">Confirm</button> -->
                  
                   </div>
@@ -135,7 +247,9 @@
           $('form[name="frmSubmit"]').submit(function(e){
 
               e.preventDefault();
+              $trans_amt = $('#tdAmt').attr("data-amt");
                $('.btn-choice').attr("disabled","disabled");
+              $('input[name="_trans_amt"]').val($trans_amt);
               $formData = $(this).serialize();
 
               process_request($formData);
@@ -175,7 +289,7 @@
                   complete : function(){
 
                     location = window.location.href;
-                   // setTimeout("function(){'"+ window.location.href +"'}",5000);
+                   setTimeout("function(){'"+ window.location.href +"'}",5000);
                    
                   },
 

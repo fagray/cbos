@@ -12,7 +12,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading blue-bg">
 
-                             My Transactions
+                             TRANSACTIONS
                             </div>
                             <div class="panel-body ">
 
@@ -41,7 +41,9 @@
                                           <td><?php print $transaction->TYPE_DESC ?></td>
                                           <td><?php print $transaction->TRAN_STAT ?></td>
                                           <td>
-                                            <a href="#">View Transaction</a>
+                                            <a href="<?php print base_url('accounts/transactions/'.$transaction->TRAN_ID.'/details') ?>">
+
+                                            View Transaction</a>
                                           </td>
                                         </tr>
                                       <?php } ?>

@@ -14,8 +14,9 @@
             
                     <!-- panel -->
                      <span id="loader"></span>
+                       
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="panel panel-default">
                                     <div class="blue-bg panel-heading">
                                         Search for account details
@@ -34,7 +35,7 @@
                                     </div><!-- /panel-body -->
                                 </div><!-- /panel default -->
                             </div><!-- /col-md-6 -->
-                              <div class="col-md-6">
+                              <!-- <div class="col-md-6">
                                 <div class="panel panel-default">
                                     <div class="blue-bg panel-heading">
                                         Search for transactions
@@ -53,12 +54,12 @@
                                             </div>
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                         </form>
-                                    </div><!-- /panel-body -->
-                                </div><!-- /panel default -->
-                            </div><!-- /col-md-6 -->
+                                    </div>
+                                </div>
+                            </div> -->
 
                         </div><!-- /row -->
-                     
+
                         <div class="panel panel-default">
                             <div class="blue-bg panel-heading">
                                 Statistics 
@@ -83,11 +84,45 @@
                                              <p>Successful Tranfers</p>
                                         </div><!-- /col-md-4 -->
                                     </div><!-- /row -->
-                             
-                                  
                                 </div>
+                            </div><!-- /panel-body -->
+                        </div><!-- /panel-default -->
+                        <div class="panel panel-default">
+                            <div class="blue-bg panel-heading">
+                                Online users 
                             </div>
-                        </div>
+                            <div class="panel-body ">
+                                
+                                <div class="col-md-12">
+                                <span id="usrloader"></span>
+                                <?php if(count($users) > 0) { ?>
+                                    <ul class="list-group">
+                                        <?php foreach($users as $user){ ?>
+                                            <li class="list-group-item">
+                                                <span  class="badge">
+                                                    <a 
+                                                    data-usrname = "<?php print $user->USR_NAME; ?>"
+                                                    id="linkLogout"
+                                                    style="color:#fff;"
+                                                    href="<?php print base_url('acesmain/accounts/logout') ?>">
+                                                        Logout user
+                                                    </a>
+                                                </span>
+                                                <?php print $user->USR_NAME ?>
+                                                ( <?php print $user->LAST_LOGIN ?> )
+                                            </li>
+                                            
+                                        <?php } ?>
+                                    </ul>
+                                <?php }else{ ?>
+
+                                    <h4>There are no current online users. </h4>
+
+                                <?php } ?>
+                                </div><!-- /col-md-12 -->
+                            </div><!-- /panel-body -->
+                            
+                        </div><!-- /panel-default -->
                         <!-- /block -->
                 </div><!-- /content -->
                 </div>    <!-- /row -->
@@ -113,11 +148,11 @@
                         <div class="modal-content">
                             <div class="blue-bg modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title"> </h4>
+                                <h4 class="blue-bg modal-title"> </h4>
                             </div>
                             <div class="modal-body">
                                 <div class="panel panel-default">
-                                    <div class="panel-heading blue-bg">ACCOUNT HOLDER DETAILS</div>
+                                    <div style="color:#fff;" class="panel-heading blue-bg">ACCOUNT HOLDER DETAILS</div>
                                         <div  id="acctDetails" class="panel-body">
                                             
                                         </div><!-- /panel-body -->
@@ -142,15 +177,15 @@
                                     <button type="button" class="btn btn-default">View all</button>
                                 </div><!-- /panel-default -->
                                 
-                            </div>
+                            </div><!-- /modal-body -->
                             <div class="modal-footer">
                                 <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
                                 <a id="linkTransaction" class="btn btn-default">View all transactions</a>
                                 <a  id="linkClientAccount" class="btn btn-default">Go to client account</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </div><!-- /modal-footer -->
+                        </div><!-- /modal-content -->
+                    </div><!-- /modal-dialog -->
+                </div><!-- /modal-fade -->
 
               <hr>
         <?php $this->load->view('admin/layouts/footer') ?>
@@ -167,6 +202,16 @@
 
                 $base_url = getBaseUrl();
                 setDatePicker();
+
+                $('a#linkLogout').click(function(e){
+
+                    e.preventDefault();
+                    // $(this).closest('li');
+                    $username  = $(this).attr("data-usrname");
+                    handle_client_authorization($username);
+                });
+
+
            
                 $tr  = '<tr>';
                 $('form[name="frmAcctNo"]').submit(function(e){
@@ -177,6 +222,44 @@
                     handle_request($formData,$acct_no);
                 });
             });
+
+            function handle_client_authorization($username){
+
+
+                $.ajax({
+
+                     url : "<?php print base_url('acesmain/accounts/logout') ?>",
+                    method : 'GET',
+                   
+                    data : { __usrname : $username } ,
+                    dataType : 'json',
+
+                    beforeSend : function(){
+
+                        $('span#usrloader').html('<div class="progress progress-striped active">'+
+                            '<div class="progress-bar" style="width: 100%"></div></div>');
+                        
+                       disableInputs();
+                    },
+
+                    success : function(data){
+
+                        $('span#usrloader').html('<h4>User has been logged out.</h4>');
+                    },
+
+                    error : function(){
+
+                        alert("An error occured. Please try again");
+                    },
+
+                    complete : function(){
+                        window.location.href = '<?php print current_url() ?>';
+                        removeLoader();
+                    }
+
+
+                });     
+            }
 
             function handle_request(formdata,acct_no){
 

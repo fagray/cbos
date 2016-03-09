@@ -14,6 +14,7 @@ class Transaction extends CI_Controller {
 			return redirect(base_url('auth/login'));
 		}
 
+		$data['page']  = 'TH';
 		$client_no = $this->session->userdata('client_no');
 		$this->load->model('currency_model');
 		$this->load->model('accounts_model');
@@ -64,7 +65,14 @@ class Transaction extends CI_Controller {
 		$ccy = 			$this->input->get('ccy');
 		$acct_no = 		$this->input->get('acct_no');
 		$account = 		$this->accounts_model->get_account($client_no,$acct_no);
-		
+
+		// format the dates
+		$d_start  = new DateTime($start_date);
+		$d_end = new DateTime($end_date);
+		$start_date =  $d_start->format('d-M-y');
+		$end_date =  $d_end->format('d-M-y');
+
+
 		if ( count($account) < 1 ){
 
 			//account not found
@@ -76,9 +84,10 @@ class Transaction extends CI_Controller {
 
 		 $start_balance =  $this->account_bal_model->get_start_balance($internal_key,$start_date);
 		// return print $this->transactions_model->get_back_date_amt($internal_key,$start_date);
-		$end_balance = $this->transactions_model
-							->get_end_balance($internal_key,$start_date,															$end_date,$start_balance);
+		// $end_balance = $this->transactions_model
+		// 					->get_end_balance($internal_key,$start_date,															$end_date,$start_balance);
 		
+		$end_balance = $this->account_bal_model->get_end_balance($internal_key,$end_date);
 		if ( count( $account) < 1){
 
 			return new Exception('Account not found');
@@ -90,10 +99,16 @@ class Transaction extends CI_Controller {
 		
 		$branch_name = $this->get_branch_name($account[0]->BRANCH);
 		$ccy_desc = $this->get_ccy_desc($account[0]->CCY);
+		// return print $start_date .' ' . $end_date;
+		
 
 		// statement header params
+		$this->load->model('statement_header_model');
+		$seq_no = $this->statement_header_model->get_max_id();
+
 		$data = array(
 
+					'SEQ_NO'				=> $seq_no + 1,
 					'INTERNAL_KEY'			=> $internal_key,
 					'CONTACT_TYPE'			=> NULL,
 					'ACCT_NO'				=> $acct_no,
@@ -183,12 +198,13 @@ class Transaction extends CI_Controller {
 		$data['transactions'] = $this->transactions_model
 				->get_trans_history($start_date,$end_date,$internal_key);
 		
+		
 		$data['start_date'] = $this->formatDate($start_date);
 		$data['end_date'] = $this->formatDate($end_date);
 
 
 		// return print_r($data['transactions']);
-		return $this->render('transactions/view_statement',$data);
+		return $this->render('transactions/view_statement3',$data);
 	}
 
 	/**
@@ -216,8 +232,164 @@ class Transaction extends CI_Controller {
 
 
 		 $this->load->helper('dompdf');
-		 $html = $this->load->view('transactions/view_statement', $data, true);
+		 $html = $this->load->view('transactions/view_statement2', $data, true);
      	 return pdf_create($html, 'eStatement as of  '.$start_date. ' to' .$end_date);
+	}
+
+	/**
+	 * Takes in a filename and an array associative data array and outputs a csv file
+	 * @param string $fileName
+	 * @param array $assocDataArray     
+	 */
+	public function outputCsv($fileName, $assocDataArray)
+	{
+	    ob_clean();
+	    header('Pragma: public');
+	    header('Expires: 0');
+	    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+	    header('Cache-Control: private', false);
+	    header('Content-Type: text/csv');
+	    header('Content-Disposition: attachment;filename=' . $fileName);  
+	    $count = count($assocDataArray);
+
+	    if(isset($assocDataArray['0'])){
+
+	        $fp = fopen('php://output', 'w');
+	        fputcsv($fp, array_keys($assocDataArray['0']));
+	        foreach($assocDataArray AS $values){
+	            fputcsv($fp, $values);
+	        }
+	        fclose($fp);
+	    }
+	    ob_flush();
+	}
+
+
+
+	/**
+	 * Convert the estatement to csv format
+	 * @param  int $seq_no 
+	 * @return Response
+	 */
+	public function download_in_csv($seq_no)
+	{
+
+		
+		$this->load->model('statement_header_model');
+		// $this->load->library('m_pdf');
+		$this->load->model('transactions_model');
+		$statement 				= $this->statement_header_model->get_statement($seq_no);
+		$start_date 			= $statement[0]->START_DATE;
+		$end_date 				= $statement[0]->END_DATE;
+		$internal_key 			= $statement[0]->INTERNAL_KEY;
+		// $data['statement'] 		= $statement[0];
+
+		// return print_r($statement);
+		$transactions = $this->transactions_model
+				->get_trans_history($start_date,$end_date,$internal_key);
+
+
+
+		// $data['start_date'] = $this->formatDate($start_date);
+		// $data['end_date'] = $this->formatDate($end_date);
+
+		// prepare the csv file
+		 // $this->load->helper('csv');
+		
+
+		// $array = array(
+
+		// 	array('Last Name', 'First Name', 'Gender'),
+		// 	array('Furtado', 'Nelly', 'female'),
+		// 	array('Twain', 'Shania', 'female'),
+		// 	array('Farmer', 'Mylene', 'female')
+		// );
+
+		$data = array();
+		$i = 0;
+
+		// for($i = 0; $i  < count($transactions); $i)
+		foreach($transactions as $transaction){
+
+			
+			 $tran_date = $this->formatDate($transaction->TRAN_DATE);
+
+			 if(isset($transaction->TRAN_ID)){
+
+			 	$tran_desc =  $transaction->trans_desc;
+			 	$seq_no = "-----";
+			 	$tran_amt = number_format($transaction->trans_amt,2);
+			 	$bal = number_format(-1* $transaction->trans_bal,2);
+
+			 }else{
+
+			 	$tran_desc = $transaction->TRAN_DESC;
+			 	$seq_no = $transaction->SEQ_NO;
+
+			 	if ($transaction->CD_DR_MAINT_IND == 'D'){
+
+			 		$withdrawal = $tran_amt = number_format($transaction->TRAN_AMT,2);
+			 		$deposit = '';
+			 	}else{
+
+			 		$deposit = $tran_amt = number_format($transaction->TRAN_AMT,2);
+			 		$withdrawal = '';
+			 	}
+			 	
+			 	$bal = number_format(-1* $transaction->ACTUAL_BAL_AMT,2);
+			 }
+
+			// $a = array();
+
+			// $data = array(
+			 			// $b = array(
+			 			// 			'Steenebt of account for' => '',
+			 			// 			''		=> '',
+			 						
+			 			// 		);
+
+						 $a = array(
+
+						 		
+
+								'Transaction Date'	 			=> $tran_date,
+								'Transaction Description'		=> $tran_desc,
+								'Cheque/ Seq.No' 				=> $seq_no,
+								'Withdrawal' 					=> $withdrawal,
+								'Deposit' 						=> $deposit,
+								'Balance' 						=> $bal
+							);
+						
+				// );
+
+			array_push($data,$a);
+
+			$i++;
+		}
+
+		return $this->outputCsv('expenses.csv', $data);
+
+	
+		 
+		 // $csv_array_header = array(
+		 // 							'Transaction Date',
+		 // 							'Transaction Desc',
+		 // 							'Cheque/ Seq.No',
+		 // 							'Withdrawal',
+		 // 							'Deposit',
+		 // 							'Balance',
+		 // 						);
+		// return array_to_csv($array, TRUE, 'toto.csv');
+		
+		// $data = array(
+
+		//     array( 'Transaction Date' => 'Server', 'cost' => 10000, 'approved by' => 'Joe'),
+		   
+		// );
+
+
+
+
 	}
 
 	public function toJson($value)
