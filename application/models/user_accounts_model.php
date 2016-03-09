@@ -23,7 +23,7 @@ class User_accounts_model extends CI_Model {
 		// return print $this->db->count_all_results();
 		// $this->db->join('fm_client c','c.CLIENT_NO = a.client_no ','left');
 		$result = $this->db->get()->result_object();
-		return  $result;
+		return $result;
 
 	}
 
@@ -35,7 +35,8 @@ class User_accounts_model extends CI_Model {
 	 */
 	public function change_auth_state($user_id,$state = 0)
 	{
-		$data = array('IS_ACTIVE' => $state);
+		$stamp = date('Y-m-d g:i:s');
+		$data = array('IS_ACTIVE' => $state,'LAST_LOGIN' => $stamp);
 		return $this->db->update($this->table, $data,array('USR_NAME' => $user_id));
 	}
 
@@ -75,7 +76,7 @@ class User_accounts_model extends CI_Model {
 	}
 
 	/**
-	 * Process the changing of password request.
+	 * Process the changing of password request
 	 * @param  string $usr_id       
 	 * @param  string $old_password 
 	 * @param  string $new_password 
@@ -106,9 +107,10 @@ class User_accounts_model extends CI_Model {
 	 */
 	public function change_password($client_no,$new_password)
 	{
+		$encrypted_pass = hash('sha1',$new_password);
 		$data = array(
 			
-					'USR_PASSWORD' 					=> hash_input($new_password),
+					'USR_PASSWORD' 					=> 	$encrypted_pass,
 					'PASSWORD_CHANGED_TIMESTAMP'	=>  date('Y-m-d g:i:s')
 					
 				);	

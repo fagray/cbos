@@ -467,6 +467,7 @@
                   $value = parseInt($(this).val());
                   $source_balance = parseInt($source_balance);
 
+                  
                   if ( $value == 0){
 
                     disableElement($('#cbos_send'));
@@ -474,8 +475,9 @@
 
                   }else if( $value > $source_balance) { 
 
-                    $('span#feedback_trans_amount').html('Transfer amount cannot be more than the source amount.!').css("color","red");
+                    alert($value);
 
+                    $('span#feedback_trans_amount').html('Transfer amount cannot be more than the source amount.!').css("color","red");
 
                     disableElement($('#cbos_send'));
                     $('input[name="trans_desc"]').attr("disabled","disabled").val('');
@@ -1030,6 +1032,10 @@
 
           $('.span12').html("<h3>Plase reload the page to initiate another transactions.</h3>"+
             "<br/><a href='<?php print current_url(); ?>' class='btn btn-primary'>Reload Page</a>");
+        }
+
+        function roundOff(){
+          Math.round( (total * 100 )/ 100 ).toFixed(3); 
         }
 
           </script>

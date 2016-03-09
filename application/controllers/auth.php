@@ -29,6 +29,7 @@ class Auth extends CI_Controller {
 		$password = $this->input->post('usr_password');
 		 $account = $this->user_accounts_model->authenticate_user($username,$password);
 		  // return print_r($account);
+		 // return print  count ($account);
 		if( count ($account) < 1 ){
 
 			$this->session->set_flashdata('msg','Invalid username or password.');
@@ -51,11 +52,12 @@ class Auth extends CI_Controller {
 						'last_login' 	=> 	$account[0]->LAST_LOGIN,
 						'client_name' 	=> 	$account[0]->CLIENT_NAME
 					);
+
 		session_set_cookie_params(0);
 		$this->session->set_userdata($data);
 
 		// determine if the account is new
-		if ( $account[0]->ACCESS_TYPE == 0){
+		if ( $account[0]->ACCESS_TYPE == '0'){
 			return redirect(base_url('accounts/new/settings/change-password/'.random_string('alnum',12)));
 
 		}
@@ -165,7 +167,10 @@ class Auth extends CI_Controller {
 		$this->change_authentication_state();
 
 		$this->session->unset_userdata('access_token');
-		$this->session->sess_destroy();
+		$this->session->unset_userdata('urname');
+		$this->session->unset_userdata('urname');
+		$this->session->unset_userdata('last_login');
+		$this->session->unset_userdata('client_no');
 		return redirect(base_url('auth/login'));
 	}
 

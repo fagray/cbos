@@ -56,8 +56,9 @@
         </p>
     </div><!-- /col-md-4 -->
   </div><!-- /row -->
+
   <div class="row">
- 
+  
    <strong><?php print $statement->ACCT_NO ?></strong>
     
     <table  class="table table-hover">

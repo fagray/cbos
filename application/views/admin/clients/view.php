@@ -23,7 +23,7 @@
                               
                                 <p><strong>Basic Information</strong></p><hr/>
 
-                                  <p>Client Number : <?php print $client[0]->CLIENT_NO; ?></p>
+                                  <p>Client Number : <?php print $client[0]->CLIENT_NO; ?></p><br/>
                                   <p>Client Name : <?php print $client[0]->CLIENT_NAME; ?></p><br/>
 
                                    <p><strong>Accounts</strong> </p><hr/>
@@ -31,7 +31,6 @@
                                     <?php if(count($accounts) < 1 ){ ?>
                                       <h4>This client has no available accounts.</h4>
                                     <?php } ?>
-
 
                                       <!-- /accounts block -->
                                     <?php foreach($accounts as $account){ ?>
@@ -42,7 +41,8 @@
                                           <div class="panel-body">
                                               <div class="col-md-12">
                                                 <span class="pull-right">
-                                                <p><strong>Opening Balance : <?php print number_format($account->LEDGER_BAL,2) ?></strong></p><br/>
+                                                <p><strong>Ledger Balance : 
+                                                <?php print number_format(-1 * $account->LEDGER_BAL,2) ?></strong></p><br/>
                                                 </span>
                                                 <p>Currency :  <?php print $account->CCY ?></p>
                                                 <p>Account Description : <?php print $account->ACCT_DESC ?></p>
@@ -68,7 +68,7 @@
                 <div class="modal-content">
                   <div class="blue-bg modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    Change Client Password
+                    <h4 style="color:#fff;">Change Client Password</h4>
                   </div>
                   <div class="modal-body">
                       <div id="response"></div>
@@ -132,10 +132,12 @@
 
 
             $('button#btn-changepassword').click(function(){
+
                 $client_no = $(this).attr('data-client-no');
                 $client_name = $(this).attr('data-client');
-                $("#modal-changepass .modal-body #client-info").html('<p>Client Name : '+$client_name+'</p>'+
-                  '<p>Client No : '+$client_no+'</p>'
+
+                $("#modal-changepass .modal-body #client-info").html('<h4>Client Name : '+$client_name+'</h4>'+
+                  '<h4>Client No : '+$client_no+'</h4>'
                   );
                 $('#modal-changepass').modal({
 
@@ -144,6 +146,7 @@
             });
 
             $('form#frmChangePass').submit(function(e){
+
               e.preventDefault();
               $formData = $(this).serialize();
               handleRequest($formData);

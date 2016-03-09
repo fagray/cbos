@@ -1,10 +1,9 @@
         <!-- /content -->
 
             <div class="row">
-              <?php $this->load->view('admin/layouts/sidebar') ?>
             
               <div class="col-md-9" id="content">
-                        
+              <?php $this->load->view('admin/layouts/sidebar') ?>
                         <span class="pull-right">
                            <?php if($account[0]->TRAN_STAT == 'In progress'){ ?>
                             <button data-choice="Rejected"  

@@ -11,7 +11,8 @@
         <link href="<?php print base_url('public/assets/vendors/data-tables/jquery.dataTables.min.css') ?>" rel="stylesheet" media="screen">
         <link href="<?php print base_url('public/assets/vendors/data-tables/dataTables.tableTools.css') ?>" rel="stylesheet" media="screen">
         <link href="<?php print base_url('public/assets/vendors/data-tables/dataTables.bootstrap.css') ?>" rel="stylesheet" media="screen">
-        <link rel="stylesheet" type="text/css" href="<?php print base_url('public/assets/vendors/datepicker/jquery.datetimepicker.css') ?>">    
+        <link rel="stylesheet" type="text/css" href="<?php print base_url('public/assets/vendors/datepicker/jquery.datetimepicker.css') ?>">
+        <link rel="stylesheet" type="text/css" href="<?php print base_url('public/assets/vendors/dialog/dialog.css') ?> ">    
     </head>
      <body>
 

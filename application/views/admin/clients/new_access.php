@@ -11,11 +11,11 @@
                             </div>
                             <div class="panel-body">
                                 <div class="col-md-12">
-                                   <div id="feedback"></div>
+                                   <div style="display:none;" class="alert alert-info" id="feedback"></div>
                                    <?php echo form_open('',array('name' => 'frmAccess','class' => 'form-group')) ?>
                                         <div class="form-group">
                                             <label for="">Client No.</label>
-                                            <?php echo form_input('client_no','',array('required' => 'required','type' => 'text','class' => 'form-control error')); ?>
+                                            <?php echo form_input('client_no','',array('required' => 'required','type' => 'number','class' => 'form-control error')); ?>
                                             <span id="response"></span>
                                         </div>
 
@@ -40,7 +40,7 @@
                                             </span>
                                         </div>
                                         <br/><br/>
-                                        <?php echo form_submit('btn_access blue-bg', 'Grant Access',array('class' =>  'btn btn-primary')); ?>
+                                        <?php echo form_submit('btn_access ', 'Grant Access',array('class' =>  ' blue-bg btn btn-primary','id' => 'btn_submit')); ?>
                                     <?php echo form_close(); ?>
                                 </div>
                             </div>
@@ -52,33 +52,56 @@
         <?php $this->load->view('layouts/footer') ?>
 
         <!-- /External files -->
-        <link rel="stylesheet" type="text/css" href="<?php print base_url('public/assets/vendors/autocomplete/jquery.auto-complete.css') ?>">
-        <script src="<?php print base_url('public/assets/vendors/autocomplete/jquery.auto-complete.min.js') ?>"></script>
+
+       
         <script type="text/javascript">
 
             $(document).ready(function(){
 
+                $pass_field1 =  $('input[name="accss_pass_field1"]');
+                $rand_pass = '';
+                $btn_access = $('input[id="btn_submit"]');
+                $btn_access.attr("disabled","disabled");
+                $term = '';
+                $('input[name="user_name"]').attr("disabled","disabled");
+                $('input[name="accss_pass_field2"]').attr("disabled","disabled");
               $('input[name="client_no"]').keyup(function(){
+
                     $element = $(this);
-                    var term = $(this).val();
-                        $.getJSON('<?php print base_url("acesmain/clients/find") ?>', { q: term }, 
+                    $term = $(this).val();
+
+                        if($term > 7){
+
+                            $.getJSON('<?php print base_url("acesmain/clients/find") ?>', { q: $term }, 
+                            
                             function(data){
+
                               console.log(data);
+
                                 if ( data[0].response == 500){
+
                                     $('span#response').html('Client not found.').css("color","#ff0000");
                                     $element.attr("id","inputError");
+                                    $btn_access.attr("disabled","disabled");
+
                                 }else{
-                                      $('span#response').html('');
+
+                                    $('input[name="user_name"]').removeAttr("disabled");
+                                    $('input[name="accss_pass_field2"]').removeAttr("disabled");                                    
+                                    $('span#response').html('');
 
                                 }
                             });
+
+                            return false;
+                        }
+
+                        $('span#response').html('Minimum input is 8 characters.');
+
                     
                 });
 
-                $pass_field1 =  $('input[name="accss_pass_field1"]');
-                $rand_pass = '';
-                $btn_access = $('input[name="btn_access"]');
-                $btn_access.attr("disabled","disabled");
+               
 
                 $('a#lnkPasswordGenerator').on('click',function(e){
 
@@ -112,9 +135,10 @@
                 $('input[name="accss_pass_field2"]').keyup(function(){
                     $val = $(this).val();
 
-                    if ( $val != $rand_pass){
+                    if ( $val.length > 5 && $val != $rand_pass){
 
                         $('.form-group span#pass2').html("Password do not match.").css('color','red');
+                        $('input[name="user_name"]').attr("disabled","disabled");
 
                     }else{
 
@@ -148,7 +172,10 @@
 
                         success: function(data){
 
-                             $('div#feedback').html('Request has been completed. Access has been created.').css("background","green").css("color","#fff");
+                             $('div#feedback').html('Request has been completed. Access has been created.')
+                                    .css("background","green")
+                                    .css("color","#fff")
+                                    .css("display","block");
                              $('div#feedback').append('<br/><a href="<?php print base_url("acesmain") ?>">Go back to main page.</a>');
                              $('.form-group').remove();
                              $('input').remove();
@@ -156,7 +183,12 @@
 
                         error : function(data){
 
-                             $('div#feedback').html('Client has already have an access. Operation aborted.').css("background","red").css("color","#fff");
+                             $('div#feedback').html('The requested client had already have an access.Operation aborted.')
+                                .css("background","red")
+                                .css("color","#fff")
+                                .addClass('alert alert-danger')
+                                .css("display","block");
+
                              $('div#feedback').append('<a href="<?php print base_url("acesmain") ?>">Go back to main page.</a>');
                              $('.form-group').remove();
                              $('input').remove();

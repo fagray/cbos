@@ -19,9 +19,35 @@ class System_users_model extends CI_Model {
 		$this->db->where('USR_ACS_USERNAME',$user_id);
 		$this->db->where('USR_ACS_PASS',$password);
 		$result = $this->db->get()->result_object();
-		return  $result;
+
+		if ( $result > 0 ){
+
+			$user_id = $result[0]->USR_ACS_ID;
+			// update the last login field
+			$this->update_last_logged_in($user_id);
+			
+		}
+
+		return $result;
+		
+
+	}	
+
+	/**
+	 * Add a login timestamp to the user.
+	 * @param  int $user_id 
+	 * @return Response          
+	 */
+	public function update_last_logged_in($user_id)
+	{
+		$stamp   = date('Y-m-d g:i:s');
+		return $this->db->update($this->table,
+					array('USR_ACS_LAST_LOGIN' => $stamp),
+					array('USR_ACS_ID' => $user_id));
 
 	}
+
+
 
 	/**
 	 * Return the current user password.
