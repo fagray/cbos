@@ -1,14 +1,15 @@
         <!-- /content -->
 
             <div class="row">
-            
-              <div class="col-md-9" id="content">
               <?php $this->load->view('admin/layouts/sidebar') ?>
+            <div class="col-md-9" id="content">
+
+
                         <span class="pull-right">
                            <?php if($account[0]->TRAN_STAT == 'In progress'){ ?>
-                            <button data-choice="Rejected"  
+                          <!--   <button data-choice="Rejected"  
                                 type="button" class="btn-choice btn btn-danger blue-bg">Reject
-                            </button>
+                            </button> -->
                             <button data-choice="Approved"  
                               type="button" class="btn-choice btn btn-success blue-bg ">Approve
                             </button>
@@ -28,6 +29,11 @@
 
                             </div>
 
+                            <?php }else{  ?>
+
+                            <div class="alert alert-info">
+                              This transaction is pending for approval.
+                            </div>
                             <?php } ?>
                         
 
