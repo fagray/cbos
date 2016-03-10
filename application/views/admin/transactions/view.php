@@ -9,13 +9,14 @@
                            <?php if($account[0]->TRAN_STAT == 'In progress'){ ?>
                           <!--   <button data-choice="Rejected"  
                                 type="button" class="btn-choice btn btn-danger blue-bg">Reject
-                            </button> -->
+                            </<button></button>n> -->
                             <button data-choice="Approved"  
-                              type="button" class="btn-choice btn btn-success blue-bg ">Approve
+                              type="button" class="btn-choice btn btn-success blue-bg ">Approve this transaction
                             </button>
-                          <?php } ?>
+                          <?php }else if( $account[0]->TRAN_STAT == 'Approved' ){ ?>
                           </span><!-- /pull-right -->
-                          <?php  if( $account[0]->TRAN_STAT == 'Approved'){ ?>
+                          <br/><br/><br/>
+                         
 
                             <div class="alert alert-success">This transaction has been approved on
                             <?php print $account[0]->CONFIRM_TIMESTAMP . ' by '.$account[0]->CONFIRM_REF; ?>
@@ -29,7 +30,7 @@
 
                             </div>
 
-                            <?php }else{  ?>
+                            <?php }else if( $account[0]->TRAN_STAT == 'In progress' ) {  ?>
 
                             <div class="alert alert-info">
                               This transaction is pending for approval.
@@ -93,8 +94,9 @@
                                             <?php if($account[0]->TRAN_STAT == 'In progress'){ ?>
                                             
                                               <td>
-                                                <button data-choice="Rejected"  type="button" class="btn-choice btn-danger blue-bg">Reject</button>
-                                                <button data-choice="Approved"  type="button" class="btn-choice btn-success blue-bg">Approve</button>
+                                                <span class="label label-warning">
+                                                  <?php print $account[0]->TRAN_STAT ?>
+                                                </span>
                                               </td>
 
                                               <?php } else if( $account[0]->TRAN_STAT == 'Approved'){ ?>
@@ -117,7 +119,7 @@
                                           </tr>
                                         </tbody>
                                       </table>
-                                    <?php } ?><!-- /end of CBOS DETAILS -->
+                                    <?php }else{ ?><!-- /end of CBOS DETAILS -->
 
                                     <!-- START OF OTHER BANKS TRANSFER DETAILS -->
 
@@ -180,7 +182,7 @@
                                           </tr>
                                         </tbody>
                                       </table>
-
+                                      <?php } ?>
                                     </div><!-- /panel-body -->
                                   </div><!-- /panel-default -->
 
