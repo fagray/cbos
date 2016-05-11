@@ -63,37 +63,44 @@ class Transactions_model extends CI_Model {
 	 */
 	public function get_trans_history($start_date,$end_date,$internal_key)
 	{
+
 		// return print $start_date.' '. $end_date;
 		// $start_date = date('Y-m-d',strtotime(str_replace('-', '/', $start_date)));
 		// $end_date = date('Y-m-d',strtotime(str_replace('-', '/', $end_date)));
 		$d_start  = new DateTime($start_date);
 		$d_end = new DateTime($end_date);
-		$start_date =  $d_start->format('d-M-y');
-		$end_date =  $d_end->format('d-M-y');
-		// $this->db->select("*");
-		// $this->db->from($this->table);
-		// $this->db->where("INTERNAL_KEY",$internal_key);
-		// $this->db->where("TRAN_DATE >= ", "$start_date");
-		// $this->db->where("TRAN_DATE <=", "$end_date");
-		// $this->db->order_by("TRAN_DATE ", "ASC");
-		// $result =  $this->db->get()->result_object();
-		// return $result;
+		$formatted_start_date =  $d_start->format('d-M-y');
+		$formatted_end_date =  $d_end->format('d-M-y');
+
+
+	
 		$this->db->select('*');
 		$this->db->from('RB_TRAN_HIST h');
-		$this->db->where('h.TRAN_DATE >= ', $start_date);
-		$this->db->where('h.TRAN_DATE <=', $end_date);
+		$this->db->where('h.TRAN_DATE >= ', $formatted_start_date);
+		$this->db->where('h.TRAN_DATE <=', $formatted_end_date);
 		$this->db->where('h.INTERNAL_KEY',$internal_key);
+		// $this->db->where('h.STATUS','COMPLETED');
 		$res1 = $this->db->get()->result_object();
 
-		$this->db->select('TRAN_DESC as trans_desc,TRAN_AMT as trans_amt,TRAN_DATE,ACTUAL_BAL as trans_bal ,
-			TRAN_AMT as trans_amt,TRAN_DESC  as trans_desc,TRAN_ID');
-		$this->db->from('OBA_USER_TRANSACTIONS');
-		$this->db->where('TRAN_DATE >= ', $start_date);
-		$this->db->where('TRAN_DATE <=', $end_date);
-		$this->db->where('INTERNAL_KEY',$internal_key);
-		$res2 = $this->db->get()->result_object();
+		return $res1;
+		// $d_start  = new DateTime($start_date);
+		// $d_end = new DateTime($end_date);
+		// $formatted_start_date =  $d_start->format('Y-m-d');
+		// $formatted_end_date =  $d_end->format('Y-m-d');
 
-		return array_merge($res1,$res2);
+		// $this->db->select('TRAN_DESC as trans_desc,TRAN_AMT as trans_amt,TRAN_DATE,ACTUAL_BAL as trans_bal ,
+		// 	TRAN_AMT as trans_amt,TRAN_DESC  as trans_desc,TRAN_ID');
+		// $this->db->from('OBA_USER_TRANSACTIONS');
+		// $this->db->where('TRAN_DATE >= ', $formatted_start_date);
+		// $this->db->where('TRAN_DATE <=', $formatted_end_date);
+		// $this->db->where('INTERNAL_KEY',$internal_key);
+		// $this->db->where('TRAN_STAT','Approved');
+		// $res2 = $this->db->get()->result_object();
+
+		// return print_r($res1);
+		// return print_r($res2);
+
+		//return array_merge($res1,$res2);
 	}
 
 	// public function get_end_balance($internal_key,$start_date,$end_date,$start_balance)

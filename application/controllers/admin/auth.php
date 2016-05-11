@@ -19,6 +19,7 @@ class Auth extends CI_Controller {
 	 */
 	public function index()
 	{
+		// return print hash('sha1','cbosadmin');
 		if ( $this->session->has_userdata('panel_access_token')) {
 			
 			return redirect(base_url('acesmain/home'));
@@ -33,9 +34,9 @@ class Auth extends CI_Controller {
 	 */
 	public function post_login()
 	{
-
-		$this->load->library('passwordhash');
 		
+
+		// $this->load->library('passwordhash');
 		
 		$this->load->model('system_users_model');
 		$username = $this->input->post('usr_id');
@@ -44,8 +45,8 @@ class Auth extends CI_Controller {
 		// $encrypted_pass = $this->passwordhash->HashPassword($this->input->post('usr_password'));
 		// return print $encrypted_pass . ' - '. $this->passwordhash->HashPassword('raymund');exit();
 
-		$account = $this->system_users_model->authenticate_user($username,$password);
-		
+		 $account = $this->system_users_model->authenticate_user($username,$password);
+
 		if( count ($account) < 1 ){
 
 			$this->session->set_flashdata('msg','Invalid username or password.');
@@ -60,7 +61,6 @@ class Auth extends CI_Controller {
 					);
 
 		$this->session->set_userdata($data);
-
 		
 		// $data['accounts']  = $this->accounts_model->get_client_accounts($account[0]->CLIENT_NO);
 		return redirect(base_url('acesmain/home'));
@@ -74,10 +74,7 @@ class Auth extends CI_Controller {
 	{
 		$this->load->library('password_service_provider');
 		return print $this->password_service_provider->get_random_password(12,18,false,true,false);
-		// $random_pass = random_string('alnum',16);
-		// return $this->output
-	 //        ->set_content_type('application/json')
-	 //        ->set_output(json_encode(array('rnd_pass' => $random_pass)));
+		
 	}
 
 	/**
@@ -87,7 +84,8 @@ class Auth extends CI_Controller {
 	public function destroy()
 	{
 		$this->session->unset_userdata('panel_access_token');
-		$this->session->sess_destroy();
+		$this->session->unset_userdata('usrname');
+		$this->session->unset_userdata('last_login');
 		return redirect(base_url('acesmain'));
 	}
 

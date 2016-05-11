@@ -19,18 +19,18 @@
                             <div class="col-md-12">
                                 <div class="panel panel-default">
                                     <div class="blue-bg panel-heading">
-                                        Search for account details
+                                        ACCOUNT TRACKER
                                     </div>
                                     <div class="panel-body">
                                         <?php print form_open('',array('name' => 'frmAcctNo')); ?>
                                           
                                             <div class="form-group">
                                                 <label for="">Account No.</label>
-                                                <?php print form_input('acct_no', '',array('class' => 'form-control','placeholder'  => 'Enter account number')); ?>
+                                                <?php print form_input('acct_no', '',array('class' => 'form-control','placeholder'  => 'Enter account number','required' => 'required')); ?>
                                             </div>
                                         
                                             
-                                            <?php print form_submit('btn_acct_no_submit','Search',array('class' => 'btn btn-primary')) ?>
+                                            <?php print form_submit('btn_acct_no_submit','Search',array('class' => 'btn btn-primary blue-bg')) ?>
                                        <?php print form_close(); ?>
                                     </div><!-- /panel-body -->
                                 </div><!-- /panel default -->
@@ -62,7 +62,7 @@
 
                         <div class="panel panel-default">
                             <div class="blue-bg panel-heading">
-                                Statistics 
+                                STATISTICS
                             </div>
                             <div class="panel-body ">
                                 <div class="col-md-12">
@@ -89,7 +89,7 @@
                         </div><!-- /panel-default -->
                         <div class="panel panel-default">
                             <div class="blue-bg panel-heading">
-                                Online users 
+                               ONLINE USERS 
                             </div>
                             <div class="panel-body ">
                                 
@@ -132,7 +132,7 @@
                         <div class="modal-content">
                             <div class="blue-bg modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title"> Account Not found.</h4>
+                                <h4 class="modal-title blue-bg">Account Not found.</h4>
                             </div>
                             <div class="modal-body">
                                 <p style="color:red;">Sorry, no results found for your query. Account not found.</p>
@@ -166,7 +166,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Transaction ID</th>
-                                                <th>Request Tiemstamp</th>
+                                                <th>Request Timestamp</th>
                                                 <th>Type</th>
                                             </tr>
                                         </thead>
@@ -174,7 +174,6 @@
                                            
                                         </tbody>
                                     </table>
-                                    <button type="button" class="btn btn-default">View all</button>
                                 </div><!-- /panel-default -->
                                 
                             </div><!-- /modal-body -->

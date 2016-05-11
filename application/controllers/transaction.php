@@ -113,6 +113,7 @@ class Transaction extends CI_Controller {
 					'CONTACT_TYPE'			=> NULL,
 					'ACCT_NO'				=> $acct_no,
 					'ACCT_DESC'				=> $account[0]->ACCT_DESC,
+					'ACCT_TYPE'				=> $account[0]->ACCT_TYPE,
 					'CCY'					=> $account[0]->CCY,
 					'CCY_DESC'				=> $ccy_desc,
 					'BRANCH'				=> $account[0]->BRANCH,
@@ -274,7 +275,8 @@ class Transaction extends CI_Controller {
 	public function download_in_csv($seq_no)
 	{
 
-		
+		$withdrawal = '';
+		$deposit = '';
 		$this->load->model('statement_header_model');
 		// $this->load->library('m_pdf');
 		$this->load->model('transactions_model');
@@ -325,11 +327,12 @@ class Transaction extends CI_Controller {
 
 			 	$tran_desc = $transaction->TRAN_DESC;
 			 	$seq_no = $transaction->SEQ_NO;
-
-			 	if ($transaction->CD_DR_MAINT_IND == 'D'){
+			 	
+			 	if ($transaction->CR_DR_MAINT_IND == 'D'){
 
 			 		$withdrawal = $tran_amt = number_format($transaction->TRAN_AMT,2);
 			 		$deposit = '';
+
 			 	}else{
 
 			 		$deposit = $tran_amt = number_format($transaction->TRAN_AMT,2);
@@ -366,8 +369,7 @@ class Transaction extends CI_Controller {
 
 			$i++;
 		}
-
-		return $this->outputCsv('expenses.csv', $data);
+		return $this->outputCsv( 'eStatement as of  '.$start_date. ' to' .$end_date.'.csv', $data);
 
 	
 		 

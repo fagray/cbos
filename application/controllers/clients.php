@@ -3,9 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Clients extends CI_Controller {
 
-
-
-
 	/**
 	 * Find a resource based on reference key.
 	 * @return Response 

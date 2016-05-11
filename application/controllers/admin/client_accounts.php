@@ -20,6 +20,7 @@ class Client_accounts extends CI_Controller {
 	 */
 	public function create()
 	{
+		// return print hash('sha1', '12345678');
 		return $this->render('clients/new_access', NULL);
 	}
 
@@ -29,32 +30,33 @@ class Client_accounts extends CI_Controller {
 	 */
 	public function store()
 	{
-		$this->output->enable_profiler(TRUE);
+		// $this->output->enable_profiler(TRUE);
 		$this->load->model('user_accounts_model');
 		$this->load->helper('date');
 		
+		$client_no =  $this->input->get('client_no');
 
-			$client_no =  $this->input->get('client_no');
-			if ( $this->has_access($client_no) ){
+		if ( $this->has_access($client_no) ){
 
-				return show_error('Invalid request. Client has already have an acecss.');
-			}
+			return show_error('Invalid request. Client has already have an acecss.');
+		}
 
-			$password =  $this->input->get('accss_pass_field2');
-			$username =  $this->input->get('user_name');
-		
-			
-			$params = array(
-								'USR_ID' 		=> random_string('alnum',12),
-								'USR_NAME'		=> $username,
-								'USR_PASSWORD'	=> hash('sha1',$password),
-								'CLIENT_NO'		=> $client_no,
-								'DATE_ADDED'	=> now(),
-								'STATUS'		=> 'Granted',
-								'ACCESS_TYPE'	=> '0'
-						);
-			$this->user_accounts_model->create_new_client_acccount($params);
-			
+		$password =  $this->input->get('accss_pass_field2');
+		$username =  $this->input->get('user_name');
+		$email =  $this->input->get('client_email');
+	
+		$params = array(
+							'USR_ID' 		=> random_string('alnum',12),
+							'USR_NAME'		=> $username,
+							'USR_PASSWORD'	=> hash('sha1',$password),
+							'CLIENT_EMAIL'	=> $email,
+							'CLIENT_NO'		=> $client_no,
+							'DATE_ADDED'	=> date('Y-m-d g:i:s'),
+							'STATUS'		=> 'Granted',
+							'ACCESS_TYPE'	=> '0'
+					);
+
+		return $this->user_accounts_model->create_new_client_acccount($params);
 		
 	}
 
@@ -156,11 +158,11 @@ class Client_accounts extends CI_Controller {
 	{
 		$this->load->model('user_accounts_model');
 		$account = $this->user_accounts_model->check_if_has_access($client_no);
-		if ( $account > 0 ){
-
+		if ( $account == 1 ){
+			
 			return true;
 		}
-
+		
 		return false;
 	}
 

@@ -8,9 +8,9 @@
               <div class="col-md-9" id="content">
                         
                     
-                          <?php  if( $account[0]->TRAN_STAT == 'Approved'){ ?>
+                          <?php  if( $account[0]->TRAN_STAT == 'COMPLETED'){ ?>
 
-                            <div class="alert alert-success">This transaction has been approved on
+                            <div class="alert alert-success">This transaction has been COMPLETED on
                             <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
                             </div>
 

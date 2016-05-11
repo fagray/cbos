@@ -7,10 +7,10 @@
 
             <div class="col-md-9" id="content">
                     
-                <!-- <a href="<?php print 
+               <!-- <a href="<?php print 
                   base_url('accounts/'.$account[0]->ACCT_NO.'/transfers/new/mode?multiple') ?>" 
 
-                class="pull-right blue-bg btn btn-default">Switch to multiple transfer</a><Br/><br/> -->
+                class="pull-right blue-bg btn btn-default">Switch to multiple transfer</a><Br/><br/> --> 
                 <h3>New Fund Transfer from ACCT.NO # <?php print $account[0]->ACCT_NO; ?> </h3>
                     <!-- block -->
                         <div class="panel panel-default">
@@ -74,7 +74,7 @@
                                                 </td>
                                               </tr>
                                               <tr>
-                                                <td>Account Number </td>
+                                                <td>Account Number* </td>
                                                 <td> 
                                                   <select name="cbos_acct_no"  class="form-control" >
                                                     <option value=""></option>
@@ -107,13 +107,13 @@
                                                 <td class="requiredValues"  id="trans_ccy"> </td>
                                               </tr>
                                                <tr>
-                                                <td>Transfer Amount </td>
+                                                <td>Transfer Amount* </td>
                                                 <td> <input required="required" type="text" name="trans_amount" id="input" class="form-control" value="" required="required" pattern="" title="">
                                                 <span id="feedback_trans_amount"></span>
                                                 </td>
                                               </tr>
                                                <tr>
-                                                <td>Transfer Description </td>
+                                                <td>Transfer Description* </td>
                                                 <td> 
                                                   <input required="required" name="trans_desc" id="inputTrans_desc" class="form-control" >
                                                 </td>
@@ -121,7 +121,10 @@
 
                                             </tbody>
 
-                                          </table>  
+                                          </table>
+                                          <span class="pull-left">
+                                            <span style="color:#0099FF;">* Fields are required.</span>
+                                           </span>  
                                           <span class="pull-right">
                                              <a id="cbos_send" href="#" class="blue-bg btn btn-primary">Send</a>
                                              <button type="button" class="btn-clear btn btn-default blue-bg">Clear</button>
@@ -169,7 +172,16 @@
                                               <tr>
                                                 <td>Bank Name * </td>
                                                 <td>
-                                                     <input data-required="true" required="required" type="text" name="other_bank_name" id="input" class="form-control" value=""  required="required" >
+                                                  <select name="other_bank_name" id="input" class="form-control" required="required">
+                                                    <option value=""></option>
+
+                                                    <?php foreach($banks as $bank){ ?>
+                                                      <option value="<?php print $bank->CLIENT_SHORT ?>">
+                                                        <?php print $bank->CLIENT_SHORT;  ?>
+                                                      </option>
+                                                    <?php } ?>
+                                                  </select>
+                                                     
                                                  </td>
                                               </tr>
                                               <tr>
@@ -179,7 +191,7 @@
                                               </tr>
 
                                               <tr>
-                                                <td>TIBAN Number </td>
+                                                <td>IBAN Number </td>
                                                 <td> <input  data-required="true" required="required" type="number" name="other_tiban_number" id="input" class="form-control" value=""  >
                                                 
                                                 </td>
@@ -223,6 +235,9 @@
                                           </table>  
 
                                          
+                                          <span class="pull-left">
+                                            <span style="color:#0099FF;">* Fields are required.</span>
+                                          </span>
 
                                           <span class="pull-right">
                                              <button id="others_send" type="submit" class="blue-bg btn btn-primary">Send</button>
@@ -321,7 +336,7 @@
                       <tbody>
                         <tr >
                           <td>Transfer To : </td>
-                          <td style="background:#ccc;"> 
+                          <td class="blue-bg"> 
                            Other Banks Account
                           </td>
                         </tr>
@@ -475,7 +490,7 @@
 
                   }else if( $value > $source_balance) { 
 
-                    alert($value);
+                    // alert($value);
 
                     $('span#feedback_trans_amount').html('Transfer amount cannot be more than the source amount.!').css("color","red");
 
@@ -618,6 +633,15 @@
 
                       clearPage();
 
+                    },
+
+                    erro : function(){
+
+                         $('#content').html('Transaction Unsuccessful.<a href="'+$current_url+'" class="btn btn-primary">Click here to reload</a>');
+                        $('.modal-footer').remove();
+                        $('.modal-title').html("<h4>Transfer Error</h4>").css("color","#ff0000");
+                        $('.modal-body table').remove();
+
                     }
 
 
@@ -673,42 +697,9 @@
         /* Start Other Banks handlers */
 
 
-        // function checkForAccountNumber($acct_no){
-
-        //           $.ajax({
-
-        //             dataType : 'json',
-        //             method : 'GET',
-        //             data : { acct_no  : $acct_no },
-        //             url : '<?php print base_url("accounts/async_check_account_number") ?>',
-
-        //             beforeSend : function(){
-
-        //               $('span#other_acct_feedback').html("<p>Checking...</p>");
-        //             },
-
-        //             success : function(data){
-
-        //                 if(data.response == 200){
-
-        //                   enableFieldsOfOtherBanksTab();
-        //                   $('span#other_acct_feedback').html(data.msg).css("color","#006633");
-
-        //                 }else{
-
-        //                   disableFieldsOfOtherBanksTab();
-        //                   $('span#other_acct_feedback').html(data.msg).css("color","red");
-
-        //                 }
-        //             }
-
-        //           }); //ajax request
-
-        //     }
-
         function disableFieldsOfOtherBanksTab(){
 
-          $('input[name="other_bank_name"]').attr("disabled","disabled");
+          $('select[name="other_bank_name"]').attr("disabled","disabled");
           $('input[name="other_acct_name"]').attr("disabled","disabled");
           $('select[name="other_ccy"]').attr("disabled","disabled");
           $('input[name="other_trans_amount"]').attr("disabled","disabled");
@@ -717,7 +708,7 @@
 
          function enableFieldsOfOtherBanksTab(){
 
-          $('input[name="other_bank_name"]').removeAttr("disabled");
+          $('select[name="other_bank_name"]').removeAttr("disabled");
           $('input[name="other_acct_name"]').removeAttr("disabled");
           $('select[name="other_ccy"]').removeAttr("disabled");
           $('input[name="other_trans_amount"]').removeAttr("disabled");
@@ -734,7 +725,7 @@
 
                   $('td#other_trans_desc').html($('input[name="other_trans_desc').val());
                   $('td#other_acct_name').html($('input[name="other_acct_name').val());
-                  $('td#other_bank_name').html($('input[name="other_bank_name').val());
+                  $('td#other_bank_name').html($('select[name="other_bank_name').val());
                   $('td#other_swift_code').html($('input[name="other_swift_code').val());
                   $('td#other_tiban_number').html($('input[name="other_tiban_number').val());
                   $('td#other_ccy').html($('select[name="other_ccy').val());
@@ -744,7 +735,7 @@
                   $other_trans_desc                 = $('input[name="other_trans_desc').val();
                   $other_acct_no                    = $('input[name="other_acct_no').val();
                   $other_acct_name                  = $('input[name="other_acct_name').val();
-                  $other_bank_name                  = $('input[name="other_bank_name').val();
+                  $other_bank_name                  = $('select[name="other_bank_name').val();
                   $other_ccy                        = $('select[name="other_ccy').val();
                   $other_trans_amount               = $('input[name="other_trans_amount').val();
                   $other_swift_code                 = $('input[name="other_swift_code').val();
@@ -1023,7 +1014,7 @@
 
        function format(selector){
 
-        $(selector).autoNumeric('init');
+        // $(selector).autoNumeric('init');
         // return $.number(value,2);
 
        }

@@ -20,7 +20,7 @@ class System_users_model extends CI_Model {
 		$this->db->where('USR_ACS_PASS',$password);
 		$result = $this->db->get()->result_object();
 
-		if ( $result > 0 ){
+		if ( count($result) > 0 ){
 
 			$user_id = $result[0]->USR_ACS_ID;
 			// update the last login field

@@ -3,30 +3,25 @@
             <div class="row">
               <?php $this->load->view('admin/layouts/sidebar') ?>
             <div class="col-md-9" id="content">
-
+                         <h3>Transaction Details : TRAN_ID : <?php print $account[0]->TRAN_ID ?> </h3>
 
                         <span class="pull-right">
-                           <?php if($account[0]->TRAN_STAT == 'In progress'){ ?>
-                          <!--   <button data-choice="Rejected"  
-                                type="button" class="btn-choice btn btn-danger blue-bg">Reject
-                            </<button></button>n> -->
-                            <button data-choice="Approved"  
-                              type="button" class="btn-choice btn btn-success blue-bg ">Approve this transaction
-                            </button>
-                          <?php }else if( $account[0]->TRAN_STAT == 'Approved' ){ ?>
+                          
+                        
+                          <?php if( $account[0]->TRAN_STAT == 'COMPLETED' ){ ?>
                           </span><!-- /pull-right -->
                           <br/><br/><br/>
                          
 
                             <div class="alert alert-success">This transaction has been approved on
-                            <?php print $account[0]->CONFIRM_TIMESTAMP . ' by '.$account[0]->CONFIRM_REF; ?>
+                            <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
                             </div>
 
                            <?php }else if( $account[0]->TRAN_STAT == 'Rejected') { ?>
 
                             <div class="alert alert-danger">
                               This transaction has been denied on  
-                                <?php print $account[0]->CONFIRM_TIMESTAMP . ' by '.$account[0]->CONFIRM_REF; ?>
+                                <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
 
                             </div>
 
@@ -35,6 +30,12 @@
                             <div class="alert alert-info">
                               This transaction is pending for approval.
                             </div>
+
+                            <button data-choice="Approved"  
+                              type="button" class="btn-choice btn btn-success blue-bg ">Approve this transaction
+                            </button>
+                            
+
                             <?php } ?>
                         
 

@@ -19,7 +19,6 @@ class Currency_model extends CI_Model {
 
 	public function all_currency()
 	{
-		
 		return $this->db->get($this->table)->result_object();
 	}
 
@@ -45,8 +44,8 @@ class Currency_model extends CI_Model {
 	public function update_rate($conv_id,$rate)
 	{
 		return $this->db->update(
-									'OBA_CURRENCY_RATES',array('RATE' => $rate),
-									array('CONV_ID' => $conv_id)
+								'OBA_CURRENCY_RATES',array('RATE' => $rate),
+								array('CONV_ID' => $conv_id)
 						);
 	}
 	

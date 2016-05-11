@@ -59,10 +59,40 @@ class User_Transactions extends CI_Controller {
 
 		$this->user_transactions_model->verify_request($data,$tran_id);
 
-		// update the beneficiary account balance
-		$this->update_beneficiary_balance($benef_acct_no,$trans_amt);
+
+		// update the necessary balances
+		switch ($tran_status) 	{
+
+			case 'Approved':
+
+				$this->update_beneficiary_balance($benef_acct_no,$trans_amt);
+
+				break;
+
+			case 'Rejected' : 
+
+				$this->refund_transfer_amount($data,$tran_id);
+
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
 		$params = array('response'	=> 200,'msg' => 'Request has been successfully completed.');
 		return $this->toJson($params);
+	}
+
+	/**
+	 * Refund the transfer amount of the sender.
+	 * @param  array $data    
+	 * @param  int $tran_id 
+	 * @return Response          
+	 */		
+	public function refund_transfer_amount($data,$tran_id)		
+	{
+		return new Exception("Not yet available");
 	}
 
 	/**
@@ -85,6 +115,14 @@ class User_Transactions extends CI_Controller {
 			// $old_balance = $this->negate($old_balance);
 			// return print $new_balance;
 			
+			// transfer = 200
+			// actual bal = 500
+			// previous  =700
+
+			// cancel
+			// actual bal = 700  
+			// prev  = 
+
 			// params for rb_acct table. 
 			$data = array(
 							'LEDGER_BAL'			=> $new_balance,

@@ -20,8 +20,6 @@ class User_accounts_model extends CI_Model {
 		$this->db->where('a.USR_PASSWORD',"$encrpted_pass");
 		$this->db->where('a.STATUS','Granted');
 		$this->db->join('FM_CLIENT c','c.CLIENT_NO = a.CLIENT_NO');
-		// return print $this->db->count_all_results();
-		// $this->db->join('fm_client c','c.CLIENT_NO = a.client_no ','left');
 		$result = $this->db->get()->result_object();
 		return $result;
 
@@ -84,7 +82,6 @@ class User_accounts_model extends CI_Model {
 	 */
 	public function change_account_password($client_no,$old_password,$new_password)
 	{
-
 		$data = array(
 			
 					'USR_PASSWORD' 					=> hash('sha1',$new_password),
@@ -131,6 +128,13 @@ class User_accounts_model extends CI_Model {
 	{
 		$this->db->where('IS_ACTIVE',1);
 		return $this->db->get($this->table)->result_object();
+	}
+
+	public function get_client_email($client_no)
+	{
+		$this->db->where('CLIENT_NO',$client_no);
+		$result = $this->db->get($this->table)->result_object();
+		return $result[0]->CLIENT_EMAIL;
 	}
 
 

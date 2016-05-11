@@ -12,6 +12,10 @@
                 <button data-client="<?php print $client[0]->CLIENT_NAME; ?>" 
                   data-client-no="<?php print $client[0]->CLIENT_NO; ?>"
                   id="btn-changepassword" type="button" class="btn btn-default"><i class="fa fa-lock"></i> Change Password</button> 
+
+                  <a href="<?php print base_url('acesmain/clients/'.$client[0]->CLIENT_NO.'/transactions') ?>" class="btn btn-default">
+                    View Transactions
+                  </a>
                  <!-- <button type="button" class="btn btn-danger">Deactivate access</button>  -->
                    <hr/>
                         <div class="panel panel-default">
@@ -44,6 +48,13 @@
                                                 <p><strong>Ledger Balance : 
                                                 <?php print number_format(-1 * $account->LEDGER_BAL,2) ?></strong></p><br/>
                                                 </span>
+                                                <p>
+                                                  Account Open Date : 
+                                                  <?php 
+                                                      $d = new DateTime($account->ACCT_OPEN_DATE);
+                                                      print $d->format('M d, Y');
+                                                  ?>
+                                                </p>
                                                 <p>Currency :  <?php print $account->CCY ?></p>
                                                 <p>Account Description : <?php print $account->ACCT_DESC ?></p>
                                                 <p>Account Type : <?php print $account->ACCT_TYPE ?></p>

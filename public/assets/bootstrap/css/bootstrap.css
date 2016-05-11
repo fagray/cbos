@@ -3003,6 +3003,8 @@ select[multiple].form-group-lg .form-control {
       touch-action: manipulation;
   cursor: pointer;
   background-image: none;
+  background: #0099FF;
+  color: #fff;
   border: 1px solid transparent;
   white-space: nowrap;
   padding: 8px 12px;
@@ -6679,6 +6681,8 @@ button.close {
 }
 .btn {
   padding: 8px 12px;
+  background: #0099FF !important;
+  color: #fff !important;
 }
 .btn-lg {
   padding: 16px 20px;

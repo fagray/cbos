@@ -19,10 +19,16 @@
                                             <span id="response"></span>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label for="">Client Email</label>
+                                            <?php echo form_input('client_email','',array('required' => 'required','type' => 'email','class' => 'form-control')); ?>
+                                        </div> 
+
                                          <div class="form-group">
                                             <label for="">Username</label>
                                             <?php echo form_input('user_name','',array('required' => 'required','type' => 'text','class' => 'form-control')); ?>
-                                        </div> 
+                                        </div>
+
 
                                         <div class="form-group">
                                             <label for="">Password</label>

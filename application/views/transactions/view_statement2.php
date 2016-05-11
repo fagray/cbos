@@ -1,7 +1,7 @@
 
 <div style="font-family: 'BankPrinter';font-size: 12px;" class="container">
 
-<img width="200" height="160" style="margin-left:200pt;" src="<?php print base_url('public/assets/img/cbos2.png') ?>">
+<img  style="margin-left:230pt;" src="<?php print base_url('public/assets/img/cbos.png') ?>">
 <div style="clear:both; position:relative;">
     <div style="position:absolute; left:0pt; width:192pt;">
       <p><?php print $statement->CLIENT_NAME ?></p>
@@ -30,7 +30,7 @@
 <div  class="stmt-transactions"><br/>
   <strong><?php print $statement->ACCT_NO ?></strong>
     
-    <table cellspacing="10" cellpadding="10" style="margin-top:30pt;" >
+    <table cellspacing="5" cellpadding="5" style="margin-top:30pt;font-size:12px !important;font-family: 'BankPrinter !important';" >
       <thead>
         <tr>
           <th>Tran Date</th>
@@ -85,18 +85,25 @@
             ?>
           </td>
           <td>
+          
+           <?php if($transaction->CR_DR_MAINT_IND == 'D'){
+
+              print number_format($transaction->TRAN_AMT,2); }
+
+            ?>
+              
             
           </td>
 
           <td>
             <?php
-                if(isset($transaction->TRAN_ID)){
+            
+                   if($transaction->CR_DR_MAINT_IND == 'C'){
 
-                    print number_format($transaction->trans_amt,2);
-                }else{
+                    print number_format($transaction->TRAN_AMT,2);
 
-                  print number_format($transaction->TRAN_AMT,2);
-                }
+                  }
+                
                 
               ?>
           </td>
@@ -105,13 +112,10 @@
           <td>
             <?php 
 
-              if(isset($transaction->TRAN_ID)){
+             
 
-                  print number_format(-1* $transaction->trans_bal,2);
-              }else{
-
-                 print number_format(-1* $transaction->ACTUAL_BAL_AMT,2);
-              }
+                print number_format( -1 * $transaction->ACTUAL_BAL_AMT,2);
+              
               
               
              ?>
@@ -123,12 +127,11 @@
       </tbody>
     </table>
     <p>Closing Balance as of <?php print $end_date.' is '; ?>
-<?php 
+    <?php 
 
-   if($statement->END_BALANCE < 0 ) { print number_format(-1 * $statement->END_BALANCE,2); } 
-    else {
-        print number_format( -1 * $statement->END_BALANCE,2);
-     } ?>
+   
+        print number_format( $statement->END_BALANCE,2);
+     ?>
   </p>
 
   <p>Total number of transactions : <?php print count($transactions); ?></p>

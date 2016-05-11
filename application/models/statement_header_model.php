@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Statement_header_model extends CI_Model {
 
 	// private $db;
-	protected $table = 'RB_STMT_HEADER';
+	protected $table = 'OBA_STMT_HEADER';
 
 	/**
 	 * Retrieve all the statement headers.
@@ -27,7 +27,7 @@ class Statement_header_model extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('RB_ACCT a');
 		$this->db->where('a.CLIENT_NO',$client_no);
-		$this->db->join('RB_STMT_HEADER s','s.INTERNAL_KEY = a.INTERNAL_KEY');
+		$this->db->join('OBA_STMT_HEADER s','s.INTERNAL_KEY = a.INTERNAL_KEY');
 		return  $this->db->get()->result_object();
 	}
 
@@ -63,7 +63,7 @@ class Statement_header_model extends CI_Model {
 	public function get_statement($seq_no)
 	{
 		$this->db->select('*');
-		$this->db->from('RB_STMT_HEADER s');
+		$this->db->from('OBA_STMT_HEADER s');
 		$this->db->where('s.SEQ_NO',$seq_no);
 		$this->db->join('RB_ACCT a','a.ACCT_NO = s.ACCT_NO','left');
 		$this->db->join('FM_BRANCH b','b.BRANCH = s.BRANCH');

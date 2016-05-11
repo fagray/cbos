@@ -28,8 +28,8 @@
 </div>
 </div><!-- /container -->
 
-<div style="font-family: 'BankPrinter';font-size: 12px;" class="container">
-  <div class="row" style=" font-family: 'BankPrinter';font-size: 12px;" >
+<div style="font-family: 'Arial';font-size: 12px;" class="container">
+  <div class="row" style=" font-family: 'BankPrinter';font-size: 12px;"  >
  
 
     <div class="col-md-4">
@@ -115,9 +115,13 @@
             ?>
           </td>
           <td>
+          <?php if($transaction->CR_DR_MAINT_IND == 'D'){
 
-           
+              print number_format($transaction->TRAN_AMT,2); }
 
+            ?>
+              
+        
           </td>
 
           <td>
@@ -125,9 +129,15 @@
                 if(isset($transaction->TRAN_ID)){
 
                     print number_format($transaction->trans_amt,2);
+
                 }else{
 
-                  print number_format($transaction->TRAN_AMT,2);
+                  if($transaction->CR_DR_MAINT_IND == 'C'){
+
+                    print number_format($transaction->TRAN_AMT,2);
+
+                  }
+                  
                 }
                 
               ?>
@@ -161,10 +171,9 @@
 <p>Closing Balance as of <?php print $end_date.' is '; ?>
 <?php 
 
-  if($statement->END_BALANCE < 0 ) { print number_format(-1 * $statement->END_BALANCE,2); } 
-    else {
-        print number_format( $statement->END_BALANCE,2);
-     } ?>
+ 
+        print number_format(  $statement->END_BALANCE,2);
+  ?>
   </p>
   <p>Total number of transactions : <?php print count($transactions); ?></p>
 </div>

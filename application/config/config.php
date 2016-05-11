@@ -1,7 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/* Custom Timezone for Sudan */
 
+date_default_timezone_set('Africa/Juba');
+// error_reporting(0);
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -24,7 +27,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/acesglobal_oracle/';
+// $config['base_url'] = 'http://localhost/aceseglobal/';
+$config['base_url'] = 'http://cbos.dev/';
 
 /*
 |--------------------------------------------------------------------------

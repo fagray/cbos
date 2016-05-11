@@ -74,6 +74,7 @@ class User_transactions_model extends CI_Model {
 		$this->db->join('RB_ACCT a','a.ACCT_NO = t.ACCT_NO');
 		$this->db->join('FM_CLIENT c','c.CLIENT_NO = a.CLIENT_NO');
 		$this->db->join('OBA_TRAN_TYPES ty','ty.TYPE_ID = t.TRAN_TYPE');
+		$this->db->order_by('t.TRAN_DATE','desc');
 		return $this->db->get()->result_object();
 	}
 
@@ -119,6 +120,58 @@ class User_transactions_model extends CI_Model {
 	public function transfer_funds($params)
 	{
 		return $this->db->insert($this->table,$params);
+	}
+
+	/**
+	 * Send an email confirmation after a fund transfer request.
+	 * @param  int $client_no 
+	 * @param  array $data      Contains the transfer data from the account model
+	 * @return Response            
+	 */
+	public function send_email_confirmation($client_no,$data,$type)
+	{
+		// get its email, created along with its access details 
+		$this->load->model('user_accounts_model');
+		$sender_email = $this->user_accounts_model->get_client_email($client_no);
+		switch ($type) {
+
+			case 'CBOS':
+					
+				$title = ' CBOS Fund Transfer Notification';
+				$body  = "\nYou have initiated a  new  fund transfer request to your CBOS Account. Here are the transfer details : \n\n Account Number  :".  $data['ACCT_NO'] . " \nRecipient Account Number  : ".$data['BENEF_ACCT_NO']. " \nTransfer Amount :".$data['TRAN_AMT']."\nTransfer Currency".$data['TRAN_CCY']."\n\n Thank you for banking with us.";
+
+
+				break;
+
+			case 'OBT' :
+
+				$title = ' Other Banks Account Fund Transfer Notification';
+				$body  = "\n You have initiated a  new  fund transfer request to Other Banks Account. Here are the transfer Details : \n Account Number  : ".  $data['ACCT_NO'] . "\nBank Name : ".$data['BANK_NAME']."\nSwift Code: ".$data['SWIFT_CODE']."\nIBAN Number : ".$data['TIBAN_NUM']."\nRecipient Account Number  : ".$data['BENEF_ACCT_NO']. " \nTransfer Amount : \n".$data['TRAN_AMT']."\n This request might take some time to be approved, we'll notify you as soon as your request have been granted.\n\nThank you for banking with us.";
+
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
+		
+		$this->compose_email($title,$body,$sender_email);
+
+		return true;
+	}
+
+
+	public function compose_email($title,$body,$recipient)
+	{
+		$this->load->library('email');
+		$this->email->from('noreply@cbos.com', ' CBOS Online Banking Application ');
+		$this->email->to($recipient); 
+		$this->email->subject($title);
+		$this->email->message($body);	
+		$this->email->send();
+
+		//echo $this->email->print_debugger();
 	}
 
 	

@@ -7,15 +7,20 @@
                                             <?php print $this->session->flashdata('msg'); ?>
                                         </div>
                                     <?php } ?>
-                <h3> Client Transactions : #<?php print $transactions[0]->CLIENT_NO; ?> |
+                <h3> Client Transactions </h3>
+                <?php if(count($transactions) > 0 ){?>
+                <h4>  
+                <hr/>
+                  Client # <?php print $transactions[0]->CLIENT_NO; ?> |
                   Client Name : <?php print $transactions[0]->CLIENT_NAME; ?>
-                 </h3>
+                 </h4>
                  Search Transactions <input placeholder="Enter transaction number" class="form-control" name="keyword">    
+                    <br/>
                     <button id="btn_clear" class="btn btn-default blue-bg">Clear search</button>
                    <hr/>
                         
                                 <div class="col-md-12">
-                                  
+                                 
                                     <?php foreach($transactions as $transaction){ ?>
                                       <div class="panel panel-default">
                                           <div class="blue-bg  panel-heading">
@@ -30,11 +35,17 @@
                                                    Type:  <?php print $transaction->TYPE_DESC ?>
                                                  
                                                 </div>
-                                                <p class="pull-right"> Transaction Date :  <?php print $transaction->TRAN_DATE ?></p>
+                                                <p class="pull-right"> Transaction Date :  
+                                                <?php 
+                                                  $d = new DateTime($transaction->TRAN_DATE);
+                                                  print $d->format('M d, Y');
+                                                ?></p>
+                                                
                                                 <table class="table table-hover">
                                                   <thead>
                                                     <tr>
-                                                       <th>Account No.</th>
+
+                                                      <th>Account No.</th>
                                                       <th>Benefactor Account No.</th>
                                                       <th>CCY</th>
                                                       <th>Transfer Amount</th>
@@ -42,6 +53,7 @@
                                                      
                                                     </tr>
                                                   </thead>
+
                                                   <tbody>
                                                     <tr>
                                                       <td><?php print $transaction->ACCT_NO ?></td>
@@ -57,7 +69,7 @@
                                               </div><!-- /span12 -->
                                           </div><!-- /block-content -->
                                       </div><!-- /block -->
-                                    <?php } ?>
+                                    <?php } }else {  print "<Br/><p>This client has no available transactions. </p>"; } ?>
 
 
                 </div><!-- /content -->

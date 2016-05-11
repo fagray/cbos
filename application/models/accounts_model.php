@@ -70,6 +70,7 @@ class Accounts_model extends CI_Model {
 		$this->db->where('ACCT_NO',$acct_no);
 		$result_count = $this->db->count_all_results();
 		if ( $result_count > 0 ){
+			
 			return true;
 		}
 

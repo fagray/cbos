@@ -102,13 +102,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  *  ORACLE CONNECTION
  */
-
+// phpinfo();
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = "localhost/db";
+$db['default']['hostname'] = "localhost/orcl";
 $db['default']['username'] = 'C##EOCLIVE';
-$db['default']['password'] = 'eoclive';
+$db['default']['password'] = 'aerind19';
 $db['default']['database'] = 'eoclive';
 $db['default']['dbdriver'] = 'oci8';
 $db['default']['dbprefix'] = '';

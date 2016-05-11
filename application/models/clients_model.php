@@ -25,6 +25,23 @@ class Clients_model extends CI_Model {
 			$clients = $this->db->get()->result_object();
 			return $clients;
 	}
+
+	/**
+	 * Get the local banks
+	 * @return Response 
+	 */
+	public function get_banks()
+	{
+		$this->db->select('CLIENT_NO,CLIENT_SHORT,CLIENT_NAME');
+		$this->db->from('FM_CLIENT c');
+		$this->db->where('c.CLIENT_TYPE',5);
+		$clients = $this->db->get()->result_object();
+		if ( count($clients) > 0 ){
+
+			return $clients;
+		}
+		return NULL;	
+	}
 	
 	public function count_number_of_accounts($client_no)
 	{
