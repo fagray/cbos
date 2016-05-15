@@ -2,7 +2,7 @@
 <html>
     
     <head>
-        <title>aces eGlobal | Admin Dashboard</title>
+        <title>CBOS Online Banking| Admin Dashboard</title>
         <!-- Bootstrap -->
         <link href="<?php print base_url('public/assets/bootstrap/css/bootstrap.css') ?>" rel="stylesheet" media="screen">
         <link href="<?php print base_url('public/assets/css/styles.css') ?>" rel="stylesheet" media="screen">
@@ -68,7 +68,7 @@
 
 
                      <?php } ?>
-                    <h4>welcome to aces eGlobal online banking application</h4>
+                    <h4>Welcome to CBOS Online Banking</h4>
                   </div>
                 </div><!-- /row -->
             <hr/>

@@ -20,8 +20,11 @@ class Client_accounts extends CI_Controller {
 	 */
 	public function create()
 	{
-		// return print hash('sha1', '12345678');
-		return $this->render('clients/new_access', NULL);
+		$this->load->model('clients_model');
+		$data['clients'] = $this->clients_model->get_all_clients();
+		$data['clients_access'] = $this->clients_model->get_all_client_access();
+
+		return $this->render('clients/new_access', $data);
 	}
 
 	/**
@@ -147,6 +150,29 @@ class Client_accounts extends CI_Controller {
 	public function hash_input($input)
 	{
 		return hash('sha1',$input);
+	}
+
+	/**
+	 * Remove the access from a certain user.
+	 *
+	 * @return     mixed  
+	 */
+	public function remove_access()
+	{
+		if ( ! $this->session->userdata('panel_access_token')) {
+			return redirect(base_url('acesmain'));
+		}
+		
+		$usr_id  = $this->input->get('id');
+		$this->load->model('clients_model');
+		$operation = $this->clients_model->remove_access($usr_id);
+
+		if  ( $operation ){
+
+			return $this->toJson(array('response'	 => 200,'msg'	=> 'Operation completed.'));
+		}
+
+		return $this->toJson(array('response'	 => 500,'msg'	=> 'Operation failed.'));
 	}
 
 	/**

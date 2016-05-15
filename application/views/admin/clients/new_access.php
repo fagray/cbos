@@ -3,7 +3,21 @@
             <div class="row">
               <?php $this->load->view('admin/layouts/sidebar') ?>
             <div class="col-md-9" id="content">
-                <h3> New Client Access </h3>
+                <div role="tabpanel">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#new-access" aria-controls="new-access" role="tab" data-toggle="tab">New Client Access</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#access" aria-controls="access" role="tab" data-toggle="tab">List of Access</a>
+                        </li>
+                    </ul>
+                
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="new-access">
+                             <h3> New Client Access </h3>
                     <!-- block -->
                         <div class="panel panel-default ">
                             <div class="blue-bg panel-heading ">
@@ -15,7 +29,18 @@
                                    <?php echo form_open('',array('name' => 'frmAccess','class' => 'form-group')) ?>
                                         <div class="form-group">
                                             <label for="">Client No.</label>
-                                            <?php echo form_input('client_no','',array('required' => 'required','type' => 'number','class' => 'form-control error')); ?>
+                                            <select name="client_no" id="input" class="form-control" required="required">
+                                                <option value=""></option>
+                                                <?php foreach($clients as $client){?>
+                                                    <option value="<?php print $client->CLIENT_NO ?>">
+                                                    <?php 
+                                                        print substr($client->CLIENT_NO,3,9) 
+                                                    ?>
+                                                    </option>
+                                                <?php } ?>
+                                                    
+                                               
+                                            </select>
                                             <span id="response"></span>
                                         </div>
 
@@ -52,6 +77,40 @@
                             </div>
                         </div>
                         <!-- /block -->
+
+                        </div><!-- /new-client-access -->
+
+                        <div role="tabpanel" class="tab-pane" id="access">
+                             <h3> List of Access</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Client No</th>
+                                        <th>Username</th>
+                                        <th>Date Granted</th>
+                                        <th>Last Login</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($clients_access as $client){?>
+                                        <tr>
+                                            <td><?php print $client->CLIENT_NO ?></td>
+                                            <td><?php print $client->USR_NAME ?></td>
+                                            <td><?php print $client->DATE_ADDED ?></td>
+                                            <td><?php print $client->LAST_LOGIN ?></td>
+                                            <td>
+                                                <a data-id="<?php print $client->USR_ID ?>" class="lnk-remove-access" href="#">Remove access</a>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+
+                        </div><!-- /client-access -->
+                    </div>
+                </div><!-- /tabpanel -->
+               
                 </div><!-- /content -->
             </div>    <!-- /row-fluid -->
               <hr>
@@ -69,8 +128,21 @@
                 $btn_access = $('input[id="btn_submit"]');
                 $btn_access.attr("disabled","disabled");
                 $term = '';
-                $('input[name="user_name"]').attr("disabled","disabled");
-                $('input[name="accss_pass_field2"]').attr("disabled","disabled");
+              
+
+                $('a.lnk-remove-access').click(function(e){
+
+                    e.preventDefault();
+                   $id =  $(this).attr('data-id');
+                   if ( confirm('Are you sure you want to remove access from this user ? ')){
+
+                        $.getJSON('<?php print base_url("acesmain/clients/access/remove") ?>', { id: $id },function(data){
+                            alert(data);
+                        });
+                   }
+                })
+
+
               $('input[name="client_no"]').keyup(function(){
 
                     $element = $(this);

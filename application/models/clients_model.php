@@ -4,17 +4,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Clients_model extends CI_Model {
 
 	protected $table = 'FM_CLIENT';
-	// private $db; // use for oracle
-	
-	// public function __construct()
-	// {
-	// 	parent::__construct();
-	// 	// $this->db = $database_oci_model->getInstance();
-	// }
-	
+
+	public function get_all_clients()
+	{
+		$this->db->select('*');
+		$this->db->from($this->table);
+		$clients = $this->db->get()->result_object();
+		return $clients;
+	}
 
 	/**
-	 * Show all the clients on the storage.
+	 * Get all the clients from the storage.
 	 * @return Response 
 	 */
 	public function get_all()
@@ -25,6 +25,32 @@ class Clients_model extends CI_Model {
 			$clients = $this->db->get()->result_object();
 			return $clients;
 	}
+
+	/**
+	 * Remove the access from a certain user.
+	 *
+	 * @param      int  $usr_id  
+	 *
+	 * @return     mixed  
+	 */
+	public function remove_access($usr_id)
+	{
+	 	return $this->db->delete('OBA_CLIENT_ACCOUNTS', array('USR_ID' => $usr_id)); 
+	}
+
+	/**
+	 * Get all clients who have an access to the application.
+	 * @return Response 
+	 */
+	public function get_all_client_access()
+	{
+			$this->db->select('*');
+			$this->db->from('OBA_CLIENT_ACCOUNTS');
+			$clients = $this->db->get()->result_object();
+			return $clients;
+	}
+
+
 
 	/**
 	 * Get the local banks

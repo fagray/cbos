@@ -110,6 +110,7 @@ $route['acesmain/system/currency/rates/update'] ='currency/update_conv_rate';
 // Helper Routes and async request
 $route['acesmain/system/misc/accounts/generate-password'] = 'admin/auth/generate_password';
 $route['acesmain/clients/find'] = 'clients/find'; // async request for clients searching
+$route['acesmain/clients/access/remove'] = 'admin/client_accounts/remove_access'; // async request for clients searching
 $route['acesmain/transactions/process'] = 'admin/user_transactions/process_request'; // async request for clients searching
 $route['acesmain/accounts/change_password'] = 'admin/client_accounts/chage_client_password'; // async request for changing password
 $route['acesmain/accounts/search'] = 'admin/client_accounts/find_account_details'; // async request for finding account details
