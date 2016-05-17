@@ -32,9 +32,9 @@
                                             <select name="client_no" id="input" class="form-control" required="required">
                                                 <option value=""></option>
                                                 <?php foreach($clients as $client){?>
-                                                    <option value="<?php print $client->CLIENT_NO ?>">
+                                                    <option value="<?php print $client->GLOBAL_ID ?>">
                                                     <?php 
-                                                        print substr($client->CLIENT_NO,3,9) 
+                                                        print $client->GLOBAL_ID .' - '. $client->CLIENT_ALIAS;
                                                     ?>
                                                     </option>
                                                 <?php } ?>
@@ -137,7 +137,8 @@
                    if ( confirm('Are you sure you want to remove access from this user ? ')){
 
                         $.getJSON('<?php print base_url("acesmain/clients/access/remove") ?>', { id: $id },function(data){
-                            alert(data);
+                            alert('Access has been removed successfully.');
+                            location.reload(true);
                         });
                    }
                 })

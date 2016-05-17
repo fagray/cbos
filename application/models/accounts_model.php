@@ -27,8 +27,19 @@ class Accounts_model extends CI_Model {
 	 */
 	public function get_client_accounts($client_no)
 	{
-		$this->db->where('CLIENT_NO',$client_no);
-		$result = $this->db->get($this->table)->result_object();
+	
+		$this->db->select('b.LEDGER_BAL,b.ACCT_OPEN_DATE,b.ACCT_TYPE,a.GLOBAL_ID, a.CLIENT_ALIAS, b.CLIENT_NO,b.ACCT_NO,b.ACCT_DESC,b.EB_ACCT, b.ACCT_STATUS');
+		$this->db->from('RB_ACCT b, FM_CLIENT a');
+		$this->db->where('a.CLIENT_NO',$client_no);
+		$this->db->where('a.EB_CLIENT','Y');
+		$this->db->where('a.CLIENT_TYPE',5);
+		$this->db->where('b.ACCT_TYPE','DOB');
+		$this->db->where('b.CCY','SDG');
+		$this->db->where('b.ACCT_STATUS','A');
+		$this->db->order_by('a.GLOBAL_ID');
+		$this->db->order_by('b.CLIENT_NO');
+		$this->db->order_by('b.ACCT_NO');
+		$result = $this->db->get()->result_object();
 		return $result;
 	}
 	/**

@@ -9,6 +9,10 @@ class Clients_model extends CI_Model {
 	{
 		$this->db->select('*');
 		$this->db->from($this->table);
+		$this->db->where('EB_CLIENT','Y');
+		$this->db->where('TRAN_STATUS','A');
+		$this->db->where('CLIENT_TYPE',5);
+		$this->db->distinct();
 		$clients = $this->db->get()->result_object();
 		return $clients;
 	}

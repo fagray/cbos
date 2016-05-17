@@ -20,7 +20,7 @@
                                           <th>Client No</th>
                                           <th>Client Name</th>
                                           <th>Number of accounts</th>
-                                          <th>Access Status</th>
+                                         
                                           <th>Action</th>
                                         </tr>
                                       </thead>
@@ -36,16 +36,10 @@
                                             <td>
                                                 <?php print $this->clients_model->count_number_of_accounts($client->CLIENT_NO); ?>
                                             </td>
-                                            <td>
-                                              <?php  if ( $client->STATUS == 'Granted' ){
-                                                      print "<label class='label label-success'>Granted</label>";
-                                                }else if( $client->STATUS == ''){
-                                                     print "<label class='label label-danger'>No access</label>";
-                                                  } ?>
-                                            </td>
+                                            
                                             <td>
                                                   <a href="<?php print base_url('acesmain/clients/'.$client->CLIENT_NO.'/details') ?>">
-                                                   View account
+                                                   View accounts
                                                 </a>
                                                 
                                             </td>

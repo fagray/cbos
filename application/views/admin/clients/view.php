@@ -55,7 +55,7 @@
                                                       print $d->format('M d, Y');
                                                   ?>
                                                 </p>
-                                                <p>Currency :  <?php print $account->CCY ?></p>
+                                                <p>Currency :  SDG </p>
                                                 <p>Account Description : <?php print $account->ACCT_DESC ?></p>
                                                 <p>Account Type : <?php print $account->ACCT_TYPE ?></p>
                                               </div><!-- /span12 -->

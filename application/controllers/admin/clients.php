@@ -20,7 +20,7 @@ class Clients extends CI_Controller{
 	public function index()
 	{
 		$this->load->model('clients_model');
-		$data['clients'] = $this->clients_model->get_all();
+		$data['clients'] = $this->clients_model->get_all_clients();
 		$this->render('clients/index',$data);
 	}
 
@@ -32,6 +32,7 @@ class Clients extends CI_Controller{
 
 	public function view($client_no)
 	{
+
 		$this->load->model('clients_model');
 		$this->load->model('accounts_model');
 		$data['client'] = $this->clients_model->get_client_details($client_no);
