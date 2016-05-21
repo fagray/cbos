@@ -29,7 +29,7 @@
                                           <tr>
                                             <td>
                                                
-                                                    <?php print $client->CLIENT_NO ?>
+                                              <?php print $client->GLOBAL_ID ?>
                                               
                                             </td>
                                             <td><?php print $client->CLIENT_NAME ?></td>

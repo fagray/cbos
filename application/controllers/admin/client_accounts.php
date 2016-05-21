@@ -27,6 +27,14 @@ class Client_accounts extends CI_Controller {
 		return $this->render('clients/new_access', $data);
 	}
 
+	public function accounts_list()
+	{
+		$global_id = $this->input->get('global_id');
+		$this->load->model('accounts_model');
+		$accounts =  $this->accounts_model->get_accounts_by_global_id($global_id);
+		return $this->toJson($accounts);
+	}
+
 	/**
 	 * Store the newly created access.
 	 * @return Response 

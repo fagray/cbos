@@ -114,5 +114,6 @@ $route['acesmain/clients/access/remove'] = 'admin/client_accounts/remove_access'
 $route['acesmain/transactions/process'] = 'admin/user_transactions/process_request'; // async request for clients searching
 $route['acesmain/accounts/change_password'] = 'admin/client_accounts/chage_client_password'; // async request for changing password
 $route['acesmain/accounts/search'] = 'admin/client_accounts/find_account_details'; // async request for finding account details
+$route['acesmain/clients/accounts/list'] = 'admin/client_accounts/accounts_list'; // async request for finding account details
 
 $route['acesmain/accounts/logout'] = 'admin/client_accounts/logout_user'; // async request for logging out a user

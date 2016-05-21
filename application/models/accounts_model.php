@@ -178,4 +178,21 @@ class Accounts_model extends CI_Model {
 		return -1 * $value;
 	}
 
+	public function get_accounts_by_global_id($global_id)
+	{
+		$this->db->select('*');
+		$this->db->from('RB_ACCT b, FM_CLIENT a');
+		$this->db->where('a.GLOBAL_ID',$global_id);
+		$this->db->where('a.EB_CLIENT','Y');
+		$this->db->where('a.CLIENT_TYPE',5);
+		$this->db->where('b.ACCT_TYPE','DOB');
+		$this->db->where('b.CCY','SDG');
+		$this->db->where('b.ACCT_STATUS','A');
+		$this->db->order_by('a.GLOBAL_ID');
+		$this->db->order_by('b.CLIENT_NO');
+		$this->db->order_by('b.ACCT_NO');
+		$result = $this->db->get()->result_object();
+		return $result;
+	}
+
 }

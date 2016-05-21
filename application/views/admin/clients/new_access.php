@@ -29,7 +29,7 @@
                                    <?php echo form_open('',array('name' => 'frmAccess','class' => 'form-group')) ?>
                                         <div class="form-group">
                                             <label for="">Client No.</label>
-                                            <select name="client_no" id="input" class="form-control" required="required">
+                                            <select name="global_id" id="input" class="form-control" required="required">
                                                 <option value=""></option>
                                                 <?php foreach($clients as $client){?>
                                                     <option value="<?php print $client->GLOBAL_ID ?>">
@@ -122,6 +122,31 @@
         <script type="text/javascript">
 
             $(document).ready(function(){
+
+                // list all accounts after client selection
+                $('select[name="global_id"]').change(function(){
+
+                    $global_id  = $(this).val();
+
+                    $.ajax({
+
+                        url : "<?php print base_url('acesmain/clients/accounts/list') ?>",
+                        dataType: "json",
+                        data : { global_id : $global_id},
+
+                        beforeSend: function(){
+
+                            // $('a#lnkPasswordGenerator').html('Generating...');
+                        },
+
+                        complete: function(data){
+
+                          
+                        }
+
+                    });
+
+                });
 
                 $pass_field1 =  $('input[name="accss_pass_field1"]');
                 $rand_pass = '';
