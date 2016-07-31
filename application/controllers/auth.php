@@ -12,6 +12,15 @@ class Auth extends CI_Controller {
 	 */			
 	public function login()
 	{
+		// $data = array(
+		// 				'access_token'	=> 	random_string('alnum',32), 
+		// 				'usrname' 		=> 	'rbfatima',
+		// 				'client_no' 	=> 	'0700000',
+		// 				'client_name' 	=> 'raymund'
+		// 			);
+
+		session_set_cookie_params(0);
+		// $this->session->set_userdata($data);
 		$this->load->view('auth/login');
 	}
 
@@ -27,9 +36,9 @@ class Auth extends CI_Controller {
 		$this->load->model('accounts_model');
 		$username = $this->input->post('usr_id');
 		$password = $this->input->post('usr_password');
-		 $account = $this->user_accounts_model->authenticate_user($username,$password);
-		  // return print_r($account);
-		 // return print  count ($account);
+		// return print $password;
+		$account = $this->user_accounts_model->authenticate_user($username,$password);
+		// return print count($account);
 		if( count ($account) < 1 ){
 
 			$this->session->set_flashdata('msg','Invalid username or password.');
@@ -48,7 +57,7 @@ class Auth extends CI_Controller {
 		$data = array(
 						'access_token'	=> 	random_string('alnum',32), 
 						'usrname' 		=> 	$username,
-						'client_no' 	=> 	$account[0]->CLIENT_NO,
+						'client_no' 	=> 	$account[0]->GLOBAL_ID,
 						'last_login' 	=> 	$account[0]->LAST_LOGIN,
 						'client_name' 	=> 	$account[0]->CLIENT_NAME
 					);
@@ -61,11 +70,7 @@ class Auth extends CI_Controller {
 			return redirect(base_url('accounts/new/settings/change-password/'.random_string('alnum',12)));
 
 		}
-		// print_r($account[0]);			
-		// print $account[0]->access_type;
-		// return print "not a newbie";exit();
-
-		// $data['accounts']  = $this->accounts_model->get_client_accounts($account[0]->CLIENT_NO);
+	
 		return redirect(base_url());
 
 	}

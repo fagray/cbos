@@ -3,14 +3,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Auth extends CI_Controller {
 
+
+	private $layouts_path = 'admin/layouts/';
+	private $admin_path = 'admin/';
+
 	public function __construct()
 	{
 		parent::__construct();
 
-		// if ( ! $this->session->userdata('panel_access_token')){
-
-		// 	return redirect(base_url('acesmain'));
-		// }
 	}
 
 	/**
@@ -87,6 +87,58 @@ class Auth extends CI_Controller {
 		$this->session->unset_userdata('usrname');
 		$this->session->unset_userdata('last_login');
 		return redirect(base_url('acesmain'));
+	}
+
+	/**
+	 * Show the view for password changing
+	 */
+	public function change_password()
+	{
+
+		return $this->render('auth/change-password');
+	}
+
+	/**
+	 * Process the admin password change
+	 */
+	public function post_change_password()
+	{
+		$this->load->model('system_users_model');
+		$usrname = $this->session->userdata('usrname');
+		$old_password = $this->system_users_model->get_current_password($usrname);
+		$old_input_password = $this->input->post('old_pass');
+		$new_password = $this->input->post('new_pass1');
+		$confirm_new_passwrod = $this->input->post('new_pass2');
+
+		if ( $old_password != hash('sha1',$old_input_password)){
+
+			$this->session->set_flashdata('msg','Old password is invalid!');
+			return redirect('acesmain/settings/change-password');
+		}
+
+		if ( $new_password != $confirm_new_passwrod){
+			$this->session->set_flashdata('msg','Password do not match!');
+			return redirect('acesmain/settings/change-password');
+		}
+
+		$this->system_users_model->change_password($new_password);
+		$this->session->set_flashdata('msg','Password has been changed.');
+		return redirect('acesmain');
+
+
+		
+	}
+
+	/**
+	 * Render the view for this module.
+	 * @param  string $path 
+	 * @param  mixed $data 
+	 * @return Response       
+	 */
+	public function render($path,$data = NULL)
+	{
+		$this->load->view($this->layouts_path.'header');
+		$this->load->view($this->admin_path.$path,$data);	
 	}
 
 

@@ -59,12 +59,12 @@ class Transaction extends CI_Controller {
 		$this->load->model('accounts_model');
 		$this->load->model('account_bal_model');
 		$this->load->model('transactions_model');
-		$client_no 	= 	$this->session->userdata('client_no');
+		$global_id 	= 	$this->session->userdata('client_no');
 		$start_date = 	$this->input->get('start_date');
 		$end_date = 	$this->input->get('end_date');
 		$ccy = 			$this->input->get('ccy');
 		$acct_no = 		$this->input->get('acct_no');
-		$account = 		$this->accounts_model->get_account($client_no,$acct_no);
+		$account = 		$this->accounts_model->get_account($global_id,$acct_no);
 
 		// format the dates
 		$d_start  = new DateTime($start_date);
@@ -82,7 +82,7 @@ class Transaction extends CI_Controller {
 		$internal_key = $account[0]->INTERNAL_KEY;
 		$data['transactions'] = $this->transactions_model->get_trans_history($start_date,$end_date,$internal_key);
 
-		 $start_balance =  $this->account_bal_model->get_start_balance($internal_key,$start_date);
+	 $start_balance =  $this->account_bal_model->get_start_balance($internal_key,$start_date);
 		// return print $this->transactions_model->get_back_date_amt($internal_key,$start_date);
 		// $end_balance = $this->transactions_model
 		// 					->get_end_balance($internal_key,$start_date,															$end_date,$start_balance);

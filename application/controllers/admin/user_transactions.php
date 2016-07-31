@@ -21,7 +21,7 @@ class User_Transactions extends CI_Controller {
 	public function index()
 	{
 		$this->load->model('user_transactions_model');
-		$data['transactions'] = $this->user_transactions_model->get_all();
+		 $data['transactions'] = $this->user_transactions_model->get_all();
 		return $this->render('transactions/index',$data);
 	}
 

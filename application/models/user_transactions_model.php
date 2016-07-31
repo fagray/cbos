@@ -11,41 +11,10 @@ class User_transactions_model extends CI_Model {
 	{
 			$this->db->select('*');
 			$this->db->from('OBA_USER_TRANSACTIONS t');
-			$this->db->join('FM_CLIENT c', 'c.CLIENT_NO = t.CLIENT_NO','left');
+			$this->db->join('FM_CLIENT c', 'c.GLOBAL_ID = t.CLIENT_NO','left');
 			$this->db->join('OBA_TRAN_TYPES ty', 'ty.TYPE_ID = t.TRAN_TYPE','left');
-			$transactions = $this->db->get()->result_object();	
-			return $transactions;
-		// $this->db = $this->database_model->getInstance();
-		// $sql = "SELECT a.tran_date,
-		// a.effect_date,	a.sort_priority,	nvl(a.cons_seq_no,seq_no),
-		// a.tran_type||'-'||a.tran_desc	tran_desc,	
-		// a.reference,	
-		// a.voucher_no,
-		// a.seq_no,
-		// sum(decode(a.cr_dr_maint_ind,	'D',	a.tran_amt,	0))		debit_amount,
-		// sum(decode(a.cr_dr_maint_ind,	'C',	a.tran_amt,	0))		credit_amount
-		// from		rb_tran_hist	a,
-		// rb_tran_def	c
-		// where		a.internal_key	=	:internal_key
-		// and			(a.tran_type	=	c.tran_type	and	nvl(c.show_on_stmt,'Y')	=	'Y')
-		// and				greatest(a.tran_date,a.effect_date)	between	:start_date	AND	:end_date
-		// and		((a.cr_dr_maint_ind	in	('C','D')	and	:excl_maint_tran	=	'Y')	or	:excl_maint_tran	=	'N')
-		// group	by	a.tran_date,	a.effect_date,	a.sort_priority,	a.branch,
-		// nvl(a.cons_seq_no,seq_no)	,
-		// a.tran_type||'-'||a.tran_desc	,	
-		// a.reference,	a.narrative,	a.voucher_no,	a.seq_no
-		// order	by	1,2,3,4";
-
-		// $stmt = oci_parse($this->db,$sql) or die(oci_error());
-		// $result = oci_execute($stmt);
-		// 	while (($row = oci_fetch_object($stmt)) != false) {
-		// 	    // Use upper case attribute names for each standard Oracle column
-		// 	    echo $row->tran_date . "<br>\n";
-		// 	    echo $row->effect_date . "<br>\n"; 
-		// 	}
-
-		// 	exit();
-
+			return $transactions = $this->db->get()->result_object();	
+		
 	}
 
 	public function get_all_transactions_by_account($acct_no)
@@ -72,20 +41,21 @@ class User_transactions_model extends CI_Model {
 		$this->db->from('OBA_USER_TRANSACTIONS t');
 		$this->db->where('t.CLIENT_NO',$client_no);
 		$this->db->join('RB_ACCT a','a.ACCT_NO = t.ACCT_NO');
-		$this->db->join('FM_CLIENT c','c.CLIENT_NO = a.CLIENT_NO');
-		$this->db->join('OBA_TRAN_TYPES ty','ty.TYPE_ID = t.TRAN_TYPE');
+		$this->db->join('FM_CLIENT c','c.GLOBAL_ID = a.GLOBAL_ID');
+		// $this->db->join('OBA_TRAN_TYPES ty','ty.TYPE_ID = t.TRAN_TYPE');
 		$this->db->order_by('t.TRAN_DATE','desc');
 		return $this->db->get()->result_object();
 	}
 
 	public function get_transaction_details($trans_id)
 	{
-		$this->db->select('*');
+		$this->db->select('t.ACCT_NO,a.ACCT_DESC,a.GLOBAL_ID,t.BENEF_ACCT_NO,t.TRAN_AMT,t.TRAN_CCY,t.TRAN_STAT,
+							t.TRAN_DESC,t.REQUEST_TIMESTAMP,t.TRAN_ID');
 		$this->db->from('OBA_USER_TRANSACTIONS t');
 		$this->db->where('t.TRAN_ID',$trans_id);
-		$this->db->join('RB_ACCT a','a.CLIENT_NO = t.CLIENT_NO','left');
-		$this->db->join('OBA_TRAN_TYPES ty','ty.TYPE_ID = t.TRAN_TYPE','left');
-		$this->db->join('FM_CLIENT c','c.CLIENT_NO = a.CLIENT_NO','left');
+		$this->db->join('RB_ACCT a','a.GLOBAL_ID = t.CLIENT_NO');
+		// $this->db->join('OBA_TRAN_TYPES ty','ty.TYPE_ID = t.TRAN_TYPE','left');
+		$this->db->join('FM_CLIENT c','c.GLOBAL_ID = a.GLOBAL_ID');
 		return $this->db->get()->result_object();
 	}
 

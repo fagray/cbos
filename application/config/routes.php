@@ -105,6 +105,8 @@ $route['acesmain/transactions/(:any)/details'] ='admin/user_transactions/view/$1
 $route['acesmain/system/currency/rates'] ='currency/index'; 
 $route['acesmain/system/currency/rates/new'] ='currency/insert'; 
 $route['acesmain/system/currency/rates/update'] ='currency/update_conv_rate'; 
+$route['acesmain/settings/change-password'] = 'admin/auth/change_password'; 
+$route['acesmain/settings/change-password/process'] = 'admin/auth/post_change_password'; 
 
 
 // Helper Routes and async request

@@ -23,7 +23,6 @@ class Client_accounts extends CI_Controller {
 		$this->load->model('clients_model');
 		$data['clients'] = $this->clients_model->get_all_clients();
 		$data['clients_access'] = $this->clients_model->get_all_client_access();
-
 		return $this->render('clients/new_access', $data);
 	}
 
@@ -31,7 +30,7 @@ class Client_accounts extends CI_Controller {
 	{
 		$global_id = $this->input->get('global_id');
 		$this->load->model('accounts_model');
-		$accounts =  $this->accounts_model->get_accounts_by_global_id($global_id);
+		$accounts  = $this->accounts_model->get_accounts_by_global_id($global_id);
 		return $this->toJson($accounts);
 	}
 
@@ -43,16 +42,18 @@ class Client_accounts extends CI_Controller {
 	{
 		// $this->output->enable_profiler(TRUE);
 		$this->load->model('user_accounts_model');
+		$this->load->model('accounts_model');
 		$this->load->helper('date');
 		
-		$client_no =  $this->input->get('client_no');
+		$global_id =  $this->input->get('global_id');
 
-		if ( $this->has_access($client_no) ){
+		if ( $this->has_access($global_id) ){
 
 			return show_error('Invalid request. Client has already have an acecss.');
 		}
 
-		$password =  $this->input->get('accss_pass_field2');
+		$password =  $this->input->get('accss_pass_field1');
+
 		$username =  $this->input->get('user_name');
 		$email =  $this->input->get('client_email');
 	
@@ -61,12 +62,13 @@ class Client_accounts extends CI_Controller {
 							'USR_NAME'		=> $username,
 							'USR_PASSWORD'	=> hash('sha1',$password),
 							'CLIENT_EMAIL'	=> $email,
-							'CLIENT_NO'		=> $client_no,
+							'CLIENT_NO'		=> $global_id,
 							'DATE_ADDED'	=> date('Y-m-d g:i:s'),
 							'STATUS'		=> 'Granted',
 							'ACCESS_TYPE'	=> '0'
-					);
+						);
 
+		$this->accounts_model->update_access_accounts($this->input->get('accounts'));
 		return $this->user_accounts_model->create_new_client_acccount($params);
 		
 	}
@@ -192,7 +194,8 @@ class Client_accounts extends CI_Controller {
 	{
 		$this->load->model('user_accounts_model');
 		$account = $this->user_accounts_model->check_if_has_access($client_no);
-		if ( $account == 1 ){
+		
+		if ( count($account) > 0 ){
 			
 			return true;
 		}

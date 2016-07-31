@@ -17,9 +17,9 @@
                                   <table class="table table-hover">
                                       <thead>
                                         <tr>
-                                          <th>Client No</th>
+                                          <th>Global Id</th>
                                           <th>Client Name</th>
-                                          <th>Number of accounts</th>
+                                      
                                          
                                           <th>Action</th>
                                         </tr>
@@ -32,14 +32,11 @@
                                               <?php print $client->GLOBAL_ID ?>
                                               
                                             </td>
-                                            <td><?php print $client->CLIENT_NAME ?></td>
-                                            <td>
-                                                <?php print $this->clients_model->count_number_of_accounts($client->CLIENT_NO); ?>
-                                            </td>
+                                            <td><?php print $client->CLIENT_ALIAS ?></td>
                                             
                                             <td>
-                                                  <a href="<?php print base_url('acesmain/clients/'.$client->CLIENT_NO.'/details') ?>">
-                                                   View accounts
+                                                  <a href="<?php print base_url('acesmain/clients/'.$client->GLOBAL_ID.'/details') ?>">
+                                                   View Client
                                                 </a>
                                                 
                                             </td>

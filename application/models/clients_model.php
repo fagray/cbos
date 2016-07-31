@@ -7,14 +7,17 @@ class Clients_model extends CI_Model {
 
 	public function get_all_clients()
 	{
-		$this->db->select('*');
+		$ignored_branches = array(01,14,05,15,09,13);
+		$this->db->select('GLOBAL_ID,CLIENT_ALIAS');
 		$this->db->from($this->table);
 		$this->db->where('EB_CLIENT','Y');
 		$this->db->where('TRAN_STATUS','A');
 		$this->db->where('CLIENT_TYPE',5);
+		$this->db->where_not_in('CTRL_BRANCH', $ignored_branches);
+		$this->db->like('GLOBAL_ID','07','after');
 		$this->db->distinct();
 		$clients = $this->db->get()->result_object();
-		return $clients;
+		 return $clients;
 	}
 
 	/**
@@ -48,8 +51,10 @@ class Clients_model extends CI_Model {
 	 */
 	public function get_all_client_access()
 	{
-			$this->db->select('*');
-			$this->db->from('OBA_CLIENT_ACCOUNTS');
+			$this->db->select('c.GLOBAL_ID,ca.USR_NAME,ca.USR_ID,ca.DATE_ADDED,ca.LAST_LOGIN');
+			$this->db->from('OBA_CLIENT_ACCOUNTS ca');
+			$this->db->join('FM_CLIENT c','ca.CLIENT_NO = c.GLOBAL_ID');
+			$this->db->distinct();
 			$clients = $this->db->get()->result_object();
 			return $clients;
 	}
@@ -60,11 +65,22 @@ class Clients_model extends CI_Model {
 	 * Get the local banks
 	 * @return Response 
 	 */
-	public function get_banks()
+	public function get_client_banks()
 	{
+		// 
+		// $this->db->select('CLIENT_NO,CLIENT_SHORT,CLIENT_NAME');
+		// $this->db->from('FM_CLIENT c');
+		// $this->db->where('c.CLIENT_TYPE',5);
+		// $this->db->where_not_in('CTRL_BRANCH', $ignored_branches);
+		$ignored_branches = array(01,14,05,15,09,13);
 		$this->db->select('CLIENT_NO,CLIENT_SHORT,CLIENT_NAME');
 		$this->db->from('FM_CLIENT c');
-		$this->db->where('c.CLIENT_TYPE',5);
+		$this->db->where('EB_CLIENT','Y');
+		$this->db->where('TRAN_STATUS','A');
+		$this->db->where('CLIENT_TYPE',5);
+		$this->db->where_not_in('CTRL_BRANCH', $ignored_branches);
+		$this->db->like('GLOBAL_ID','07','after');
+		$this->db->distinct();
 		$clients = $this->db->get()->result_object();
 		if ( count($clients) > 0 ){
 
@@ -84,9 +100,9 @@ class Clients_model extends CI_Model {
 	 * @param  int $client_no 
 	 * @return Response            
 	 */
-	public function get_client_details($client_no)
+	public function get_client_details($global_id)
 	{
-		$this->db->where('CLIENT_NO',$client_no);
+		$this->db->where('GLOBAL_ID',$global_id);
 		return $this->db->get($this->table)->result_object();
 	}
 

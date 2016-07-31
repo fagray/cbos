@@ -4,18 +4,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Accounts_model extends CI_Model {
 
 	protected $table = 'RB_ACCT';
-	// private $db; use for oracle
-	
 
 	/**
-	 * Get the client user info.
+	 * Get the client remaining accounts
 	 * @return Response 
 	 */
-	public function get_client_remaining_accounts($client_no,$source_acct)
+	public function get_client_remaining_accounts($global_id,$source_acct)
 	{
-		$this->db->where('CLIENT_NO',$client_no);
-		$this->db->where('ACCT_NO !=',$source_acct);
-		$result = $this->db->get($this->table)->result_object();
+		// $this->output->enable_profiler(TRUE);
+		$ignored_branches = array(01,14,05,15,09,13);
+	 	$this->db->select('b.CCY,b.BRANCH,b.ACTUAL_BAL,b.ACCT_DESC,b.LEDGER_BAL,
+	 		b.ACCT_OPEN_DATE,b.ACCT_TYPE,a.GLOBAL_ID, a.CLIENT_ALIAS, 
+	 		b.CLIENT_NO,b.ACCT_NO,b.ACCT_DESC,b.EB_ACCT, b.ACCT_STATUS');
+		$this->db->from('RB_ACCT b');
+		$this->db->where('b.GLOBAL_ID',$global_id);
+		// $this->db->where('b.CLIENT_NO','a.CLIENT_NO');
+		// $this->db->where('b.GLOBAL_ID','0700000');
+		$this->db->where('b.ACCT_NO !=',$source_acct);
+		$this->db->where('a.EB_CLIENT','Y');
+		$this->db->where('b.EB_ACCT','Y');
+		$this->db->where('a.CLIENT_TYPE',5);
+		$this->db->where('b.ACCT_TYPE','DOB');
+		$this->db->where('b.CCY','SDG');
+		$this->db->where('b.ACCT_STATUS','A');
+		$this->db->where_not_in('b.BRANCH',$ignored_branches);
+		// $this->db->where_not_in('a.CTRL_BRANCH',$ignored_branches);
+		$this->db->join('FM_CLIENT a','b.CLIENT_NO = a.CLIENT_NO');
+		
+		 $result = $this->db->get()->result_object();
+		 // return print_r($result);
 		return $result;
 		
 	}
@@ -25,20 +42,22 @@ class Accounts_model extends CI_Model {
 	 * @param  int $client_no 
 	 * @return Response            
 	 */
-	public function get_client_accounts($client_no)
+	public function get_client_accounts($global_id)
 	{
-	
-		$this->db->select('b.LEDGER_BAL,b.ACCT_OPEN_DATE,b.ACCT_TYPE,a.GLOBAL_ID, a.CLIENT_ALIAS, b.CLIENT_NO,b.ACCT_NO,b.ACCT_DESC,b.EB_ACCT, b.ACCT_STATUS');
-		$this->db->from('RB_ACCT b, FM_CLIENT a');
-		$this->db->where('a.CLIENT_NO',$client_no);
+
+		
+		$this->db->select('b.CCY,b.BRANCH,b.ACTUAL_BAL,b.ACCT_DESC,b.LEDGER_BAL,b.ACCT_OPEN_DATE,b.ACCT_TYPE,a.GLOBAL_ID, a.CLIENT_ALIAS, b.CLIENT_NO,b.ACCT_NO,b.ACCT_DESC,b.EB_ACCT, b.ACCT_STATUS');
+		$this->db->from('RB_ACCT b');
+		$this->db->where('b.GLOBAL_ID',$global_id);
+		// $this->db->where('b.CLIENT_NO','a.CLIENT_NO');
 		$this->db->where('a.EB_CLIENT','Y');
+		$this->db->where('b.EB_ACCT','Y');
 		$this->db->where('a.CLIENT_TYPE',5);
 		$this->db->where('b.ACCT_TYPE','DOB');
 		$this->db->where('b.CCY','SDG');
 		$this->db->where('b.ACCT_STATUS','A');
-		$this->db->order_by('a.GLOBAL_ID');
-		$this->db->order_by('b.CLIENT_NO');
-		$this->db->order_by('b.ACCT_NO');
+		$this->db->join('FM_CLIENT a','b.CLIENT_NO = a.CLIENT_NO','left');
+		$this->db->distinct();
 		$result = $this->db->get()->result_object();
 		return $result;
 	}
@@ -151,13 +170,14 @@ class Accounts_model extends CI_Model {
 	 * @param  int $acct_no   
 	 * @return Response            
 	 */		
-	public function get_account($client_no,$acct_no)
+	public function get_account($global_id,$acct_no)
 	{
+		// return print $global_id;
 		$this->db->select('*');
 		$this->db->from('RB_ACCT a');
-		$this->db->where('a.ACCT_NO',"$acct_no");
-		$this->db->where('a.CLIENT_NO',"$client_no");
-		$this->db->join('FM_CLIENT c','c.CLIENT_NO = a.CLIENT_NO');
+		$this->db->where('a.ACCT_NO',$acct_no);
+		$this->db->where('a.GLOBAL_ID',"$global_id");
+		$this->db->join('FM_CLIENT c','c.GLOBAL_ID = a.GLOBAL_ID');
 		$result = $this->db->get()->result_object();
 		return $result;
 	}
@@ -180,19 +200,43 @@ class Accounts_model extends CI_Model {
 
 	public function get_accounts_by_global_id($global_id)
 	{
-		$this->db->select('*');
-		$this->db->from('RB_ACCT b, FM_CLIENT a');
-		$this->db->where('a.GLOBAL_ID',$global_id);
+		
+		// $this->output->enable_profiler(TRUE);
+		$this->db->select('b.ACCT_NO,b.ACCT_DESC,b.GLOBAL_ID,b.EB_ACCT');
+		$this->db->from('RB_ACCT b,FM_CLIENT a');
+		
+		$this->db->where('b.GLOBAL_ID',$global_id);
+		$this->db->where('b.EB_ACCT','Y');
 		$this->db->where('a.EB_CLIENT','Y');
 		$this->db->where('a.CLIENT_TYPE',5);
 		$this->db->where('b.ACCT_TYPE','DOB');
 		$this->db->where('b.CCY','SDG');
 		$this->db->where('b.ACCT_STATUS','A');
-		$this->db->order_by('a.GLOBAL_ID');
-		$this->db->order_by('b.CLIENT_NO');
-		$this->db->order_by('b.ACCT_NO');
+		
+		$this->db->group_by('b.GLOBAL_ID');
+		$this->db->group_by('b.ACCT_NO');
+		$this->db->group_by('b.ACCT_DESC');
+		$this->db->group_by('b.EB_ACCT');
 		$result = $this->db->get()->result_object();
 		return $result;
+	}
+
+	public function update_access_accounts($accounts)
+	{
+		$conditions = array();
+
+			for ($i=0; $i < count($accounts);  $i++) { 
+					
+				$conditions = array('ACCT_NO' => $accounts[$i]);	
+
+			}
+		$data = array('EB_ACCT' => 'Y');
+		$this->db->where($conditions);
+		if  ( $this->db->update($this->table, $data) ) {
+			return true;
+		}
+		return false;
+
 	}
 
 }

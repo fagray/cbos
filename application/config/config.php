@@ -28,7 +28,8 @@ date_default_timezone_set('Africa/Juba');
 |
 */
 // $config['base_url'] = 'http://localhost/aceseglobal/';
-$config['base_url'] = 'http://cbos.dev/';
+// $config['base_url'] = 'http://cbos.dev/';
+$config['base_url'] = 'http://172.16.26.113/cbos/';
 
 /*
 |--------------------------------------------------------------------------
@@ -375,7 +376,7 @@ $config['encryption_key'] = '';
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = NULL;
+$config['sess_save_path'] = sys_get_temp_dir();
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] =TRUE;

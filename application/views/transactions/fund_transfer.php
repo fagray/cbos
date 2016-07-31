@@ -38,7 +38,8 @@
                                           <td><?php print $transaction->ACCT_NO ?></td>
                                           <td><?php print $transaction->BENEF_ACCT_NO ?></td>
                                           <td><?php print $transaction->TRAN_CCY.' '.number_format($transaction->TRAN_AMT,2) ?></td>
-                                          <td><?php print $transaction->TYPE_DESC ?></td>
+                                         
+                                          <td>CBOS FUND TRANSFER</td>
                                           <td><?php print $transaction->TRAN_STAT ?></td>
                                           <td>
                                             <a href="<?php print base_url('accounts/transactions/'.$transaction->TRAN_ID.'/details') ?>">
@@ -60,6 +61,12 @@
           <hr>
 
           <?php $this->load->view('layouts/footer') ?>
+
+          <script type="text/javascript">
+            $(document).ready(function(){
+              $('table.table').DataTable()
+            }); 
+          </script>
        
     </body>
 

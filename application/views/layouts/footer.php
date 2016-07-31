@@ -11,7 +11,9 @@
         <script src="<?php print base_url('public/assets/js/jquery.idle.min.js') ?>"></script>
         <script src="<?php print base_url('public/assets/vendors/pace/pace.min.js') ?>"></script>
         <script src="<?php print base_url('public/assets/vendors/dialog/dialog.js') ?>"></script>
-       
+        <script src="<?php print base_url('public/assets/vendors/data-tables/jquery.dataTables.min.js') ?>"></script>
+        <script src="<?php print base_url('public/assets/vendors/data-tables/dataTables.tableTools.js') ?>"></script>
+        <script src="<?php print base_url('public/assets/vendors/data-tables/dataTables.bootstrap.js') ?>"></script>
 
         <script type="text/javascript">
         
@@ -58,5 +60,7 @@
                         });
 
             }
+
+             
         </script>
 

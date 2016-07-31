@@ -59,11 +59,18 @@ class System_users_model extends CI_Model {
 		$this->db->where('USR_ACS_USERNAME',$usrname);
 		$result = $this->db->get($this->table)->result_object();
 
-	//	return print $result[0]->usr_acs_pass;
 		if ( count($result) > 0){
 			return $result[0]->USR_ACS_PASS;
 		}
 		return show_error('Invalid Request.',500);
+	}
+
+	public function change_password($new_password)
+	{
+		$usrname = $this->session->userdata('usrname');
+		return $this->db->update($this->table,
+					array('USR_ACS_PASS' => hash('sha1',$new_password) ),
+					array('USR_ACS_USERNAME' => $usrname));
 	}
 
 }

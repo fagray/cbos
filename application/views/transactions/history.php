@@ -1,16 +1,16 @@
 
-        <!-- /content -->
-          <?php $this->load->view('layouts/main-header') ?>
-            <div class="row">
-            
-              <?php $this->load->view('layouts/sidebar') ?>
+<!-- /content -->
+<?php $this->load->view('layouts/main-header') ?>
+<div class="row">
 
-                <div class="col-md-9" id="content">
-                 
-                <h3>Transaction History</h3>
-                          
-                                
-                    <!-- panel -->
+  <?php $this->load->view('layouts/sidebar') ?>
+
+  <div class="col-md-9" id="content">
+
+    <h3>Transaction History</h3>
+
+
+    <!-- panel -->
                         <!-- <div class="panel panel-default">
                             <div class="panel-heading blue-bg">
                                TRANSACTION HISTORY
@@ -43,33 +43,34 @@
                                     </table>
                                 </div>
                             </div>
-                        </div> -->
-                        <!-- /panel -->
-                </div><!-- /content -->
-            </div>    <!-- /row -->
-            <div class="modal fade" id="modalFilter">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Filter Transactions</h4>
-                  </div>
-                  <div  class="panel panel-default">
-                        <div class="heading-status panel-heading blue-bg">
-                          Prepare eStatement and Transaction History
-                           
-                        </div>
-                        <div class="panel-body">
-                            <div class="col-md-12">
-                            <span id="loader"></span>
-                               <?php print form_open(); ?>
-                                <div class="row">
-                                  <div class="col-md-4">
-                                    <div class="form-group">
-                                    <label for="">Client No.</label>
-                                    <input value="<?php print $this->session->userdata('client_no') ?>" disabled type="text" name="client_no" class=" form-control"   title="">
-                                  </div>
-                                  </div><!-- /col-md-4 -->
+                          </div> -->
+                          <!-- /panel -->
+                        </div><!-- /content -->
+                      </div>    <!-- /row -->
+                      <div class="modal fade" id="modalFilter">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                              <h4 class="modal-title">Filter Transactions</h4>
+                            </div>
+                            <div  class="panel panel-default">
+                              <div class="heading-status panel-heading blue-bg">
+                                Prepare eStatement and Transaction History
+
+                              </div>
+                              <div class="panel-body">
+                                <div class="col-md-12">
+                                  <div class="link-container"></div>
+                                  <span id="loader"></span>
+                                  <?php print form_open(); ?>
+                                  <div class="row">
+                                    <div class="col-md-4">
+                                      <div class="form-group">
+                                        <label for="">GLOBAL ID</label>
+                                        <input value="<?php print $this->session->userdata('client_no') ?>" disabled type="text" name="client_no" class=" form-control"   title="">
+                                      </div>
+                                    </div><!-- /col-md-4 -->
                                 <!--   <div class="col-md-4">
                                     <div class="form-group">
                                       <label for="">Currency</label>
@@ -89,15 +90,15 @@
                                       <select style="font-size: 15px !important;" name="acct_no" id="inputAcct_no" class="form-control" required="required">
                                         <option value=""></option>
                                         <?php foreach($accounts as $account){ ?>
-                                          <option value="<?php print $account->ACCT_NO ?>">
-                                            <?php print $account->ACCT_NO ?>
-                                          </option>
+                                        <option value="<?php print $account->ACCT_NO ?>">
+                                          <?php print $account->ACCT_NO ?>
+                                        </option>
                                         <?php } ?>
                                       </select>
                                     </div>
                                   </div><!-- /col-md-4 -->
                                 </div><!-- /row -->
-                                 <div class="row">
+                                <div class="row">
                                  <!--  <div class="col-md-6">
                                      <div class="form-group">
                                       
@@ -119,127 +120,129 @@
                                   <div class="col-md-6">
                                     <div class="form-group">
                                       <label for="">  End Date </label>
-                                     <input type="text" name="end_date" id="tbTo" class="form-control" value=""  title="">
+                                      <input type="text" name="end_date" id="tbTo" class="form-control" value=""  title="">
                                     </div>
                                   </div><!-- /col-md-3 -->
                                 </div><!-- /row -->
 
-                                  <?php print form_submit('btn_filter', 'Prepare/ Display eStatement',
-                                    array('class' => ' blue-bg btn btn-primary')); ?>
-                                  
-                              <?php print form_close(); ?>                             
-                            </div><!-- /span12 -->
-                        </div><!-- /panel-content -->
-                      </div><!-- /panel -->
-           
-                </div><!-- /modal-content -->
-              </div><!-- /modal-dialog -->
-            </div><!-- /modal-filter -->
-            <hr>
+                                <?php print form_submit('btn_filter', 'Prepare/ Display eStatement',
+                                array('class' => ' blue-bg btn btn-primary')); ?>
 
-      <?php $this->load->view('layouts/footer') ?>
-      <script type="text/javascript" src="<?php print base_url('public/assets/vendors/datepicker/jquery.datetimepicker.js') ?>"></script>
-      <script type="text/javascript">
+                                <?php print form_close(); ?>                             
+                              </div><!-- /span12 -->
+                            </div><!-- /panel-content -->
+                          </div><!-- /panel -->
 
-        $(document).ready(function(){
+                        </div><!-- /modal-content -->
+                      </div><!-- /modal-dialog -->
+                    </div><!-- /modal-filter -->
+                    <hr>
 
-          $base_url = $('span#base').attr('data-value');
-          setDatePicker();
-          showFilterModal();
+                    <?php $this->load->view('layouts/footer') ?>
+                    <script type="text/javascript" src="<?php print base_url('public/assets/vendors/datepicker/jquery.datetimepicker.js') ?>"></script>
+                    <script type="text/javascript">
 
-          $('form').submit(function(e){
+                      $(document).ready(function(){
 
-              e.preventDefault();
-              $formData = $(this).serialize();
-              handleRequest($formData);
+                        $base_url = $('span#base').attr('data-value');
+                        setDatePicker();
+                        showFilterModal();
 
-          });
+                        $('form').submit(function(e){
+
+                          e.preventDefault();
+                          $formData = $(this).serialize();
+                          handleRequest($formData);
+
+                        });
         });// document ready end
 
-        function handleRequest(data){
-          console.log(data);
+                      function handleRequest(data){
+                        console.log(data);
 
-          $.ajax({
+                        $.ajax({
 
-              method  : 'GET',
-              url     :  $base_url+'accounts/transactions/aysnc_get_transactions',
-              data : data,
-              dataType: 'json',
-              
+                          method  : 'GET',
+                          url     :  $base_url+'accounts/transactions/aysnc_get_transactions',
+                          data : data,
+                          dataType: 'json',
 
-              beforeSend : function(){
 
-                disableInputs();
-                 $('span#loader').html('<div class="progress progress-striped active">'+
-                            '<div class="progress-bar" style="width: 100%"></div></div>'+
-                            '<p>Processing request...</p>');
+                          beforeSend : function(){
 
-              
-              },
+                            disableInputs();
+                            $('span#loader').html('<div class="progress progress-striped active">'+
+                              '<div class="progress-bar" style="width: 100%"></div></div>'+
+                              '<p>Processing request...</p>');
 
-              success : function(response_data){
-                console.log(response_data);
-                console.log(response_data.seq_no);
 
-                    if(response_data.response == '200'){
-                        alert("eStatement has been generated ! ");
-                        base = $base_url;
+                          },
+
+                          success : function(data){
+                            console.log(data);
+                            console.log(data.seq_no);
+
+                            if(data.response == 200){
+                               $('span#loader').html('');
+                              alert("eStatement has been generated ! ");
+                              base = $base_url;
                       //success 
                       // $updatedText = "<a class='btn btn-primary' href='"+base_url+"accounts/transactions/estatement/+data.seq_no">View transaction+'</a>';
-                       $('.heading-status').html('eStatement has been successfully generated').css("background","#006633");
-                       $('#modalFilter .panel-body .col-md-12').html('<a href="'+base+'accounts/'+'transactions/estatement/'+response_data.seq_no+'">View eStatement</a>');
+                      $('.heading-status').html('eStatement has been successfully generated').css("background","#006633");
+                      // $('.heading-status').append('<a href="'+base+'accounts/'+'transactions/estatement/'+response_data.seq_no+'">View eStatement</a>');
+                      $('.link-container').html('<a href="'+base+'accounts/'+'transactions/estatement/'+data.seq_no+'">View eStatement</a>');
 
                         // $('#modalFilter .modal-body .col-md-12').html('<h3>'+data.msg+'</h3>')
 
                       // console.log(data);
-                    return false;
+                      return false;
 
-                  }else if(response_data.response == '500'){
-                        alert("error");
-                    alert("An error occured.Operation aborted.Please try again.");
-                    return false;
-                  }
+                    }else if(response_data.response == '500'){
+                      alert("error");
+                      alert("An error occured.Operation aborted.Please try again.");
+                      return false;
+                    }
 
                 // console.log(data.response);
-               
-            }
 
-          });
-        }
+              }
+
+            });
+}
 
 
-          function setDatePicker(){
+function setDatePicker(){
 
-             $('#tbFrom').datetimepicker({
-                    format:'Y-m-d',
-                    timepicker:false,
-                    mask:true,
-                });
+ $('#tbFrom').datetimepicker({
+  format:'Y-m-d',
+  timepicker:false,
+  mask:true,
+});
 
-                $('#tbTo').datetimepicker({
-                    format:'Y-m-d',
-                    timepicker:false,
-                    mask:true,
-                });
-            }
+ $('#tbTo').datetimepicker({
+  format:'Y-m-d',
+  timepicker:false,
+  mask:true,
+});
+}
 
-            function showFilterModal(){
+function showFilterModal(){
 
-                $('.modal#modalFilter').modal({
+  $('.modal#modalFilter').modal({
 
-                  backdrop :false
-                  
-                });
-              
-            }
+    backdrop :false
 
-            function disableInputs(){
+  });
 
-              $('input').attr("disabled","disabled");
-            }
-        
+}
 
-        </script>
-    </body>
+function disableInputs(){
+
+  $('input').attr("disabled","disabled");
+}
+
+
+</script>
+</body>
 
 </html>

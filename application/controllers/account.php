@@ -7,16 +7,6 @@ class Account extends CI_Controller {
 	{
 		parent::__construct();
 		
-		if( ! $this->session->userdata('access_token') 
-				
-
-				&& ! $this->session->userdata('client_no')) {
-
-			return redirect('auth/login');
-		}
-
-		
-
 	}
 
 	/**
@@ -28,7 +18,6 @@ class Account extends CI_Controller {
 
 		if(! $this->session->userdata('access_token'))
 		{
-
 			return redirect(base_url('auth/login'));
 		}
 
@@ -73,10 +62,10 @@ class Account extends CI_Controller {
 		$this->load->model('accounts_model');
 		$this->load->model('currency_model');
 		$this->load->model('clients_model');
-		$data['banks']  		= $this->clients_model->get_banks();
+		$data['banks']  		= $this->clients_model->get_client_banks();
 		$data['currencies'] 	= $this->currency_model->get_all();
 		$data['account'] 		= $this->accounts_model->get_acocunt_details($acct_no);
-		$data['user_accounts'] 	= $this->accounts_model
+		 $data['user_accounts'] 	= $this->accounts_model
 						->get_client_remaining_accounts($client_no,$acct_no); // client accounts
 		
 
@@ -88,7 +77,8 @@ class Account extends CI_Controller {
 		$data['page'] = 'FT';
 		$this->load->model('user_transactions_model');
 		$data['account'] = $this->user_transactions_model->get_transaction_details($trans_id);
-		
+		// return print_r($data['account']);
+		// return print_r($data['account']);
 		return $this->render('transactions/view',$data);
 
 	}
@@ -178,10 +168,10 @@ class Account extends CI_Controller {
 				return $this->toJson($params);
 			}
 
-			// send an email notification to the sender
-			$type = 'CBOS';
-			$sender_client_no = $account[0]->CLIENT_NO;
-			$this->user_transactions_model->send_email_confirmation($sender_client_no,$data,$type);
+			// send an email notification to the sender, cancel for now
+			// $type = 'CBOS';
+			// $sender_client_no = $account[0]->CLIENT_NO;
+			// $this->user_transactions_model->send_email_confirmation($sender_client_no,$data,$type);
 
 			$params = array('response' => 200,'msg' => 'Transfer has been received.');
 

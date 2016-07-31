@@ -34,7 +34,7 @@
                                                 <?php foreach($clients as $client){?>
                                                     <option value="<?php print $client->GLOBAL_ID ?>">
                                                     <?php 
-                                                        print $client->GLOBAL_ID .' - '. $client->CLIENT_ALIAS;
+                                                        print $client->GLOBAL_ID .' - '. $client->GLOBAL_ID;
                                                     ?>
                                                     </option>
                                                 <?php } ?>
@@ -42,6 +42,12 @@
                                                
                                             </select>
                                             <span id="response"></span>
+                                            <div style="display: none;"   class="chkbox_account checkbox  ">
+                                                <div class="account_container">
+                                                   
+                                                </div>
+                                            </div>
+                                            
                                         </div>
 
                                         <div class="form-group">
@@ -57,19 +63,13 @@
 
                                         <div class="form-group">
                                             <label for="">Password</label>
-                                            <?php echo form_password('accss_pass_field1','',array('disabled' => 'disabled','type' => 'text','class' => 'form-control')); ?>
+                                            <input id="inpt_accss_pass_field1" type="password" name="accss_pass_field1"  class="form-control" value="" required="required" title="">
                                             <span id="generated_password">
                                                  <a id="lnkPasswordGenerator" href="#">Generate Password</a>
                                             </span>
                                             
                                         </div>
-                                        <div class="form-group">
-                                            <label for="">Re-type the password above </label>
-                                            <?php echo form_input('accss_pass_field2','',array('type' => 'text','class' => 'col-md-3 form-control')); ?>
-                                            <span id="pass2">
-                                                
-                                            </span>
-                                        </div>
+                                     
                                         <br/><br/>
                                         <?php echo form_submit('btn_access ', 'Grant Access',array('class' =>  ' blue-bg btn btn-primary','id' => 'btn_submit')); ?>
                                     <?php echo form_close(); ?>
@@ -95,7 +95,7 @@
                                 <tbody>
                                     <?php foreach($clients_access as $client){?>
                                         <tr>
-                                            <td><?php print $client->CLIENT_NO ?></td>
+                                            <td><?php print $client->GLOBAL_ID ?></td>
                                             <td><?php print $client->USR_NAME ?></td>
                                             <td><?php print $client->DATE_ADDED ?></td>
                                             <td><?php print $client->LAST_LOGIN ?></td>
@@ -123,6 +123,7 @@
 
             $(document).ready(function(){
 
+                
                 // list all accounts after client selection
                 $('select[name="global_id"]').change(function(){
 
@@ -131,27 +132,53 @@
                     $.ajax({
 
                         url : "<?php print base_url('acesmain/clients/accounts/list') ?>",
-                        dataType: "json",
+                        dataType: 'json',
+                        method : 'GET',
                         data : { global_id : $global_id},
 
                         beforeSend: function(){
 
-                            // $('a#lnkPasswordGenerator').html('Generating...');
+                            $('select').append('Retrieving accounts...');
                         },
 
-                        complete: function(data){
+                        success: function(data){
 
+                            display_accounts(data);
+                            
                           
+                        },
+
+                        error : function (data) {
+                            
+                            console.log(data);
+                            console.log('error');
                         }
 
                     });
 
                 });
 
+                function display_accounts (data) {
+
+                    $('div.account_container').html('');
+                    $('div.chkbox_account').css('display','block');
+
+                    $.each(data,function(key,val){
+
+                        $('div.account_container')
+                            .append('<div>'+
+                                        '<label>'+
+                                            '<input name="accounts[]" type="checkbox" value="'+ val.ACCT_NO+'">'+
+                                            '<p>'+ val.ACCT_DESC +'</p>'+
+                                        '</label>'+
+                                    +'</div>');    
+                    });
+                }
+
                 $pass_field1 =  $('input[name="accss_pass_field1"]');
                 $rand_pass = '';
                 $btn_access = $('input[id="btn_submit"]');
-                $btn_access.attr("disabled","disabled");
+             
                 $term = '';
               
 
@@ -230,26 +257,14 @@
                             $('a#pssShow').click(function(){
                                 $(this).remove();
                                  $pass_field1.attr('type',"text");
+                                 $('form').find("#inpt_accss_pass_field1").focus();
                             });
                         }
 
                     });
                 });
 
-                $('input[name="accss_pass_field2"]').keyup(function(){
-                    $val = $(this).val();
-
-                    if ( $val.length > 5 && $val != $rand_pass){
-
-                        $('.form-group span#pass2').html("Password do not match.").css('color','red');
-                        $('input[name="user_name"]').attr("disabled","disabled");
-
-                    }else{
-
-                         $('.form-group span#pass2').html("Password matched.").css('color','green');
-                         $btn_access.removeAttr("disabled");
-                    }
-                });
+        
 
                 $('form').submit(function(e){
                     e.preventDefault();
@@ -275,6 +290,7 @@
                         },
 
                         success: function(data){
+                            console.log(data);
 
                              $('div#feedback').html('Request has been completed. Access has been created.')
                                     .css("background","green")
@@ -286,7 +302,7 @@
                         },
 
                         error : function(data){
-
+                            console.log(data);
                              $('div#feedback').html('The requested client had already have an access.Operation aborted.')
                                 .css("background","red")
                                 .css("color","#fff")

@@ -30,13 +30,13 @@ class Clients extends CI_Controller{
 		return $this->clients_model->count_number_of_accounts($client_no);
 	}
 
-	public function view($client_no)
+	public function view($global_id)
 	{
 
 		$this->load->model('clients_model');
 		$this->load->model('accounts_model');
-		$data['client'] = $this->clients_model->get_client_details($client_no);
-		$data['accounts'] = $this->accounts_model->get_client_accounts($client_no);
+		$data['client'] = $this->clients_model->get_client_details($global_id);
+		$data['accounts'] = $this->accounts_model->get_client_accounts($global_id);
 		return $this->render('clients/view',$data);
 	}
 

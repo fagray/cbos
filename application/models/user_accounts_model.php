@@ -16,11 +16,12 @@ class User_accounts_model extends CI_Model {
 		$encrpted_pass = hash('sha1',$password);
 		$this->db->select('*');
 		$this->db->from('OBA_CLIENT_ACCOUNTS a');
-		$this->db->where('a.USR_NAME',"$user_id");
+		$this->db->where('a.USR_NAME',$user_id);
 		$this->db->where('a.USR_PASSWORD',"$encrpted_pass");
 		$this->db->where('a.STATUS','Granted');
-		$this->db->join('FM_CLIENT c','c.CLIENT_NO = a.CLIENT_NO');
+		$this->db->join('FM_CLIENT c','c.GLOBAL_ID = a.CLIENT_NO');
 		$result = $this->db->get()->result_object();
+		// return print_r($result);
 		return $result;
 
 	}
@@ -58,8 +59,10 @@ class User_accounts_model extends CI_Model {
 	 */
 	public function check_if_has_access($client_no)
 	{
+		$this->db->select('*');
+		$this->db->from($this->table);
 		$this->db->where('CLIENT_NO',$client_no);
-		return $this->db->count_all_results($this->table);
+		return $this->db->get()->result_object();
 	}
 
 	/**

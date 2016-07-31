@@ -2,7 +2,7 @@
 <html class="no-js">
     
     <head>
-        <title>acesglobal | Main Panel </title>
+        <title>CBOS Online Banking | Main Panel </title>
         <!-- Bootstrap -->
         <link href="<?php print base_url('public/assets/bootstrap/css/bootstrap.css') ?>" rel="stylesheet" media="screen">
         <link href="<?php print base_url('public/assets/css/styles.css') ?>" rel="stylesheet" media="screen">
@@ -18,7 +18,6 @@
        
         <!-- /content -->
         <div class="container">
-
             <div class=" row">
                 <div class="col-md-offset-3 col-md-6">
                      <div class="panel panel-default">

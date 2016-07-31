@@ -99,17 +99,47 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-/**
- *  ORACLE CONNECTION
- */
-// phpinfo();
-$active_group = 'default';
-$active_record = TRUE;
+/*
+ *
+ *------------------------------------------
+ *  ORACLE CONNECTION - LOCAL MACHINE
+ *------------------------------------------
+ *
+**/
+ // $active_group = 'default';
+ // $active_record = TRUE;
 
-$db['default']['hostname'] = "localhost/orcl";
-$db['default']['username'] = 'C##EOCLIVE';
-$db['default']['password'] = 'aerind19';
-$db['default']['database'] = 'eoclive';
+ // $db['default']['hostname'] = "localhost/orcl";
+ // $db['default']['username'] = 'C##EOCLIVE';
+ // $db['default']['password'] = 'aerind19';
+ // $db['default']['database'] = 'eoclive';
+ // $db['default']['dbdriver'] = 'oci8';
+ // $db['default']['dbprefix'] = '';
+ // $db['default']['pconnect'] = TRUE;
+ // $db['default']['db_debug'] = TRUE;
+ // $db['default']['cache_on'] = FALSE;
+ // $db['default']['cachedir'] = '';
+ // $db['default']['char_set'] = 'utf8';
+ // $db['default']['dbcollat'] = 'utf8_general_ci';
+ // $db['default']['swap_pre'] = '';
+ // $db['default']['autoinit'] = TRUE;
+ // $db['default']['stricton'] = FALSE;
+
+
+/*
+ *
+ *------------------------------------------
+ *  ORACLE CONNECTION - CBOS MACHINE
+ *------------------------------------------
+ *
+**/
+
+$active_record = TRUE;
+$active_group = 'default';
+$db['default']['hostname'] = "172.16.1.75";
+$db['default']['username'] = 'ONLBNK';
+$db['default']['password'] = 'Ig913793Tg';
+$db['default']['database'] = 'EOYDB';
 $db['default']['dbdriver'] = 'oci8';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
@@ -121,3 +151,4 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
+/**

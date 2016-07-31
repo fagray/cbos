@@ -1,5 +1,4 @@
 <?php $this->load->view('layouts/header') ?>
-    
         <!-- /content -->
         <div class="container">
             <div class=" row">

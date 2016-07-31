@@ -25,6 +25,7 @@ class Currency_model extends CI_Model {
 
 	public function get_description($currency)
 	{
+		// return print $currency;
 		$this->db->where('CCY',"$currency");
 		$result  =  $this->db->get($this->table)->result_object();
 		return $result[0]->CCY_DESC;

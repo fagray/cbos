@@ -32,7 +32,7 @@
                                                 <span class="pull-right">
                                                 </span>
                                                 <div class="label label-primary">
-                                                   Type:  <?php print $transaction->TYPE_DESC ?>
+                                                   Type: CBOS FUND TRANSFER
                                                  
                                                 </div>
                                                 <p class="pull-right"> Transaction Date :  
