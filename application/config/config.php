@@ -28,8 +28,8 @@ date_default_timezone_set('Africa/Juba');
 |
 */
 // $config['base_url'] = 'http://localhost/aceseglobal/';
-// $config['base_url'] = 'http://cbos.dev/';
-$config['base_url'] = 'http://172.16.26.113/cbos/';
+$config['base_url'] = 'http://cbos.dev/';
+// $config['base_url'] = 'http://172.16.26.113/cbos/';
 
 /*
 |--------------------------------------------------------------------------

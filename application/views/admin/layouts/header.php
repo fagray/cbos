@@ -20,31 +20,9 @@
         <div class="container">
           <div class="col-md-12">
 
-          <div style="margin-top:60px;" class="col-md-4">
-            <?php if($this->session->has_userdata('panel_access_token')){ 
-              ?>
-              
-            <h3 style="color:#fff !important;" >Welcome : <?php print $this->session->userdata('usrname'); ?> 
-                  </h3><br/><br/>
-                 <p style="color:#fff !important" class="text-left">Last Logged in : <?php print $this->session->userdata('last_login'); ?></p>
-                 <p style="color:#fff !important;">Current Time : <?php print date('D, M d, Y G:i:s'); ?></p>
-                 <p style="color:#fff !important" class="text-left">Administrator Panel </p>
-            <?php } ?>
+         
 
-            <?php if( ! $this->session->has_userdata('panel_access_token')){ ?>
-              <h4 style="color:#fff !important;" >Welcome to CBOS Online Banking
-                  </h4><br/><br/>
-                 <p style="color:#fff !important" class="text-left">Administrator Panel </p>
-
-
-            <?php } ?>
-          </div><!-- /col-md-6 -->  
-
-
-          <div style="margin-top:60px;" class="col-md-offset-5 col-md-3  ">
-            <img class="img-responsive"  src="<?php print base_url('public/assets/img/cbos.png') ?>">
-            <h4 style="color:#fff !important" class="text-left">Online Banking Application</h4>
-          </div><!-- /col-md-6 -->
+      
 
         </div><!-- /col-md-12 -->
         </div>
@@ -68,7 +46,7 @@
 
 
                      <?php } ?>
-                    <h4>Welcome to CBOS Online Banking</h4>
+                   
                   </div>
                 </div><!-- /row -->
-            <hr/>
+    
