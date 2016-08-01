@@ -8,27 +8,31 @@
           <div class="col-md-9" id="content">
             
             
-            <?php  if( $account[0]->TRAN_STAT == 'COMPLETED'){ ?>
+            <span class="pull-right">
+            
+            
+            <?php if( $account[0]->TRAN_STAT == 'COMPLETED' ){ ?>
+          </span><!-- /pull-right -->
+          <br/><br/><br/>
+          
 
-            <div class="alert alert-success">This transaction has been COMPLETED on
-              <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
-            </div>
+          <div class="alert alert-success">This transaction has been approved on
+            <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
+          </div>
 
-            <?php }else if( $account[0]->TRAN_STAT == 'Rejected') { ?>
+          <?php }else if( $account[0]->TRAN_STAT == 'Rejected') { ?>
 
-            <div class="alert alert-danger">
-              This transaction has been denied on  
-              <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
+          <div class="alert alert-danger">
+            This transaction has been denied on  
+            <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
 
-            </div>
+          </div>
 
-            <?php }else{ ?>
+          <?php }else if( $account[0]->TRAN_STAT == 'In progress' ) {  ?>
 
-            <div class="alert alert-info blue-bg">
-              This transaction is still in progress.
-              
-
-            </div>
+          <div class="alert alert-info">
+            This transaction is pending for approval.
+          </div>
 
             <?php } ?>
             
