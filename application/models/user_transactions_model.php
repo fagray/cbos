@@ -40,8 +40,8 @@ class User_transactions_model extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('OBA_USER_TRANSACTIONS t');
 		$this->db->where('t.CLIENT_NO',$client_no);
-		$this->db->join('RB_ACCT a','a.ACCT_NO = t.ACCT_NO');
-		$this->db->join('FM_CLIENT c','c.GLOBAL_ID = a.GLOBAL_ID');
+		// $this->db->join('RB_ACCT a','a.ACCT_NO = t.ACCT_NO');
+		// $this->db->join('FM_CLIENT c','c.GLOBAL_ID = a.GLOBAL_ID');
 		// $this->db->join('OBA_TRAN_TYPES ty','ty.TYPE_ID = t.TRAN_TYPE');
 		$this->db->order_by('t.TRAN_DATE','desc');
 		return $this->db->get()->result_object();
