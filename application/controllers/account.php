@@ -65,7 +65,7 @@ class Account extends CI_Controller {
 		$data['banks']  		= $this->clients_model->get_client_banks();
 		$data['currencies'] 	= $this->currency_model->get_all();
 		$data['account'] 		= $this->accounts_model->get_acocunt_details($acct_no);
-		 $data['user_accounts'] 	= $this->accounts_model
+		$data['user_accounts'] 	= $this->accounts_model
 						->get_client_remaining_accounts($client_no,$acct_no); // client accounts
 		
 
@@ -178,6 +178,80 @@ class Account extends CI_Controller {
 			return $this->toJson($params);
 		
 
+	}
+
+	public function process_cbos_transfer()
+	{
+		// load the necessary models
+		$this->load->model('accounts_model');
+		$this->load->model('user_transactions_model');
+		
+		// validate the data
+		$source_acct_no = $this->input->post('source_acct_no');
+
+		// check if the source account exists
+		if ( ! $this->account_exist($source_acct_no)) {
+			$params = array('response' => 500,'msg' => 'Source account number is invalid.');
+			return $this->toJson($params);
+		}
+
+		// grab the transfer amount
+		$transfer_amount = $this->input->post('tran_amount');
+
+		// get account details of the source amount
+		$account  = $this->accounts_model->get_acocunt_details($source_acct_no);
+
+		// curren balance of the account
+		$source_balance  = $account[0]->ACTUAL_BAL; 
+
+		// the transfer currency
+		$transfer_ccy  = $this->input->post('ccy');
+
+		// convert the balance to positive number
+		if ( $source_balance < 0 && $source_balance != 0 ){
+
+			$source_balance = $source_balance * -1;
+		}
+
+
+		// check if the transfer amount is greater than its source amount
+		if ( $transfer_amount > $source_balance ){
+
+			$params = array('response' => 500,'msg' => 'Transfer amount cannot exceed the actual balance.Please add more funds to your account. Thank you.');
+			return $this->toJson($params);
+		}
+
+
+		$data = array(
+
+						'INTERNAL_KEY'		=> $account[0]->INTERNAL_KEY,
+						'TRAN_DATE'			=> date('Y-m-d'),
+						'TRAN_TYPE'			=> $this->input->post('tran_type'),
+						'ACCT_NO'			=> $this->input->post('source_acct_no'),
+						'BENEF_ACCT_NO'		=> $this->input->post('benef_acct_no'),
+						'TRAN_CCY'			=> $transfer_ccy,
+						'TRAN_AMT'			=> $this->input->post('tran_amount'),
+						'REQUEST_TIMESTAMP'	=> date('Y-m-d g:i:s'),
+						'TRAN_DESC'			=> $this->input->post('trans_desc'),
+						'CLIENT_NO'			=> $this->session->userdata('client_no'),
+						'CLIENT_TERMINAL'	=> $this->input->ip_address()
+			);
+
+			if ( ! $this->initiate_transfer($data)) {
+
+				$params = array('response' => 500,'msg' => 'Transfer has been aborted. Transfer error.');
+				return $this->toJson($params);
+			}
+
+			// send an email notification to the sender, cancel for now
+			// $type = 'CBOS';
+			// $sender_client_no = $account[0]->CLIENT_NO;
+			// $this->user_transactions_model->send_email_confirmation($sender_client_no,$data,$type);
+
+			// $params = array('response' => 200,'msg' => 'Transfer has been received.');
+			 // $this->toJson($params);
+			$this->session->set_flashdata('msg-success','Fund transfer has been received successfully.');
+			return redirect(base_url('accounts/transactions/transfer'));
 	}
 
 	/**

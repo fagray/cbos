@@ -53,6 +53,7 @@
             </div>    <!-- /row-fluid -->
               <hr>
         <?php $this->load->view('admin/layouts/footer') ?>
+        
        
     </body>
 

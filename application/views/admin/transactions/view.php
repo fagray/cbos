@@ -6,9 +6,9 @@
            <h3>Transaction Details : TRAN_ID : <?php print $account[0]->TRAN_ID ?> </h3>
 
            <span class="pull-right">
-            
-            
-            <?php if( $account[0]->TRAN_STAT == 'COMPLETED' ){ ?>
+
+            <?php if( $account[0]->TRAN_STAT == 'Approved' ){ ?>
+
           </span><!-- /pull-right -->
           <br/><br/><br/>
           
@@ -20,148 +20,153 @@
           <?php }else if( $account[0]->TRAN_STAT == 'Rejected') { ?>
 
           <div class="alert alert-danger">
-            This transaction has been denied on  
-            <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
 
-          </div>
+           This transaction has been rejected on. Timestamp : 
+           <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
 
-          <?php }else if( $account[0]->TRAN_STAT == 'In progress' ) {  ?>
+         </div>
 
-          <div class="alert alert-info">
-            This transaction is pending for approval.
-          </div>
+         <?php }else if( $account[0]->TRAN_STAT == 'Received' ) {  ?>
 
-          <button data-choice="Approved"  
-          type="button" class="btn-choice btn btn-success blue-bg ">Approve this transaction
-        </button>
-        
-
-        <?php } ?>
-        
-
-        <div style="margin-top:50px;" class="">
-          <div class="panel panel-default">
-           <div class="blue-bg panel-heading"> TRANSACTION DETAILS</div>
-           
-           <div class="panel-body">
-            <p> Transfer Type : <strong>
-              CBOS FUND TRANSFER
-            </strong></p>
-            <p> Request Timestamp : <strong>
-              <?php print $account[0]->REQUEST_TIMESTAMP ?>
-            </strong></p>
-            <p> Transfer Status : <strong>
-              <?php print $account[0]->TRAN_STAT ?>
-            </strong></p>
-            <p> Transfer Description : <strong>
-              <?php print $account[0]->TRAN_DESC ?>
-            </strong></p>
-
-            <hr/>
-            <div class="row">
-              <div class="col-md-12">
-                
-               <div class="panel panel-default">
-                 
-                <div class="blue-bg  panel-heading">
-                  TRANSFER DETAILS
-                </div>
-                <div class="panel-body">
-                 
-
-                  <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th> Source Account No.</th>
-                        <th>Source Account Name</th>
-                        <th>Benefactor Account No.</th>
-                        <th>Transfer Amount</th>
-                        <th>Currency</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><?php print $account[0]->ACCT_NO ?></td>
-                        <td><?php print $account[0]->ACCT_DESC ?></td>
-                        <td><?php print $account[0]->BENEF_ACCT_NO ?></td>
-                        <td id="tdAmt" data-amt="<?php print $account[0]->TRAN_AMT ?>">
-
-                          <?php print number_format($account[0]->TRAN_AMT,2) ?>
-
-                        </td>
-                        <td><?php print $account[0]->TRAN_CCY ?></td>
-
-                        <?php if($account[0]->TRAN_STAT == 'In progress'){ ?>
-                        
-                        <td>
-                          <span class="label label-warning">
-                            <?php print $account[0]->TRAN_STAT ?>
-                          </span>
-                        </td>
-
-                        <?php } else if( $account[0]->TRAN_STAT == 'Approved'){ ?>
-
-                        <td>
-                          <span class="label label-success">
-                            <?php print $account[0]->TRAN_STAT ?>
-                          </span>
-                        </td>
-
-                        <?php }else{ ?>
-
-                        <td>
-                          <span class="label label-warning">
-                            <?php print $account[0]->TRAN_STAT ?>
-                          </span>
-                        </td>
-
-                        <?php } ?>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <!-- /end of CBOS DETAILS -->
-
-                  
-                </div><!-- /panel-body -->
-              </div><!-- /panel-default -->
-
-            </div><!-- /col -->
-          </div><!-- /row -->
-          
+         <div class="alert alert-info">
+          This transaction is pending for approval.
         </div>
-      </div>
-      <!-- /block -->
 
-      
-    </div><!-- /content -->
-  </div>    <!-- /row-fluid -->
-  <div class="modal fade" id="modal_confirm">
-    <div class="modal-dialog">
-     <?php print form_open('',array('name' => 'frmSubmit')); ?>
-     <div class="modal-content">
-      <div  class="blue-bg modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 style="color:#fff !important;" class="modal-title">Confirmation Required </h4>
-      </div>
-      
-      <div class="modal-body">
-       
+        <button data-choice="Completed"  
+        type="button" class="btn-choice btn btn-success blue-bg ">Approve this transaction
+      </button>
 
-      </div>
-      <div class="modal-footer">
-        <?php print form_hidden('tran_id', $account[0]->TRAN_ID ); ?>
-        <?php print form_hidden('tran_status', ''); ?>
-        <?php print form_hidden('benef_acct_no',$account[0]->BENEF_ACCT_NO) ?>
-        <?php print form_hidden('_trans_amt') ?>
-        <?php print form_submit('confirm', 'Confirm',array('class' => 'btn_confirm btn btn-primary blue-bg')); ?>
-        <button type="button" class="btn btn-default blue-bg" data-dismiss="modal">Cancel</button>
-        <!-- <button type="submit" class="btn_confirm btn btn-primary">Confirm</button> -->
-        
-      </div>
+      <button style="background:#d20909 !important" data-choice="Rejected"  
+      type="button" class="btn-choice btn btn-success blue-bg ">Reject this transaction
+    </button>
+
+
+    <?php } ?>
+
+
+    <div style="margin-top:50px;" class="">
+      <div class="panel panel-default">
+       <div class="blue-bg panel-heading"> TRANSACTION DETAILS</div>
+
+       <div class="panel-body">
+        <p> Transfer Type : <strong>
+          CBOS FUND TRANSFER
+        </strong></p>
+        <p> Request Timestamp : <strong>
+          <?php print $account[0]->REQUEST_TIMESTAMP ?>
+        </strong></p>
+        <p> Transfer Status : <strong>
+          <?php print $account[0]->TRAN_STAT ?>
+        </strong></p>
+        <p> Transfer Description : <strong>
+          <?php print $account[0]->TRAN_DESC ?>
+        </strong></p>
+
+        <hr/>
+        <div class="row">
+          <div class="col-md-12">
+
+           <div class="panel panel-default">
+
+            <div class="blue-bg  panel-heading">
+              TRANSFER DETAILS
+            </div>
+            <div class="panel-body">
+
+
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th> Source Account No.</th>
+                    <th>Source Account Name</th>
+                    <th>Benefactor Account No.</th>
+                    <th>Transfer Amount</th>
+                    <th>Currency</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><?php print $account[0]->ACCT_NO ?></td>
+                    <td><?php print $account[0]->ACCT_DESC ?></td>
+                    <td><?php print $account[0]->BENEF_ACCT_NO ?></td>
+                    <td id="tdAmt" data-amt="<?php print $account[0]->TRAN_AMT ?>">
+
+                      <?php print number_format($account[0]->TRAN_AMT,2) ?>
+
+                    </td>
+                    <td><?php print $account[0]->TRAN_CCY ?></td>
+
+                    <?php if($account[0]->TRAN_STAT == 'Received'){ ?>
+
+                    <td>
+                      <span class="label label-warning">
+                        <?php print $account[0]->TRAN_STAT ?>
+                      </span>
+                    </td>
+
+                    <?php } else if( $account[0]->TRAN_STAT == 'Completed'){ ?>
+
+                    <td>
+                      <span class="label label-success">
+                        <?php print $account[0]->TRAN_STAT ?>
+                      </span>
+                    </td>
+
+                    <?php }else{ ?>
+
+                    <td>
+                      <span class="label label-danger">
+                        <?php print $account[0]->TRAN_STAT ?>
+                      </span>
+                    </td>
+
+                    <?php } ?>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- /end of CBOS DETAILS -->
+
+
+            </div><!-- /panel-body -->
+          </div><!-- /panel-default -->
+
+        </div><!-- /col -->
+      </div><!-- /row -->
+
     </div>
-    <?php print form_close(); ?>
   </div>
+  <!-- /block -->
+
+
+</div><!-- /content -->
+</div>    <!-- /row-fluid -->
+<div class="modal fade" id="modal_confirm">
+  <div class="modal-dialog">
+   <?php print form_open('',array('name' => 'frmSubmit')); ?>
+   <div class="modal-content">
+    <div  class="blue-bg modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 style="color:#fff !important;" class="modal-title">Confirmation Required </h4>
+    </div>
+
+    <div class="modal-body">
+
+
+    </div>
+    <div class="modal-footer">
+      <?php print form_hidden('tran_id', $account[0]->TRAN_ID ); ?>
+      <?php print form_hidden('tran_status', ''); ?>
+      <?php print form_hidden('benef_acct_no',$account[0]->BENEF_ACCT_NO) ?>
+      <?php print form_hidden('_trans_amt') ?>
+      <?php print form_submit('confirm', 'Confirm',array('class' => 'btn_confirm btn btn-primary blue-bg')); ?>
+      <button type="button" class="btn btn-default blue-bg" data-dismiss="modal">Cancel</button>
+      <!-- <button type="submit" class="btn_confirm btn btn-primary">Confirm</button> -->
+
+    </div>
+  </div>
+  <?php print form_close(); ?>
+</div>
 </div>
 <hr>
 <?php $this->load->view('layouts/footer') ?>
@@ -183,7 +188,7 @@
 
               }else{
 
-               $('.modal-body').html('Are you sure you want to  <strong>approve</strong> this transfer ? This cannot be undone.');
+               $('.modal-body').html('Are you sure you want to  <strong>complete</strong> this transfer ? This cannot be undone.');
                 // $('input[name="tran_status"]').val('Completed');
                 show_modal();
 
@@ -206,7 +211,7 @@
 
   function process_request(formData){
 
-   
+
    $.ajax({
 
     url : "<?php print base_url('acesmain/transactions/process') ?>",
@@ -215,7 +220,7 @@
     dataType : 'json',
 
     beforeSend : function(){
-     
+
       $('.modal-footer').html("<h4>Processing Request...</h4>");
     },
 
@@ -225,6 +230,7 @@
 
         $('.modal-body').html("<h4>Request has been completed.</h4>");
         $('.modal-footer').remove();
+        
 
       }else{
 

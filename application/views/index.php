@@ -12,11 +12,11 @@
                 <span class="pull-right">
               
                 </span>                    
-                <h3>Account Summary</h3>
+                <h3 class="heading">Account Summary</h3>
                     <!-- block -->
                         <div class="panel panel-default">
                             <div class="blue-bg panel-heading">
-                                My Accounts
+                                ACCOUNTS LIST
                             </div>
                             <div class="panel-body">
                                 <div class="col-md-12">

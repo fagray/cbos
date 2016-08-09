@@ -48,6 +48,19 @@ body {
   font-family: 'BankPrinter';
 }
 
+@font-face{
+
+  src:url('../font/Montserrat-Regular.ttf');
+  font-family: 'Montserrat';
+
+}
+
+.heading{
+
+  font-family: 'Montserrat';
+  
+}
+
 
 @media (min-width: 979px){
     body {

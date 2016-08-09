@@ -43,14 +43,14 @@ class User_transactions_model extends CI_Model {
 		// $this->db->join('RB_ACCT a','a.ACCT_NO = t.ACCT_NO');
 		// $this->db->join('FM_CLIENT c','c.GLOBAL_ID = a.GLOBAL_ID');
 		// $this->db->join('OBA_TRAN_TYPES ty','ty.TYPE_ID = t.TRAN_TYPE');
-		$this->db->order_by('t.TRAN_DATE','desc');
+		$this->db->order_by('t.TRAN_DATE','DESC');
 		return $this->db->get()->result_object();
 	}
 
 	public function get_transaction_details($trans_id)
 	{
 		$this->db->select('t.ACCT_NO,a.ACCT_DESC,a.GLOBAL_ID,t.BENEF_ACCT_NO,t.TRAN_AMT,t.TRAN_CCY,t.TRAN_STAT,
-							t.TRAN_DESC,t.REQUEST_TIMESTAMP,t.TRAN_ID');
+							t.TRAN_DESC,t.REQUEST_TIMESTAMP,t.TRAN_ID,t.CONFIRM_TIMESTAMP');
 		$this->db->from('OBA_USER_TRANSACTIONS t');
 		$this->db->where('t.TRAN_ID',$trans_id);
 		$this->db->join('RB_ACCT a','a.GLOBAL_ID = t.CLIENT_NO');

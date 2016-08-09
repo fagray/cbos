@@ -6,7 +6,7 @@
             <?php $this->load->view('layouts/sidebar') ?>
 
             <div class="col-md-9" id="content">
-              
+
                <!-- <a href="<?php print 
                   base_url('accounts/'.$account[0]->ACCT_NO.'/transfers/new/mode?multiple') ?>" 
 
@@ -18,9 +18,8 @@
                      My Accounts 
                    </div>
                    <div  class="transfer-content panel-body">
-
                     <div class="col-md-12">
-                     
+
                       <table class="table table-hover">
                         <thead>
                           <tr>
@@ -35,7 +34,6 @@
                         </thead>
                         <tbody>
                          <tr>
-                           
                           <td>From</td>
                           <td id="tdAcctNo" data-account-no="<?php print $account[0]->ACCT_NO ?>">
                             <?php print $account[0]->ACCT_NO ?>
@@ -65,7 +63,7 @@
                                         <div role="tabpanel" class="tab-pane active" id="cbos">
 
                                           <table class="table table-bordered">
-                                           
+
                                             <tbody>
                                               <tr >
                                                 <td>Transfer To : </td>
@@ -78,7 +76,7 @@
                                                 <td> 
                                                   <select name="cbos_acct_no"  class="form-control" >
                                                     <option value=""></option>
-                                                    <option value="00169290019001 ">00169290019001 - RTGS Account </option>
+                                                    <option value="00169290018001  ">00169290018001 - RTGS Account </option>
                                                     <?php foreach($user_accounts as $acct){ ?>
                                                     <option value="<?php print $acct->ACCT_NO; ?>">
                                                       <?php print $acct->ACCT_NO .'/ '.$acct->BRANCH .' / ' . $acct->ACCT_DESC; ?>
@@ -136,7 +134,7 @@
                                         <?php print form_open('',array('id' => 'frmOthersValidate','data-parsley-validate')) ?>
 
                                         <table class="table table-bordered">
-                                         
+
                                           <tbody>
                                             <tr >
                                               <td>Transfer To : </td>
@@ -147,9 +145,7 @@
                                            <tr>
                                             <td>Account Number * </td>
                                             <td> 
-
-
-                                              <input required  type="number" name="other_acct_no" id="input" class="form-control" value=""   >
+                                            <input required  type="number" name="other_acct_no" id="input" class="form-control" value=""   >
                                                  <!--  <select name="other_acct_no"  class="form-control" >
                                                   <option></option>
                                                   <?php foreach($other_accounts as $account){?>
@@ -194,7 +190,7 @@
                                               <tr>
                                                 <td>IBAN Number </td>
                                                 <td> <input  data-required="true" required="required" type="number" name="other_tiban_number" id="input" class="form-control" value=""  >
-                                                  
+
                                                 </td>
                                               </tr>
 
@@ -263,7 +259,7 @@
                               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                               <h4 class="modal-title">Transaction Confirmation for Fund Transfer for CBOS Account</h4>
                             </div>
-                            <?php print form_open('',array('id' => 'frmConfirmCBOS')); ?>
+                            <?php print form_open('accounts/transfers/new/process',array('id' => 'frmConfirmCBOS')); ?>
                             <div class="modal-body">
                               <div id="response"></div>
                               <table class="table table-bordered table-hover">
@@ -344,7 +340,7 @@
                                  <tr>
                                   <td>Account Number </td>
                                   <td id="other_acct_no"> 
-                                   
+
                                   </td>
                                 </tr>
                                 <tr>
@@ -375,7 +371,7 @@
                                 <tr>
                                   <td>Transfer Description </td>
                                   <td id="other_trans_desc"> 
-                                   
+
                                   </td>
                                 </tr>
 
@@ -583,74 +579,74 @@
               });
 
                 // handle transfer
-                $('form[id="frmConfirmCBOS"]').submit(function(e){
+      //           $('form[id="frmConfirmCBOS"]').submit(function(e){
 
-                  e.preventDefault();
-                  $formData = $(this).serialize();
-                  // alert($formData);
+      //             e.preventDefault();
+      //             $formData = $(this).serialize();
+      //             // alert($formData);
 
-                  $('#btn_confirm').attr("disabled","disabled");
+      //             $('#btn_confirm').attr("disabled","disabled");
 
-                  $.ajax({
+      //             $.ajax({
 
-                    dataType : 'json',
-                    method : 'GET',
-                    data : $formData,
-                    url : '<?php print base_url("accounts/async_cbos_process_transfer") ?>',
+      //               dataType : 'json',
+      //               method : 'GET',
+      //               data : $formData,
+      //               url : '<?php print base_url("accounts/async_cbos_process_transfer") ?>',
 
-                    beforeSend : function(){
+      //               beforeSend : function(){
 
-                      $('#response').html("<h3>Transferring Funds...</h3>");
-                      clearAllInputs();
-                    },
+      //                 $('#response').html("<h3>Transferring Funds...</h3>");
+      //                 clearAllInputs();
+      //               },
 
-                    success : function(data){
+      //               success : function(data){
 
-                      console.log(data);
-                      if ( data.response == 200){
-                        $('#content').html('Transaction has been processed.Please reload the page for further transactions.');
+      //                 console.log(data);
+      //                 if ( data.response == 200){
+      //                   $('#content').html('Transaction has been processed.Please reload the page for further transactions.');
 
-                        $('.modal-body').append("<a href='<?php print current_url(); ?>' class='blue-bg btn-reload btn btn-default'>Make Another Transfer</a>");
-                        $('.modal-body').append("&nbsp;&nbsp;<a href='<?php print base_url('accounts/transactions/history') ?>' class='btn-reload btn btn-default blue-bg'>View Transaction History</a>");
+      //                   $('.modal-body').append("<a href='<?php print current_url(); ?>' class='blue-bg btn-reload btn btn-default'>Make Another Transfer</a>");
+      //                   $('.modal-body').append("&nbsp;&nbsp;<a href='<?php print base_url('accounts/transactions/history') ?>' class='btn-reload btn btn-default blue-bg'>View Transaction History</a>");
 
-                        $('.modal-footer').remove();
-                        $('.modal-title').html("<h4>Transfer request has been received.</h4>").css("color","#006633");
-                        $('#response').html("<h4>Transfer request has been received for Fund Transfer for CBOS Account.</h4>").css("color","#006633");
-                        clearAllInputs();
-                        clearPage();
+      //                   $('.modal-footer').remove();
+      //                   $('.modal-title').html("<h4>Transfer request has been received.</h4>").css("color","#006633");
+      //                   $('#response').html("<h4>Transfer request has been received for Fund Transfer for CBOS Account.</h4>").css("color","#006633");
+      //                   clearAllInputs();
+      //                   clearPage();
 
-                      }else if(data.response == 500){
-                       $('#content').html('Transaction has been processed.Please reload the page for further transactions.<a href="'+$current_url+'" class="btn btn-primary">Click here to reload</a>');
-                       $('.modal-footer').remove();
-                       $('.modal-title').html("<h4>Transfer Error</h4>").css("color","#ff0000");
-                       $('.modal-body table').remove();
-                       $('.modal-body').html(data.msg+".Please try again.<br/><br/><a href='<?php print current_url(); ?>' class='btn btn-primary'>Reload Page</a>");
+      //                 }else if(data.response == 500){
+      //                  $('#content').html('Transaction has been processed.Please reload the page for further transactions.<a href="'+$current_url+'" class="btn btn-primary">Click here to reload</a>');
+      //                  $('.modal-footer').remove();
+      //                  $('.modal-title').html("<h4>Transfer Error</h4>").css("color","#ff0000");
+      //                  $('.modal-body table').remove();
+      //                  $('.modal-body').html(data.msg+".Please try again.<br/><br/><a href='<?php print current_url(); ?>' class='btn btn-primary'>Reload Page</a>");
 
-                     }
+      //                }
 
-                   },
+      //              },
 
-                   complete : function(){
+      //              complete : function(){
 
-                    clearPage();
+      //               clearPage();
 
-                  },
+      //             },
 
-                  erro : function(){
+      //             erro : function(){
 
-                   $('#content').html('Transaction Unsuccessful.<a href="'+$current_url+'" class="btn btn-primary">Click here to reload</a>');
-                   $('.modal-footer').remove();
-                   $('.modal-title').html("<h4>Transfer Error</h4>").css("color","#ff0000");
-                   $('.modal-body table').remove();
+      //              $('#content').html('Transaction Unsuccessful.<a href="'+$current_url+'" class="btn btn-primary">Click here to reload</a>');
+      //              $('.modal-footer').remove();
+      //              $('.modal-title').html("<h4>Transfer Error</h4>").css("color","#ff0000");
+      //              $('.modal-body table').remove();
 
-                 }
-
-
-
-               }); 
+      //            }
 
 
-      });
+
+      //          }); 
+
+
+      // });
 
         $('a#cbos_send').click(function(e){
           e.preventDefault();
@@ -812,7 +808,7 @@
 
          //              if ($acct_no == $current_account){
 
-          
+
          //                clearAllInputs();
          
          //                return false;
@@ -886,7 +882,7 @@
                clearPage();
 
              }else if(data.response == 500){
-               
+
               $('#content').html('Transaction has been processed.Please reload the page for further transactions.');               
               $('#modalConfirmOthers.modal-footer').remove();
               $('#modalConfirmOthers .modal-title').html("<h4>Transfer Error</h4>").css("color","#ff0000");
@@ -942,7 +938,7 @@
      function displayAccountValuesForCBOSTransfer(data,benef_acct_no){
 
        $.each(data,function(key,val){
-        
+
         $('td#acct_name').html(val.ACCT_DESC);
         $('td#branch_ccy').html(val.BRANCH+' / '+ val.CCY);
         format($('td#beginning_bal').html(-1 * val.LEDGER_BAL,2));
@@ -962,7 +958,7 @@
      function displayAccountValuesForOtherBanksTransfer(data,benef_acct_no){
 
        $.each(data,function(key,val){
-        
+
                             // $('td#other_acct_name').html(val.ACCT_DESC);
                             // $('td#other_ccy').html(val.CCY);
                             // $('td#other_bank_name').html(val.BANK_NO);

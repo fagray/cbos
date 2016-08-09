@@ -5,35 +5,33 @@
 
           <?php $this->load->view('layouts/sidebar') ?>
           
-          <div class="col-md-9" id="content">
+          <div class="col-md-9" id="content">     
+            <?php if( $account[0]->TRAN_STAT == 'Completed' ){ ?>
+
             
+            <div class="alert alert-success">This transaction has been completed on
+              <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
+            </div>
+
+
+            <?php }else if( $account[0]->TRAN_STAT == 'Rejected') { ?>
+
+            <div class="alert alert-danger">
+
+              This transaction has been rejected on. Timestamp : 
+              <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
+
+            </div>
+
+            <?php }else if( $account[0]->TRAN_STAT == 'Received' ) {  ?>
+
+            <div class="alert alert-info">
+              This transaction is pending for approval.
+
+            </div>
             
-            <span class="pull-right">
+
             
-            
-            <?php if( $account[0]->TRAN_STAT == 'COMPLETED' ){ ?>
-          </span><!-- /pull-right -->
-          <br/><br/><br/>
-          
-
-          <div class="alert alert-success">This transaction has been approved on
-            <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
-          </div>
-
-          <?php }else if( $account[0]->TRAN_STAT == 'Rejected') { ?>
-
-          <div class="alert alert-danger">
-            This transaction has been denied on  
-            <?php print $account[0]->CONFIRM_TIMESTAMP; ?>
-
-          </div>
-
-          <?php }else if( $account[0]->TRAN_STAT == 'In progress' ) {  ?>
-
-          <div class="alert alert-info">
-            This transaction is pending for approval.
-          </div>
-
             <?php } ?>
             
 
@@ -90,11 +88,31 @@
                           </td>
                           <td><?php print $account[0]->TRAN_CCY ?></td>
 
+                          <?php if($account[0]->TRAN_STAT == 'Received'){ ?>
+
+                          <td>
+                            <span class="label label-warning">
+                              <?php print $account[0]->TRAN_STAT ?>
+                            </span>
+                          </td>
+
+                          <?php } else if( $account[0]->TRAN_STAT == 'Completed'){ ?>
+
                           <td>
                             <span class="label label-success">
                               <?php print $account[0]->TRAN_STAT ?>
                             </span>
                           </td>
+
+                          <?php }else{ ?>
+
+                          <td>
+                            <span class="label label-danger">
+                              <?php print $account[0]->TRAN_STAT ?>
+                            </span>
+                          </td>
+
+                          <?php } ?>
                           
                         </tr>
                       </tbody>

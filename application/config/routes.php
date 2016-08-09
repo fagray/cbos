@@ -59,6 +59,7 @@ $route['auth/session/logout'] = 'auth/destroy';
 $route['accounts/transactions/transfer'] = 'account/get_transfer';
 $route['accounts/transactions/(:num)/details'] = 'account/view_transaction_details/$1';
 $route['accounts/(:num)/transfers/new'] = 'account/new_transfer/$1';
+$route['accounts/transfers/new/process']['POST'] = 'account/process_cbos_transfer';
 $route['accounts/(:num)/transfers/new/(:any)'] = 'account/new_multiple_transfer/$1';
 $route['accounts/(:num)/transactions'] = 'account/get_transactions_by_account/$1';
 $route['accounts/e-statements'] = 'account/get_account_statement';

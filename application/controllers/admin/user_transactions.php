@@ -63,7 +63,7 @@ class User_Transactions extends CI_Controller {
 		// update the necessary balances
 		switch ($tran_status) 	{
 
-			case 'Approved':
+			case 'Complete':
 
 				$this->update_beneficiary_balance($benef_acct_no,$trans_amt);
 
