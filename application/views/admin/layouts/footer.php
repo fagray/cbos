@@ -70,7 +70,7 @@
 
                         "sSwfPath": "<?php print base_url('public/assets/vendors/data-tables/swf/copy_csv_xls_pdf.swf') ?>"
                     },
-                    "order": [[ 1, "desc" ]]
+                    "order": [[ 1, "asc" ]]
                     }); //end data-tables
 
             });
